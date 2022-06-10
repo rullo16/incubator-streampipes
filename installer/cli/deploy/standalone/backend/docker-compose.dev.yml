@@ -16,5 +16,7 @@
 version: "3.4"
 services:
   backend:
+    environment:
+      - SP_HOST=host.docker.internal
     ports:
       - "8030:8030"
