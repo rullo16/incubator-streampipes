@@ -16,7 +16,7 @@
 [environment:pipeline-element]
 backend
 consul
-extensions-all-jvm
+my-custom-extensions
 couchdb
 kafka
 ui

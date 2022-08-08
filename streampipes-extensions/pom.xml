@@ -59,7 +59,7 @@
         <module>streampipes-processors-change-detection-jvm</module>
         <module>streampipes-extensions-all-jvm</module>
         <module>streampipes-connect-adapters-iiot</module>
-        <module>TrendFiltered</module>
+        <module>streampipes-gft-processors</module>
     </modules>
 
     <properties>

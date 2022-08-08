@@ -13,27 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: "3.4"
-services:
-  extensions-all-jvm:
-    image: fouo/my-custom-extensions:latest
-    depends_on:
-      - consul
-      - backend
-      - couchdb  
-    volumes:
-      - files:/spImages
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "1m"
-        max-file: "1"
-    networks:
-      spnet:
-
-volumes:
-  files:
-
-networks:
-  spnet:
-    external: true
+# Those parameters are used by IntelliJ to set the default consul parameters for development
+SP_PORT=8005
+SP_HOST=host.docker.internal
+SP_DEBUG=true

@@ -13,27 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: "3.4"
-services:
-  extensions-all-jvm:
-    image: fouo/my-custom-extensions:latest
-    depends_on:
-      - consul
-      - backend
-      - couchdb  
-    volumes:
-      - files:/spImages
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "1m"
-        max-file: "1"
-    networks:
-      spnet:
+FROM adoptopenjdk/openjdk8-openj9:alpine
 
-volumes:
-  files:
+EXPOSE 8090
+ENV CONSUL_LOCATION consul
 
-networks:
-  spnet:
-    external: true
+COPY ./target/streampipes-gft-processors.jar  /streampipes-extensions-service.jar
+
+ENTRYPOINT ["java", "-jar", "/streampipes-extensions-service.jar"]
