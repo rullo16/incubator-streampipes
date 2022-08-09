@@ -16,7 +16,7 @@
   ~
   -->
 
-## TrendFiltered
+## Loess Interpolation
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -25,13 +25,12 @@
 ***
 
 ## Description
-It detects the increase of a numeric field previously filtered according to a certain threshold, in a customizable time window.
-Example: A temperature value, filtered to only obtain values greater than 7, increases by 10 percent within 5 minutes.
+Calculates the loess interpolation of a monitored value over a given time interval if greater than a threshold value.
 
 ***
 
 ## Required input
-There should be a numeric field in the event, which should be filtered according to a certain threshold, and then observe the trend.
+There should be a field to monitor in the event at certain times, if the difference of the timestamps is greater than a certain threshold (provided in input), the interpolation is calculated
 
 ***
 
@@ -39,21 +38,11 @@ There should be a numeric field in the event, which should be filtered according
 ###Value to Observe
 Specifies the value field that should be monitored.
 
-###Operation
-Specifies the filter operation that should be applied on the field.
+###Timestamp
+Specify the timestamp.
 
 ###Threshold value
 Specifies the threshold value.
 
-###Increase/Decrease
-Specifies the type of operation the processor should perform.
-
-###Percentage of Increase/Decrease
-Specifies the increase in percent (e.g., 100 indicates an increase by 100 percent within the specified time window).
-
-###Time Window Length (Seconds)
-Specifies the size of the time window in seconds.
-
-
 ## Output
-Outputs the events if there is a trend observed according to the configuration defined.
+Outputs events with the tween value if the timestamp difference is greater than the defined threshold.
