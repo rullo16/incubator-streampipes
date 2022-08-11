@@ -59,6 +59,14 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
   double[] array3Y = {0.0,0.0,0.0,0.0,0.0};
 
 
+  public void sleep(long mills){
+    try{
+      Thread.sleep(mills);
+    }catch (InterruptedException ex){
+      Thread.currentThread().interrupt();
+    }
+  }
+
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("org.gft.processors.loessinterpolation")
@@ -169,8 +177,10 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
 
       //set the values resulting from the interpolation, in the fields of the event output
       event.addField("chosen_timestamp", xi);
-      event.addField("interpolation_value", yi);
-
+      Event customEvent = event;
+      customEvent.getFieldBySelector(this.input_value).setValue(yi);
+      out.collect(customEvent);
+      sleep(500);
       out.collect(event);
     }
   }

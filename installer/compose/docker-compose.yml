@@ -132,7 +132,7 @@ services:
 
   # Lite version pipeline elements
   streampipes-extension-all:
-    image: "fouo/my-custom-extensions:latest"
+    image: "fouo/streampipes-gft-extensions:latest"
     depends_on:
       - consul
     volumes:
