@@ -177,10 +177,7 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
 
       //set the values resulting from the interpolation, in the fields of the event output
       event.addField("chosen_timestamp", xi);
-      Event customEvent = event;
-      customEvent.getFieldBySelector(this.input_value).setValue(yi);
-      out.collect(customEvent);
-      sleep(500);
+      event.addField("interpolated_value",yi);
       out.collect(event);
     }
   }
