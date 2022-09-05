@@ -150,10 +150,23 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         arrayY[0] = arrayY[1];
 
         //set the values resulting from the interpolation, in the fields of the event output
-        event.addField("chosen_timestamp", xi);
-        event.addField("interpolation_value", yi);
-
-        out.collect(event);
+        if(yi!=0 && xi!=0) {
+          event.addField("interpolation_value", yi);
+          event.getFieldBySelector(this.timestamp_value).setValue(xi);
+          out.collect(event);
+          System.out.println("CUSTOM:");
+          System.out.println(event.getFields());
+          System.out.println(event.getFieldBySelector(this.timestamp_value).getAsPrimitive().getAsString());
+          System.out.println(event.getFieldBySelector("interpolation_value").getAsPrimitive().getAsString());
+          event.getFieldBySelector(this.timestamp_value).setValue(timestamp);
+          out.collect(event);
+          System.out.println("Normal:");
+          System.out.println(event.getFields());
+          System.out.println(event.getFieldByRuntimeName("interpolation_value").getAsPrimitive().getAsString());
+          System.out.println(event.getFieldByRuntimeName("timestamp").getAsPrimitive().getAsString());
+        }else{
+          out.collect(event);
+        }
       }
 
     //three-position array interpolation
