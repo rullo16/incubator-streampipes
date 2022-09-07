@@ -16,7 +16,7 @@
 version: "3.4"
 services:
   extensions-all-jvm:
-    image: fouo/my-custom-extensions:latest
+    image: ${SP_DOCKER_REGISTRY}/pipeline-extensions-all:${SP_VERSION}
     depends_on:
       - consul
       - backend
