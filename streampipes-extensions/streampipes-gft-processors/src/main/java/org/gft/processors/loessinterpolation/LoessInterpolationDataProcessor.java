@@ -174,9 +174,8 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
         array3Y[i] = array3Y[i+1];
 
       }
-
+      event.addField("interpolation_value", yi);
       if(yi!=0.0 && xi!=0.0) {
-        event.addField("interpolation_value", yi);
         event.getFieldBySelector(this.timestamp_value).setValue(xi);
         out.collect(event);
         System.out.println("CUSTOM:");

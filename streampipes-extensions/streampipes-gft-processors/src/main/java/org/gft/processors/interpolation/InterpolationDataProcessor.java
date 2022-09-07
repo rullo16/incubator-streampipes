@@ -150,8 +150,8 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         arrayY[0] = arrayY[1];
 
         //set the values resulting from the interpolation, in the fields of the event output
+        event.addField("interpolation_value", yi);
         if(yi!=0 && xi!=0) {
-          event.addField("interpolation_value", yi);
           event.getFieldBySelector(this.timestamp_value).setValue(xi);
           out.collect(event);
           System.out.println("CUSTOM:");
