@@ -59,14 +59,6 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
   double[] array3Y = {0.0,0.0,0.0,0.0,0.0};
 
 
-  public void sleep(long mills){
-    try{
-      Thread.sleep(mills);
-    }catch (InterruptedException ex){
-      Thread.currentThread().interrupt();
-    }
-  }
-
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("org.gft.processors.loessinterpolation")
@@ -83,8 +75,7 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
 
             .requiredFloatParameter(Labels.withId(THRESHOLD))
 
-            .outputStrategy(OutputStrategies.append(PrimitivePropertyBuilder.create(Datatypes.Double, "chosen_timestamp").build()
-                    ,PrimitivePropertyBuilder.create(Datatypes.Double, "interpolation_value").build()))
+            .outputStrategy(OutputStrategies.custom())
 
             .build();
   }
@@ -174,23 +165,10 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
         array3Y[i] = array3Y[i+1];
 
       }
+      //set the values resulting from the interpolation, in the fields of the event output
+      event.addField("interpolation_timestamp", xi);
       event.addField("interpolation_value", yi);
-      if(yi!=0.0 && xi!=0.0) {
-        event.getFieldBySelector(this.timestamp_value).setValue(xi);
-        out.collect(event);
-        System.out.println("CUSTOM:");
-        System.out.println(event.getFields());
-        System.out.println(event.getFieldBySelector(this.timestamp_value).getAsPrimitive().getAsString());
-        System.out.println(event.getFieldBySelector("interpolation_value").getAsPrimitive().getAsString());
-        event.getFieldBySelector(this.timestamp_value).setValue(timestamp);
-        out.collect(event);
-        System.out.println("Normal:");
-        System.out.println(event.getFields());
-        System.out.println(event.getFieldByRuntimeName("interpolation_value").getAsPrimitive().getAsString());
-        System.out.println(event.getFieldByRuntimeName("timestamp").getAsPrimitive().getAsString());
-      }else{
-        out.collect(event);
-      }
+      out.collect(event);
     }
   }
 
