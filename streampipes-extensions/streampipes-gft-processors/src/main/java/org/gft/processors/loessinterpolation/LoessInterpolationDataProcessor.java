@@ -75,15 +75,16 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
 
             .requiredFloatParameter(Labels.withId(THRESHOLD))
 
-            .outputStrategy(OutputStrategies.custom())
+            .outputStrategy(OutputStrategies.append(PrimitivePropertyBuilder.create(Datatypes.Double, "chosen_timestamp").build()
+                    ,PrimitivePropertyBuilder.create(Datatypes.Double, "interpolation_value").build()))
 
             .build();
   }
 
   @Override
   public void onInvocation(ProcessorParams processorParams,
-                            SpOutputCollector out,
-                            EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
+                           SpOutputCollector out,
+                           EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
 
     this.input_value = processorParams.extractor().mappingPropertyValue(INPUT_VALUE);
     this.timestamp_value = processorParams.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
@@ -165,9 +166,11 @@ public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
         array3Y[i] = array3Y[i+1];
 
       }
+
       //set the values resulting from the interpolation, in the fields of the event output
-      event.addField("interpolation_timestamp", xi);
+      event.addField("chosen_timestamp", xi);
       event.addField("interpolation_value", yi);
+
       out.collect(event);
     }
   }

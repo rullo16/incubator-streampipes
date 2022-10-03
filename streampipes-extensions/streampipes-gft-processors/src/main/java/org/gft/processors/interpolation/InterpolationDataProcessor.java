@@ -41,6 +41,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 
+
+
 public class InterpolationDataProcessor extends StreamPipesDataProcessor {
 
   private String input_value;
@@ -73,19 +75,22 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
                             Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
                     .build())
             .requiredSingleValueSelection(Labels.withId(INTERPOLATION_OPERATION), Options.from("Linear",
-                     "Spline", "Cubic", "Neville"))
+                    "Spline", "Cubic", "Neville"))
+
+//"Loess"  *rimosso temporaneamente perchè da rivedere */
 
             .requiredFloatParameter(Labels.withId(THRESHOLD))
 
-            .outputStrategy(OutputStrategies.custom())
+            .outputStrategy(OutputStrategies.append(PrimitivePropertyBuilder.create(Datatypes.Double, "chosen_timestamp").build()
+                    ,PrimitivePropertyBuilder.create(Datatypes.Double, "interpolation_value").build()))
 
             .build();
   }
 
   @Override
   public void onInvocation(ProcessorParams processorParams,
-                            SpOutputCollector out,
-                            EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
+                           SpOutputCollector out,
+                           EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
 
     this.input_value = processorParams.extractor().mappingPropertyValue(INPUT_VALUE);
     this.timestamp_value = processorParams.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
@@ -114,6 +119,10 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
     //two-position array interpolation
     if ((this.interpolation_operation.equals("Linear")) || (this.interpolation_operation.equals("Neville"))) {
 
+      System.out.println("two-position array interpolation ");
+      //System.out.println("timestamp: " + timestamp );
+      //System.out.println("arrayY[0]: " + arrayY[0] );
+
       //if we are in the first event it sets the [0] values of the two arrays with the data arriving from SP
       if ((arrayY[0] == 0.0 && arrayX[0] == 0.0)) {
 
@@ -123,6 +132,7 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         //if the new timestamp is equal than the timestamp previously or the difference is more low to the threshold,
         //do not perform an interpolation
       } else if ((arrayX[0] == timestamp) || (timestamp - arrayX[0] < this.threshold)) {
+        System.out.println("--------- Timestamp Values not accepted ------- ");
 
         //perform an interpolation
       } else {
@@ -133,13 +143,18 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         BigDecimal bd = new BigDecimal((arrayX[0] + arrayX[1]) / 2).setScale(2, RoundingMode.HALF_UP);
         xi = bd.doubleValue();
 
+        System.out.println("arrayX: " + Arrays.toString(arrayX));
+        System.out.println("arrayY: " + Arrays.toString(arrayY));
+
         switch (this.interpolation_operation) {
           case "Linear":
             //perform a linear interpolation
+            System.out.println("this.interpolation_operation " + this.interpolation_operation);
             yi = linearInterp(arrayX, arrayY, xi);
             break;
           case "Neville":
-            //perform a Neville interpolation
+            //perform a Loess interpolation
+            System.out.println("this.interpolation_operation " + this.interpolation_operation);
             yi = nevilleInterp(arrayX, arrayY, xi);
             break;
         }
@@ -149,14 +164,14 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         arrayY[0] = arrayY[1];
 
         //set the values resulting from the interpolation, in the fields of the event output
-        event.addField("interpolation_timestamp", xi);
+        event.addField("chosen_timestamp", xi);
         event.addField("interpolation_value", yi);
 
         out.collect(event);
       }
 
-    //three-position array interpolation
-    }else if ((this.interpolation_operation.equals("Spline")) || (this.interpolation_operation.equals("Cubic"))){
+      //three-position array interpolation
+    }else if ((this.interpolation_operation.equals("Loess")) || (this.interpolation_operation.equals("Spline")) || (this.interpolation_operation.equals("Cubic"))){
 
 
       System.out.println("three-position array interpolation ");
@@ -167,7 +182,7 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         array3X[0] = timestamp;
         array3Y[0] = value;
 
-      //if we are in the second event it sets the [1] values of the two arrays with the data arriving from SP
+        //if we are in the second event it sets the [1] values of the two arrays with the data arriving from SP
       }else if ((array3Y[1] == 0.0 && array3X[1] == 0.0)) {
 
         array3X[1] = timestamp;
@@ -191,6 +206,11 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         System.out.println("array3Y: " + Arrays.toString(array3Y));
 
         switch (this.interpolation_operation) {
+          case "Loess":
+            //perform a Loess interpolation
+            System.out.println("this.interpolation_operation " + this.interpolation_operation);
+            yi = loessInterp(array3X, array3Y, xi);
+            break;
           case "Spline":
             //perform a Spline interpolation
             System.out.println("this.interpolation_operation " + this.interpolation_operation);
@@ -211,7 +231,7 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
         array3Y[1] = array3Y[2];
 
         //set the values resulting from the interpolation, in the fields of the event output
-        event.addField("interpolation_timestamp", xi);
+        event.addField("chosen_timestamp", xi);
         event.addField("interpolation_value", yi);
 
         out.collect(event);
@@ -232,6 +252,13 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
     // return linear interpolation of (x,y) on xi
     LinearInterpolator li = new LinearInterpolator();
     PolynomialSplineFunction psf = li.interpolate(x, y);
+    double yi = psf.value(xi);
+    return yi;
+  }
+
+  public double loessInterp(double[] x, double[] y, double xi) {
+    LoessInterpolator li = new LoessInterpolator();
+    PolynomialSplineFunction  psf = li.interpolate(x,y);
     double yi = psf.value(xi);
     return yi;
   }
