@@ -16,7 +16,7 @@
 version: "3.4"
 services:
   extensions-all-jvm:
-    image: fouo/my-custom-extensions:latest
+    image: fouo/gft-custom-extensions:latest
     depends_on:
       - consul
       - backend

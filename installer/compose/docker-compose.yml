@@ -132,7 +132,7 @@ services:
 
   # Lite version pipeline elements
   streampipes-extension-all:
-    image: "fouo/streampipes-gft-extensions:latest"
+    image: "fouo/gft-custom-extensions:latest"
     depends_on:
       - consul
     volumes:
@@ -156,8 +156,7 @@ services:
 volumes:
   backend:
   consul:
-  connect:
-  couchdb:
+  connect:  couchdb:
   kafka:
   zookeeper:
   influxdb:
