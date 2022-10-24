@@ -19,11 +19,9 @@
 import { ShepherdService } from '../../services/tour/shepherd.service';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Pipeline, PipelineService } from '@streampipes/platform-services';
-import { PanelType } from '../../core-ui/dialog/base-dialog/base-dialog.model';
-import { DialogService } from '../../core-ui/dialog/base-dialog/base-dialog.service';
+import { PanelType, DialogService, DialogRef } from '@streampipes/shared-ui';
 import { PipelineStatusDialogComponent } from '../dialog/pipeline-status/pipeline-status-dialog.component';
 import { DeletePipelineDialogComponent } from '../dialog/delete-pipeline/delete-pipeline-dialog.component';
-import { DialogRef } from '../../core-ui/dialog/base-dialog/dialog-ref';
 import { Router } from '@angular/router';
 import { PipelineAction } from '../model/pipeline-model';
 import { PipelineNotificationsComponent } from '../dialog/pipeline-notifications/pipeline-notifications.component';
@@ -143,12 +141,12 @@ export class PipelineOperationsService {
     });
   }
 
-  showPipelineInEditor(id) {
-    this.router.navigate(['editor'], { queryParams: { pipeline: id }});
+  showPipelineInEditor(id: string) {
+    this.router.navigate(['pipelines', 'modify', id]);
   }
 
-  showPipelineDetails(id) {
-    this.router.navigate(['pipeline-details'], { queryParams: { pipeline: id }});
+  showPipelineDetails(id: string) {
+    this.router.navigate(['pipelines', 'details', id]);
   }
 
   modifyPipeline(pipeline) {

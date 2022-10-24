@@ -28,7 +28,23 @@ import { DataExplorerField, SpQueryResult } from '@streampipes/platform-services
 })
 export class TimeSeriesChartWidgetComponent extends BaseDataExplorerWidgetDirective<TimeSeriesChartWidgetModel> implements OnInit {
 
-  presetColors: string[] = ['#39B54A', '#1B1464', '#f44336', '#4CAF50', '#FFEB3B', '#FFFFFF', '#000000'];
+  presetColors: string[] = [
+                            '#39B54A', 
+                            '#1B1464', 
+                            '#f44336', 
+                            '#FFEB3B', 
+                            '#000000', 
+                            '#433BFF', 
+                            '#FF00E4', 
+                            '#FD8B00', 
+                            '#FD8B00',
+                            '#00FFD5',
+                            '#581845',
+                            '#767676',
+                            '#4300BF',
+                            '#6699D4',
+                            '#D466A1'
+                          ];
 
   groupKeeper: {} = {};
 
@@ -59,7 +75,12 @@ export class TimeSeriesChartWidgetComponent extends BaseDataExplorerWidgetDirect
       plot_bgcolor: '#fff',
       paper_bgcolor: '#fff',
       yaxis: {
-        fixedrange: true
+        fixedrange: true,
+        automargin: true
+      },
+      margin: {
+        t: 35,
+        b: 35
       },
       updatemenus: this.updatemenus,
 
@@ -104,20 +125,23 @@ export class TimeSeriesChartWidgetComponent extends BaseDataExplorerWidgetDirect
       y: 1.3,
       yanchor: 'top',
       font: { color: this.dataExplorerWidget.baseAppearanceConfig.textColor },
-      bgcolor: this.dataExplorerWidget.baseAppearanceConfig.backgroundColor,
+      plot_bgcolor: this.dataExplorerWidget.baseAppearanceConfig.backgroundColor,
+      paper_bgcolor: this.dataExplorerWidget.baseAppearanceConfig.backgroundColor,
       bordercolor: '#000'
     }];
 
     super.ngOnInit();
-    this.resizeService.resizeSubject.subscribe(info => {
-      if (info.gridsterItem.id === this.gridsterItem.id) {
-        setTimeout(() => {
-          this.graph.layout.autosize = false;
-          (this.graph.layout as any).width = (info.gridsterItemComponent.width - this.offsetRightLineChart);
-          (this.graph.layout as any).height = (info.gridsterItemComponent.height - 80);
-        }, 100);
-      }
-    });
+    if (!this.previewMode) {
+      this.resizeService.resizeSubject.subscribe(info => {
+        if (info.gridsterItem.id === this.gridsterItem.id) {
+          setTimeout(() => {
+            this.graph.layout.autosize = false;
+            (this.graph.layout as any).width = (info.gridsterItemComponent.width - this.offsetRightLineChart);
+            (this.graph.layout as any).height = (info.gridsterItemComponent.height - 80);
+          }, 100);
+        }
+      });
+    }
   }
 
   transformData(data: SpQueryResult,
@@ -234,12 +258,14 @@ export class TimeSeriesChartWidgetComponent extends BaseDataExplorerWidgetDirect
         spikedash: 'dash',
         spikecolor: '#666666',
         spikethickness: 2,
+        automargin: true,
       };
       this.graph.layout.hovermode = 'x';
 
     } else {
       this.graph.layout['xaxis'] = {
         type: 'date',
+        automargin: true,
       };
       this.graph.layout.hovermode = '';
     }

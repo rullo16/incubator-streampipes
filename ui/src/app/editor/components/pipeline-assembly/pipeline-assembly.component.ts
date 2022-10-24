@@ -34,10 +34,8 @@ import { JsplumbService } from '../../services/jsplumb.service';
 import { ShepherdService } from '../../../services/tour/shepherd.service';
 import { PipelineElementConfig, PipelineElementUnion } from '../../model/editor.model';
 import { ObjectProvider } from '../../services/object-provider.service';
-import { PanelType } from '../../../core-ui/dialog/base-dialog/base-dialog.model';
+import { ConfirmDialogComponent, DialogService, PanelType, SpBreadcrumbService } from '@streampipes/shared-ui';
 import { SavePipelineComponent } from '../../dialog/save-pipeline/save-pipeline.component';
-import { DialogService } from '../../../core-ui/dialog/base-dialog/base-dialog.service';
-import { ConfirmDialogComponent } from '../../../core-ui/dialog/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EditorService } from '../../services/editor.service';
 import { PipelineCanvasMetadata, PipelineCanvasMetadataService, PipelineService } from '@streampipes/platform-services';
@@ -47,6 +45,8 @@ import { PipelineElementDraggedService } from '../../services/pipeline-element-d
 import { PipelineComponent } from '../pipeline/pipeline.component';
 import { forkJoin } from 'rxjs';
 import { PipelineElementDiscoveryComponent } from '../../dialog/pipeline-element-discovery/pipeline-element-discovery.component';
+import { SpPipelineRoutes } from '../../../pipelines/pipelines.routes';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -108,7 +108,9 @@ export class PipelineAssemblyComponent implements OnInit, AfterViewInit {
                 private dialog: MatDialog,
                 private ngZone: NgZone,
                 private pipelineElementDraggedService: PipelineElementDraggedService,
-                private pipelineCanvasMetadataService: PipelineCanvasMetadataService) {
+                private pipelineCanvasMetadataService: PipelineCanvasMetadataService,
+                private breadcrumbService: SpBreadcrumbService,
+                private router: Router) {
 
         this.selectMode = true;
         this.currentZoomLevel = 1;
@@ -251,6 +253,7 @@ export class PipelineAssemblyComponent implements OnInit, AfterViewInit {
         pipelineRequest.subscribe(pipelineResp => {
                 const pipeline = pipelineResp;
                 this.currentPipelineName = pipeline.name;
+                this.breadcrumbService.updateBreadcrumb([SpPipelineRoutes.BASE, {label: pipeline.name}, {label: 'Modify'}]);
                 this.currentPipelineDescription = pipeline.description;
                 this.rawPipelineModel = this.jsplumbService.makeRawPipeline(pipeline, false);
                 canvasRequest.subscribe(canvasResp => {

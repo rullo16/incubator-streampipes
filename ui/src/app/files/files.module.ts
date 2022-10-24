@@ -39,6 +39,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PlatformServicesModule } from '@streampipes/platform-services';
+import { RouterModule } from '@angular/router';
+import { SharedUiModule } from '@streampipes/shared-ui';
 
 @NgModule({
   imports: [
@@ -61,17 +63,25 @@ import { PlatformServicesModule } from '@streampipes/platform-services';
     MatTabsModule,
     MatTooltipModule,
     PlatformServicesModule,
-    ServicesModule
+    ServicesModule,
+    SharedUiModule,
+    RouterModule.forChild([
+      {
+        path: 'files',
+        children: [
+          {
+            path: '',
+            component: FilesComponent
+          }]
+      }])
+
   ],
   declarations: [
     FilesComponent,
     FileOverviewComponent,
     FileUploadDialogComponent
   ],
-  providers: [],
-  entryComponents: [
-    FilesComponent
-  ]
+  providers: []
 })
 export class FilesModule {
 }

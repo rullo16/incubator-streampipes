@@ -63,9 +63,20 @@ module.exports = {
                 "@angular/core": { singleton: true, strictVersion: true, requiredVersion: 'auto', eager: true },
                 "@angular/common": { singleton: true, strictVersion: true, requiredVersion: 'auto' , eager: true},
                 "@angular/common/http": { singleton: true, strictVersion: true, requiredVersion: 'auto' , eager: true},
+                "@angular/forms": { singleton: true, strictVersion: true, requiredVersion: 'auto' , eager: true},
                 "@angular/router": { singleton: true, strictVersion: true, requiredVersion: 'auto' , eager: true},
-                //"@streampipes/platform-services": {singleton: true, strictVersion: true, requiredVersion: 'auto', eager: true},
-
+                "@angular/cdk": { singleton: true, strictVersion: true, requiredVersion: 'auto' , eager: true},
+                "@angular/cdk/overlay": { singleton: true, strictVersion: false, requiredVersion: 'auto', eager: true},
+                "@angular/cdk/portal": { singleton: true, strictVersion: false, requiredVersion: 'auto', eager: true},
+                "@angular/material": { singleton: true, strictVersion: true, requiredVersion:'auto', eager: true},
+                "@angular/material/core": { singleton: true, strictVersion: false, requiredVersion: 'auto', eager: true},
+                "@angular/material/menu": { singleton: true, strictVersion: false, requiredVersion: 'auto', eager: true},
+                "@angular/material/tooltip": { singleton: true, strictVersion: true, requiredVersion:'auto', eager: true },
+                "@angular/material/dialog": { singleton: true, strictVersion: true, requiredVersion:'auto', eager: true },
+                "@angular/material/select": { singleton: true, strictVersion: true, requiredVersion:'auto', eager: true },
+                "@angular/material/form-field": { singleton: true, strictVersion: true, requiredVersion:'auto', eager: true },
+                "@streampipes/shared-ui": { singleton: true, strictVersion: true, eager: true},
+                "@streampipes/platform-services": { singleton: true, strictVersion: true, eager: true},
                 ...sharedMappings.getDescriptors()
             })
 

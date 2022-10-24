@@ -131,7 +131,7 @@ services:
       spnet:
 
   # Lite version pipeline elements
-  streampipes-extension-all:
+  extensions-all-jvm:
     image: "fouo/gft-custom-extensions:latest"
     depends_on:
       - consul
@@ -156,7 +156,8 @@ services:
 volumes:
   backend:
   consul:
-  connect:  couchdb:
+  connect:
+  couchdb:
   kafka:
   zookeeper:
   influxdb:

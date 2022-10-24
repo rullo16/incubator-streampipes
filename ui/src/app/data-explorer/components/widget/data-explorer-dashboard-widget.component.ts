@@ -16,26 +16,17 @@
  *
  */
 
-import {
-  Component,
-  ComponentFactoryResolver,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { GridsterItemComponent } from 'angular-gridster2';
 import {
-  DateRange,
+  DashboardItem, DataExplorerDataConfig,
   DataExplorerWidgetModel,
   DataLakeMeasure,
   DataViewDataExplorerService,
-  DashboardItem,
+  DateRange,
   TimeSettings
 } from '@streampipes/platform-services';
-import { DataDownloadDialog } from '../datadownloadDialog/dataDownload.dialog';
+import { DataDownloadDialogComponent } from '../../../core-ui/data-download-dialog/data-download-dialog.component';
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { DataExplorerWidgetRegistry } from '../../registry/data-explorer-widget-registry';
@@ -44,6 +35,7 @@ import { BaseWidgetData } from '../widgets/base/data-explorer-widget-data';
 import { WidgetTypeService } from '../../services/widget-type.service';
 import { AuthService } from '../../../services/auth.service';
 import { UserPrivilege } from '../../../_enums/user-privilege.enum';
+import { DialogService, PanelType } from '@streampipes/shared-ui';
 
 @Component({
   selector: 'sp-data-explorer-dashboard-widget',
@@ -70,6 +62,12 @@ export class DataExplorerDashboardWidgetComponent implements OnInit {
   @Input()
   currentlyConfiguredWidgetId: string;
 
+  @Input()
+  previewMode = false;
+
+  @Input()
+  gridMode = true;
+
   /**
    * This is the date range (start, end) to view the data and is set in data-explorer.ts
    */
@@ -95,7 +93,7 @@ export class DataExplorerDashboardWidgetComponent implements OnInit {
   @ViewChild(WidgetDirective, {static: true}) widgetHost!: WidgetDirective;
 
   constructor(private dataViewDataExplorerService: DataViewDataExplorerService,
-              private dialog: MatDialog,
+              private dialogService: DialogService,
               private componentFactoryResolver: ComponentFactoryResolver,
               private widgetTypeService: WidgetTypeService,
               private authService: AuthService) {
@@ -136,6 +134,8 @@ export class DataExplorerDashboardWidgetComponent implements OnInit {
     componentRef.instance.editMode = this.editMode;
     componentRef.instance.dataViewDashboardItem = this.dashboardItem;
     componentRef.instance.dataExplorerWidget = this.configuredWidget;
+    componentRef.instance.previewMode = this.previewMode;
+    componentRef.instance.gridMode = this.gridMode;
     const removeSub = componentRef.instance.removeWidgetCallback.subscribe(ev => this.removeWidget());
     const timerSub = componentRef.instance.timerCallback.subscribe(ev => this.handleTimer(ev));
 
@@ -150,13 +150,14 @@ export class DataExplorerDashboardWidgetComponent implements OnInit {
   }
 
   downloadDataAsFile() {
-    this.dialog.open(DataDownloadDialog, {
-      width: '600px',
+    this.dialogService.open(DataDownloadDialogComponent, {
+      panelType: PanelType.SLIDE_IN_PANEL,
+      title: 'Download data',
+      width: '50vw',
       data: {
-        index: this.dataLakeMeasure.measureName,
-        date: DateRange.fromTimeSettings(this.timeSettings)
-      },
-      panelClass: 'custom-dialog-container'
+        'date': DateRange.fromTimeSettings(this.timeSettings),
+        'dataConfig': this.configuredWidget.dataConfig as DataExplorerDataConfig
+      }
     });
   }
 

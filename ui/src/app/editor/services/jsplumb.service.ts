@@ -38,7 +38,7 @@ import { JsplumbEndpointService } from './jsplumb-endpoint.service';
 import { JsplumbFactoryService } from './jsplumb-factory.service';
 import { EditorService } from './editor.service';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class JsplumbService {
 
   idCounter = 0;
@@ -98,7 +98,8 @@ export class JsplumbService {
           pipelineElementConfig.payload,
           true,
           false);
-      }, 100);
+        this.getBridge(false).repaintEverything();
+      }, 10);
     }
 
   }
@@ -304,9 +305,9 @@ export class JsplumbService {
           this.jsplumbEndpointService.getInputEndpoint(preview, pipelineElementDomId, 0));
       } else {
         jsplumbBridge.addEndpoint(pipelineElementDomId,
-          this.jsplumbEndpointService.getNewTargetPoint(preview, 0, 0.25, pipelineElementDomId, 0));
+          this.jsplumbEndpointService.getNewTargetPoint(preview, 0, 0.3, pipelineElementDomId, 0));
         jsplumbBridge.addEndpoint(pipelineElementDomId,
-          this.jsplumbEndpointService.getNewTargetPoint(preview, 0, 0.75, pipelineElementDomId, 1));
+          this.jsplumbEndpointService.getNewTargetPoint(preview, 0, 0.7, pipelineElementDomId, 1));
       }
     }
     return pipelineElementDomId;

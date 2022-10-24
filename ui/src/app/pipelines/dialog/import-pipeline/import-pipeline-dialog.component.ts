@@ -18,7 +18,7 @@
 
 import { Component } from '@angular/core';
 import { Pipeline, PipelineService } from '@streampipes/platform-services';
-import { DialogRef } from '../../../core-ui/dialog/base-dialog/dialog-ref';
+import { DialogRef } from '@streampipes/shared-ui';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -78,8 +78,7 @@ export class ImportPipelineDialogComponent {
     }
 
     toggleSelectedPipeline(pipeline: Pipeline) {
-        console.log(pipeline);
-        if (this.selectedPipelines.some(p => p._id = pipeline._id)) {
+        if (this.selectedPipelines.some(p => p._id === pipeline._id)) {
             this.selectedPipelines.splice(this.selectedPipelines.findIndex(sp => sp._id === pipeline._id), 1);
         } else {
             this.selectedPipelines.push(pipeline);
@@ -87,7 +86,6 @@ export class ImportPipelineDialogComponent {
     }
 
     storePipelines() {
-        console.log(this.selectedPipelines);
          const promises = [];
          this.selectedPipelines.forEach(pipeline => {
              pipeline._rev = undefined;

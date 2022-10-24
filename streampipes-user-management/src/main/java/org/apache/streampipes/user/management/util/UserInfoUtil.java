@@ -19,7 +19,7 @@
 package org.apache.streampipes.user.management.util;
 
 import org.apache.streampipes.model.client.user.UserAccount;
-import org.apache.streampipes.model.client.user.UserInfo;
+import org.apache.streampipes.model.UserInfo;
 
 import java.util.Set;
 

@@ -28,8 +28,12 @@ import { WidgetConfigurationService } from '../../../../services/widget-configur
 })
 export class FieldSelectionPanelComponent implements OnInit {
 
+  MAX_INITIAL_FIELDS = 3;
+
   @Input() sourceConfig: SourceConfig;
   @Input() widgetId: string;
+
+  fieldsForSelection: FieldConfig[];
 
   expandFields = false;
 
@@ -40,15 +44,37 @@ export class FieldSelectionPanelComponent implements OnInit {
     this.applyDefaultFields();
   }
 
+  getFieldsForSelection(): FieldConfig[] {
+     return this.sourceConfig.queryConfig.fields;
+  }
+
   applyDefaultFields() {
     if (this.sourceConfig.queryConfig.fields.length === 0) {
       this.addAllFields();
+      this.selectInitialFields();
+    } else {
+      const oldFields = this.sourceConfig.queryConfig.fields;
+      this.sourceConfig.queryConfig.fields = [];
+      this.addAllFields(oldFields);
     }
   }
 
-  addAllFields() {
+  addAllFields(checkFields: FieldConfig[] = []) {
     this.sourceConfig.measure.eventSchema.eventProperties.forEach(property => {
-      this.addField(property);
+      // this ensures that dimension properties are not aggregated, this is not possible with the influxdb, See [STREAMPIPES-524]
+      if (this.sourceConfig.queryType === 'raw' || property.propertyScope !== 'DIMENSION_PROPERTY') {
+        const fieldConfig = checkFields.find(field => field.runtimeName === property.runtimeName);
+        const isSelected = fieldConfig && fieldConfig.selected;
+        this.addField(property, isSelected, fieldConfig);
+      }
+    });
+  }
+
+  selectInitialFields() {
+    this.sourceConfig.queryConfig.fields.forEach((field, index) => {
+      if (index < this.MAX_INITIAL_FIELDS) {
+        field.selected = true;
+      }
     });
   }
 
@@ -65,9 +91,12 @@ export class FieldSelectionPanelComponent implements OnInit {
     this.widgetConfigService.notify({widgetId: this.widgetId, refreshData: true, refreshView: true});
   }
 
-  addField(property: EventPropertyUnion) {
-    const selection: FieldConfig = {runtimeName: property.runtimeName, selected: false, numeric: this.fieldProvider.isNumber(property)};
-    selection.aggregations = [this.findDefaultAggregation(property)];
+  addField(property: EventPropertyUnion, isSelected = false, fieldConfig: FieldConfig) {
+    const selection: FieldConfig = {
+      runtimeName: property.runtimeName,
+      selected: isSelected,
+      numeric: this.fieldProvider.isNumber(property)};
+    selection.aggregations = fieldConfig && fieldConfig.aggregations ? fieldConfig.aggregations : [this.findDefaultAggregation(property)];
     this.sourceConfig.queryConfig.fields.push(selection);
   }
 

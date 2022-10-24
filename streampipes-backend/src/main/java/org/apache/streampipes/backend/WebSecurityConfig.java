@@ -19,6 +19,7 @@
 package org.apache.streampipes.backend;
 
 import org.apache.streampipes.rest.filter.TokenAuthenticationFilter;
+import org.apache.streampipes.service.base.security.UnauthorizedRequestEntryPoint;
 import org.apache.streampipes.user.management.service.SpUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,7 +41,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserDetailsService userDetailsService;
-  private StreamPipesPasswordEncoder passwordEncoder;
+  private final StreamPipesPasswordEncoder passwordEncoder;
 
   public WebSecurityConfig(StreamPipesPasswordEncoder passwordEncoder) {
     this.passwordEncoder = passwordEncoder;

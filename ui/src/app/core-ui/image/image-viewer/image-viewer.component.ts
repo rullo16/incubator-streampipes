@@ -15,17 +15,19 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { SafeUrl } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'sp-image-viewer',
   templateUrl: './image-viewer.component.html',
   styleUrls: ['./image-viewer.component.css']
 })
-export class ImageViewerComponent {
+export class ImageViewerComponent implements OnInit {
 
   @Input()
-  public imagesRoutes;
+  public imagesRoutes: Observable<SafeUrl>[];
 
   @Input()
   public canvasHeight = 500;
@@ -43,5 +45,8 @@ export class ImageViewerComponent {
 
   handleImageIndexChange(index) {
     this.imagesIndex = index;
+  }
+
+  ngOnInit(): void {
   }
 }

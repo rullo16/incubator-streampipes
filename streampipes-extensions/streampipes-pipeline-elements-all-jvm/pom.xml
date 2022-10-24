@@ -21,7 +21,7 @@
     <parent>
         <artifactId>streampipes-extensions</artifactId>
         <groupId>org.apache.streampipes</groupId>
-        <version>0.69.0</version>
+        <version>0.70.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -31,22 +31,32 @@
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-processors-filters-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.graalvm.nativeimage</groupId>
+                    <artifactId>svm</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-processors-image-processing-jvm</artifactId>
+            <version>0.70.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-processors-filters-siddhi</artifactId>
+            <version>0.70.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-processors-text-mining-jvm</artifactId>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.gft</groupId>
@@ -56,69 +66,43 @@
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-image-processing-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-filters-siddhi</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-text-mining-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-processors-transformation-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sinks-brokers-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sinks-databases-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sinks-internal-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sinks-notifications-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-processors-enricher-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-processors-geo-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-processors-change-detection-jvm</artifactId>
-            <version>0.69.0</version>
-            <classifier>embed</classifier>
+            <version>0.70.0</version>
         </dependency>
 
         <!-- 3rd party dependencies to avoid convergence errors -->
@@ -133,11 +117,6 @@
         <dependency>
             <groupId>org.atteo.classindex</groupId>
             <artifactId>classindex</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
         </dependency>
     </dependencies>
 
@@ -177,6 +156,6 @@
     </build>
 
   <scm>
-    <tag>release/0.69.0</tag>
+    <tag>release/0.70.0</tag>
   </scm>
 </project>

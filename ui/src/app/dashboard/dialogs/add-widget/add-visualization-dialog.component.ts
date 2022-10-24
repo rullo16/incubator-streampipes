@@ -21,9 +21,9 @@ import { ElementIconText } from '../../../services/get-element-icon-text.service
 import { WidgetConfigBuilder } from '../../registry/widget-config-builder';
 import { WidgetRegistry } from '../../registry/widget-registry';
 import { MappingPropertyGenerator } from '../../sdk/matching/mapping-property-generator';
-import { DashboardService } from '../../services/dashboard.service';
 import {
   Dashboard,
+  DashboardService,
   DashboardWidgetModel,
   DashboardWidgetSettings,
   DataLakeMeasure, DatalakeRestService,
@@ -36,8 +36,8 @@ import {
   PipelineService
 } from '@streampipes/platform-services';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DialogRef } from '../../../core-ui/dialog/base-dialog/dialog-ref';
-import { zip } from "rxjs";
+import { DialogRef } from '@streampipes/shared-ui';
+import { zip } from 'rxjs';
 
 @Component({
   selector: 'add-visualization-dialog-component',
@@ -127,14 +127,18 @@ export class AddVisualizationDialogComponent implements OnInit, AfterViewInit {
   loadVisualizablePipelines() {
     zip(this.dataExplorerService.getAllPersistedDataStreams(), this.dataLakeRestService.getAllMeasurementSeries())
       .subscribe(res => {
+        const availableVisualizablePipelines = [];
         const visualizablePipelines = res[0];
         visualizablePipelines.forEach(p => {
           const measurement = res[1].find(m => {
             return m.measureName === p.measureName;
           });
-          p.eventSchema = measurement.eventSchema;
+          if (measurement) {
+            p.eventSchema = measurement.eventSchema;
+            availableVisualizablePipelines.push(p);
+          }
         });
-        this.visualizablePipelines = this.sortPipeline(visualizablePipelines);
+        this.visualizablePipelines = this.sortPipeline(availableVisualizablePipelines);
       });
   }
 

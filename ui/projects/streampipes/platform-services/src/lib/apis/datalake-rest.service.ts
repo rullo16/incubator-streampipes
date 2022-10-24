@@ -17,8 +17,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 import { DataLakeMeasure, PageResult, SpQueryResult } from '../model/gen/streampipes-model';
 import { map } from 'rxjs/operators';
 import { DatalakeQueryParameters } from '../model/datalake/DatalakeQueryParameters';
@@ -45,13 +45,26 @@ export class DatalakeRestService {
     }));
   }
 
+  performMultiQuery(queryParams: DatalakeQueryParameters[]): Observable<SpQueryResult[]> {
+    return this.http.post(`${this.dataLakeUrl}/query`, queryParams, {headers: {ignoreLoadingBar: ''}})
+      .pipe(map(response => response as SpQueryResult[]));
+  }
+
   getData(index: string,
           queryParams: DatalakeQueryParameters,
           ignoreLoadingBar?: boolean): Observable<SpQueryResult> {
-    const url = this.dataLakeUrl + '/measurements/' + index;
-    const headers = ignoreLoadingBar ? { ignoreLoadingBar: '' } : {};
-    // @ts-ignore
-    return this.http.get<SpQueryResult>(url, { params: queryParams }, headers);
+
+    const columns = queryParams.columns;
+    if (columns === '') {
+      const emptyQueryResult = new SpQueryResult();
+      emptyQueryResult.total = 0;
+      return of(emptyQueryResult);
+    } else {
+      const url = this.dataLakeUrl + '/measurements/' + index;
+      const headers = ignoreLoadingBar ? {ignoreLoadingBar: ''} : {};
+      // @ts-ignore
+      return this.http.get<SpQueryResult>(url, {params: queryParams, headers});
+    }
   }
 
 
@@ -62,75 +75,59 @@ export class DatalakeRestService {
       itemsPerPage, undefined, undefined, order, undefined, undefined);
 
     // @ts-ignore
-    return this.http.get<PageResult>(url, { params: queryParams });
+    return this.http.get<PageResult>(url, {params: queryParams});
   }
 
   getTagValues(index: string,
                fieldNames: string[]): Observable<Map<string, string[]>> {
-    return this.http.get(this.dataLakeUrl + '/measurements/' + index + '/tags?fields=' + fieldNames.toString())
-      .pipe(map(r => r as Map<string, string[]>));
+
+    if (fieldNames.length === 0) {
+      return of(new Map<string, string[]>());
+    } else {
+      return this.http.get(this.dataLakeUrl + '/measurements/' + index + '/tags?fields=' + fieldNames.toString())
+        .pipe(map(r => r as Map<string, string[]>));
+
+    }
   }
 
-  // getGroupedData(index: string, groupingTags: string, aggregationFunction?: string, columns?: string, startDate?: number, endDate?:
-  //   number, aggregationTimeUnit?: string, aggregationTimeValue?: number, order?: string, limit?: number):
-  //   Observable<SpQueryResult> {
-  //
-  //   const url = this.dataLakeUrl + '/measurements/' + index;
-  //   let _aggregationFunction = 'mean';
-  //   let timeInterval = '2000ms';
-  //
-  //   if (aggregationFunction) {
-  //     _aggregationFunction = aggregationFunction;
-  //   }
-  //
-  //   if (aggregationTimeUnit && aggregationTimeValue) {
-  //     timeInterval = aggregationTimeValue + aggregationTimeUnit;
-  //   }
-  //
-  //   const queryParams: DatalakeQueryParameters = this.getQueryParameters(columns, startDate, endDate, undefined, limit,
-  //     undefined, groupingTags, order, _aggregationFunction, timeInterval);
-  //
-  //   // @ts-ignore
-  //   return this.http.get<GroupedDataResult>(url, { params: queryParams });
-  // }
-
-  downloadRawData(index, format) {
-    const url = this.dataLakeUrl + '/measurements/' + index + '/download?format=' + format;
-
-    const request = new HttpRequest('GET', url, {
-      reportProgress: true,
-      responseType: 'text'
-    });
-
-    return this.http.request(request);
+  downloadRawData(index: string,
+                  format: string,
+                  delimiter: string,
+                  startTime?: number,
+                  endTime?: number) {
+    const queryParams = (startTime && endTime) ? {format, delimiter, startDate: startTime, endDate: endTime} : {
+      format,
+      delimiter
+    };
+    return this.buildDownloadRequest(index, queryParams);
   }
 
   downloadQueriedData(
-    index,
-    format,
-    startDate?,
-    endDate?,
-    columns?,
-    aggregationFunction?,
-    aggregationTimeUnit?,
-    aggregationTimeValue?,
-    groupingsTags?,
-    order?,
-    limit?,
-    offset?) {
-    const url = this.dataLakeUrl + '/measurements/' + index + '/download?format=' + format;
-    const timeInterval = aggregationTimeValue + aggregationTimeUnit;
+    index: string,
+    format: string,
+    delimiter: string,
+    queryParams: DatalakeQueryParameters) {
 
-    const queryParams: DatalakeQueryParameters = this.getQueryParameters(columns, startDate, endDate, undefined,
-      limit, offset, groupingsTags, order, aggregationFunction, timeInterval);
+    (queryParams as any).format = format;
+    (queryParams as any).delimiter = delimiter;
+    return this.buildDownloadRequest(index, queryParams);
 
+  }
+
+  buildDownloadRequest(index: string,
+                       queryParams: any) {
+    const url = this.dataLakeUrl + '/measurements/' + index + '/download';
     const request = new HttpRequest('GET', url, {
       reportProgress: true,
       responseType: 'text',
-      params: queryParams
+      params: this.toHttpParams(queryParams)
     });
 
     return this.http.request(request);
+  }
+
+  toHttpParams(queryParamObject: any): HttpParams {
+    return new HttpParams({fromObject: queryParamObject});
   }
 
   removeData(index: string) {

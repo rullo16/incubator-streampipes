@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.streampipes</groupId>
         <artifactId>streampipes-extensions</artifactId>
-        <version>0.69.0</version>
+        <version>0.70.0</version>
     </parent>
 
     <artifactId>streampipes-connect-adapters</artifactId>
@@ -37,17 +37,23 @@
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-connect-container-worker</artifactId>
-            <version>0.69.0</version>
+            <version>0.70.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.graalvm.nativeimage</groupId>
+                    <artifactId>svm</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-pipeline-elements-shared</artifactId>
-            <version>0.69.0</version>
+            <version>0.70.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-container-extensions</artifactId>
-            <version>0.69.0</version>
+            <version>0.70.0</version>
         </dependency>
 
         <!-- External dependencies -->
@@ -211,6 +217,6 @@
     </build>
 
   <scm>
-    <tag>release/0.69.0</tag>
+    <tag>release/0.70.0</tag>
   </scm>
 </project>

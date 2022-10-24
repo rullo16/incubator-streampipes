@@ -13,17 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE=adoptopenjdk/openjdk9-openj9:alpine
-FROM $BASE_IMAGE
+FROM eclipse-temurin:11-jre-focal
 
 ENV CONSUL_LOCATION consul
 
 EXPOSE 8090
 
 # needed pkgs processors-image-processing-jvm
-RUN apk --update add --no-cache \
-    fontconfig \
-    ttf-dejavu
+RUN apt-get update && apt-get install ttf-dejavu-core && apt-get install fontconfig
 
 COPY target/streampipes-processors-all-jvm.jar  /streampipes-processing-element-container.jar
 

@@ -20,7 +20,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FilesService, FileMetadata } from '@streampipes/platform-services';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { ConfirmDialogComponent } from '../../../core-ui/dialog/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@streampipes/shared-ui';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -35,7 +35,7 @@ export class FileOverviewComponent implements OnInit {
   dataSource: MatTableDataSource<FileMetadata>;
   filesAvailable = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  paginator: MatPaginator;
   pageSize = 1;
 
   constructor(private filesService: FilesService,
@@ -44,13 +44,14 @@ export class FileOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource<FileMetadata>([]);
     this.refreshFiles();
   }
 
   refreshFiles() {
     this.filesService.getFileMetadata().subscribe(fm => {
-      this.dataSource = new MatTableDataSource<FileMetadata>(fm);
-      this.filesAvailable = true;
+     this.dataSource.data = fm;
+      this.filesAvailable = fm && fm.length > 0;
       setTimeout(() => {
         this.dataSource.paginator = this.paginator;
       });
@@ -76,5 +77,9 @@ export class FileOverviewComponent implements OnInit {
         });
       }
     });
+  }
+
+  @ViewChild(MatPaginator) set content(paginator: MatPaginator) {
+    this.paginator = paginator;
   }
 }

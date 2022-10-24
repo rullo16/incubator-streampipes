@@ -103,8 +103,8 @@ For a more in-depth manual, read the [installation guide](https://streampipes.ap
 To properly build the StreamPipes core, the following tools should be installed:
 
 ### Prerequisites
-* Java 8 JDK (minimum)
-* Maven (tested with 3.6)
+* Java 11 JDK (minimum)
+* Maven (tested with 3.8)
 * NodeJS + NPM (tested with v12+/ v6+)
 * Docker + Docker-Compose
 
@@ -126,7 +126,7 @@ To build the ui, switch to the ``ui`` folder and perform the following steps:
 
 ### Starting
 
-To start StreamPipes, run ``docker-compose up -d`` from the root directory.
+To start StreamPipes, run ``docker-compose up --build -d`` from the root directory.
 
 You can also use the installer or CLI as described in the ``Installation`` section.
 
@@ -135,11 +135,11 @@ StreamPipes includes a repository of extensions for
 * **Connect adapters** for a variety of IoT data sources as well as 
 * **Data Processors** and **Data Sinks** as ready-to-use pipeline elements. 
 
-A description of the standard elements can be found in the Github repository [streampipes-extensions](https://www.github.com/apache/incubator-streampipes-extensions).
+A description of the standard elements can be found in [streampipes-extensions](https://github.com/apache/incubator-streampipes/tree/dev/streampipes-extensions).
 
 ## Extending StreamPipes
 
-You can easily add your own data streams, processors or sinks. A [Java-based SDK](https://streampipes.apache.org/docs/docs/dev-guide-tutorial-processors) and several [run-time wrappers](https://streampipes.apache.org/docs/docs/dev-guide-architecture) for popular streaming frameworks such as Apache Flink, Apache Spark and Apache 
+You can easily add your own data streams, processors or sinks. A [Java-based SDK](https://streampipes.apache.org/docs/docs/dev-guide-tutorial-processors) and several [run-time wrappers](https://streampipes.apache.org/docs/docs/dev-guide-architecture) for popular streaming frameworks such as Apache Flink and Apache 
 Kafka Streams (and also plain Java programs) can be used to integrate your existing processing logic into StreamPipes. Pipeline elements are packaged as Docker images and can be installed at runtime, whenever your requirements change.
 
 Check our developer guide at [https://streampipes.apache.org/docs/docs/dev-guide-introduction](https://streampipes.apache.org/docs/docs/dev-guide-introduction).

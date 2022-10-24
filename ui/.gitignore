@@ -21,6 +21,7 @@ src/assets/lib/apps/*
 
 # prebuild
 src/app/app-routing.module.ts
+src/app/app-overview/apps.ts
 src/app/appng5.module.ts
 src/app/home/home.service.ts
 src/app/services/version/version.service.ts
@@ -41,6 +42,7 @@ webpack.partial.dev.js
 # dependencies
 /node_modules
 projects/streampipes/platform-services/node_modules
+projects/streampipes/shared-ui/node_modules
 
 
 # IDEs and editors
@@ -60,6 +62,7 @@ projects/streampipes/platform-services/node_modules
 !.vscode/extensions.json
 
 # misc
+/.angular/cache
 /.sass-cache
 /connect.lock
 /coverage

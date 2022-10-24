@@ -44,12 +44,8 @@ import { PolygonLabelingService } from './image/services/PolygonLabeling.service
 import { ReactLabelingService } from './image/services/ReactLabeling.service';
 import { CocoFormatService } from './image/services/CocoFormat.service';
 import { LabelingModeService } from './image/services/LabelingMode.service';
-import { StandardDialogComponent } from './dialog/standard-dialog/standard-dialog.component';
-import { PanelDialogComponent } from './dialog/panel-dialog/panel-dialog.component';
-import { DialogService } from './dialog/base-dialog/base-dialog.service';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { ConfirmDialogComponent } from './dialog/confirm-dialog/confirm-dialog.component';
 import { StaticAnyInput } from './static-properties/static-any-input/static-any-input.component';
 import { StaticPropertyComponent } from './static-properties/static-property.component';
 import { StaticFreeInputComponent } from './static-properties/static-free-input/static-free-input.component';
@@ -84,8 +80,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { StaticRuntimeResolvableTreeInputComponent } from './static-properties/static-runtime-resolvable-tree-input/static-tree-input.component';
 import { MatTreeModule } from '@angular/material/tree';
 import { PlatformServicesModule } from '@streampipes/platform-services';
-import { BarchartWidgetComponent } from '../pipeline-details/components/monitoring/widget/barchart/barchart-widget.component';
-import { StatusWidgetComponent } from '../pipeline-details/components/monitoring/widget/status/status-widget.component';
+import { ImageBarPreviewComponent } from './image/components/image-bar/image-bar-preview/image-bar-preview.component';
+import { SharedUiModule } from '@streampipes/shared-ui';
+import { PipelineElementTemplateConfigComponent } from './pipeline-element-template-config/pipeline-element-template-config.component';
+import { PipelineElementTemplatePipe } from './pipeline-element-template-config/pipeline-element-template.pipe';
+import { DataDownloadDialogComponent } from './data-download-dialog/data-download-dialog.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 @NgModule({
   imports: [
@@ -108,16 +108,20 @@ import { StatusWidgetComponent } from '../pipeline-details/components/monitoring
     MatSlideToggleModule,
     MatChipsModule,
     MatTreeModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
     PlatformServicesModule,
     PortalModule,
+    SharedUiModule,
     OverlayModule,
     QuillModule.forRoot(),
     MatTreeModule
   ],
   declarations: [
     ConfigureLabelsComponent,
-    ConfirmDialogComponent,
+    DataDownloadDialogComponent,
     DisplayRecommendedPipe,
+    ImageBarPreviewComponent,
     ImageComponent,
     ImageContainerComponent,
     ImageLabelingComponent,
@@ -126,8 +130,8 @@ import { StatusWidgetComponent } from '../pipeline-details/components/monitoring
     ImageAnnotationsComponent,
     ImageViewerComponent,
     ObjectPermissionDialogComponent,
-    StandardDialogComponent,
-    PanelDialogComponent,
+    PipelineElementTemplateConfigComponent,
+    PipelineElementTemplatePipe,
     SplitSectionComponent,
     StaticAnyInput,
     StaticPropertyComponent,
@@ -160,18 +164,15 @@ import { StatusWidgetComponent } from '../pipeline-details/components/monitoring
     BrushLabelingService,
     CocoFormatService,
     LabelingModeService,
-    DialogService,
     RuntimeResolvableService,
   ],
-  entryComponents: [],
   exports: [
     ConfigureLabelsComponent,
+    DataDownloadDialogComponent,
     ImageComponent,
     ImageLabelingComponent,
+    PipelineElementTemplateConfigComponent,
     SelectLabelComponent,
-    StandardDialogComponent,
-    PanelDialogComponent,
-    ConfirmDialogComponent,
     StaticAnyInput,
     StaticPropertyComponent,
     StaticFreeInputComponent,
@@ -192,7 +193,6 @@ import { StatusWidgetComponent } from '../pipeline-details/components/monitoring
     ErrorHintComponent,
     PipelineStartedStatusComponent,
     SplitSectionComponent,
-
   ]
 })
 export class CoreUiModule {

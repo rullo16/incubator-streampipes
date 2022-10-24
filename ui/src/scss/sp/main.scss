@@ -367,8 +367,12 @@ md-content {
 .page-container {
   margin: 10px;
   border: 1px solid var(--color-bg-3);
-  min-height: calc(100% - 20px);
+  min-height: calc(100% - 60px);
   //height: 100%;
+}
+
+.sp-full-height {
+  min-height: calc(100% - 20px);
 }
 
 .page-container-padding-inner {
@@ -788,9 +792,9 @@ md-select.md-default-theme .md-select-value.md-select-placeholder, md-select .md
   vertical-align: top;
   background-color: var(--color-pe);
   display: inline-block;
-  height: 80px;
-  width: 80px;
-  line-height: 80px;
+  height: 70px;
+  width: 70px;
+  line-height: 70px;
   margin-left: 3%;
   margin-top: 5px;
   box-shadow: 1px 1px 2px var(--color-shadow);
@@ -911,7 +915,7 @@ md-select.md-default-theme .md-select-value.md-select-placeholder, md-select .md
   padding: 5px;
   border: 1px solid var(--color-bg-2);
   height: 300px;
-  width: 100%;
+  max-width: 100%;
 
   background-color: var(--color-bg-1);
   background-image: var(--canvas-color);
@@ -988,9 +992,9 @@ md-select.md-default-theme .md-select-value.md-select-placeholder, md-select .md
 }
 
 .connectable-editor {
-  height: 110px !important;
-  width: 110px !important;
-  line-height: 110px;
+  height: 90px !important;
+  width: 90px !important;
+  line-height: 90px;
 }
 
 .connectable-element {

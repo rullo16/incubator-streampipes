@@ -50,8 +50,7 @@ import {
 } from '@streampipes/platform-services';
 import { CoreUiModule } from '../core-ui/core-ui.module';
 import { CustomMaterialModule } from '../CustomMaterial/custom-material.module';
-import { DataDownloadDialog } from './components/datadownloadDialog/dataDownload.dialog';
-import { DataExplorerDashboardGridComponent } from './components/grid/data-explorer-dashboard-grid.component';
+import { DataExplorerDashboardGridComponent } from './components/widget-view/grid-view/data-explorer-dashboard-grid.component';
 import { DataExplorerDashboardOverviewComponent } from './components/overview/data-explorer-dashboard-overview.component';
 import { DataExplorerDashboardPanelComponent } from './components/panel/data-explorer-dashboard-panel.component';
 import { TimeRangeSelectorComponent } from './components/time-selector/timeRangeSelector.component';
@@ -64,7 +63,6 @@ import { LoadDataSpinnerComponent } from './components/widgets/utils/load-data-s
 import { NoDataInDateRangeComponent } from './components/widgets/utils/no-data/no-data-in-date-range.component';
 import { SelectPropertiesComponent } from './components/widgets/utils/select-properties/select-properties.component';
 import { SelectColorPropertiesComponent } from './components/widgets/utils/select-color-properties/select-color-properties.component';
-import { DataExplorerComponent } from './data-explorer.component';
 import { DataExplorerEditDataViewDialogComponent } from './dialogs/edit-dashboard/data-explorer-edit-data-view-dialog.component';
 import { RefreshDashboardService } from './services/refresh-dashboard.service';
 import { ResizeService } from './services/resize.service';
@@ -95,12 +93,15 @@ import { SelectPropertyComponent } from './components/widgets/utils/select-prope
 import { DataExplorerVisualisationSettingsComponent } from './components/designer-panel/visualisation-settings/data-explorer-visualisation-settings.component';
 import { GroupSelectionPanelComponent } from './components/designer-panel/data-settings/group-selection-panel/group-selection-panel.component';
 import { WidgetDirective } from './components/widget/widget.directive';
-import { WidgetTypeService } from './services/widget-type.service';
 import { CorrelationWidgetConfigComponent } from './components/widgets/correlation-chart/config/correlation-chart-widget-config.component';
 import { TimeSelectionService } from './services/time-selection.service';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { TooMuchDataComponent } from './components/widgets/utils/too-much-data/too-much-data.component';
-import { SpValueHeatmapComponent } from "./components/widgets/distribution-chart/value-heatmap/value-heatmap.component";
+import { SpValueHeatmapComponent } from './components/widgets/distribution-chart/value-heatmap/value-heatmap.component';
+import { RouterModule } from '@angular/router';
+import { DataExplorerDashboardSlideViewComponent } from './components/widget-view/slide-view/data-explorer-dashboard-slide-view.component';
+import { SharedUiModule } from '@streampipes/shared-ui';
+import { DataExplorerPanelCanDeactivateGuard } from './data-explorer-panel.can-deactivate.guard';
 
 export const MY_NATIVE_FORMATS = {
   fullPickerInput: {
@@ -146,22 +147,39 @@ export const MY_NATIVE_FORMATS = {
     MatSlideToggleModule,
     MatChipsModule,
     PlatformServicesModule,
+    SharedUiModule,
     NgxEchartsModule.forRoot({
-      /**
-       * This will import all modules from echarts.
-       * If you only need custom modules,
-       * please refer to [Custom Build] section.
-       */
       echarts: () => import('echarts'),
     }),
+    RouterModule.forChild([
+      {
+        path: 'dataexplorer',
+        children: [
+          {
+            path: '',
+            component: DataExplorerDashboardOverviewComponent
+          },
+          {
+            path: ':id',
+            component: DataExplorerDashboardPanelComponent,
+            canDeactivate: [DataExplorerPanelCanDeactivateGuard]
+          },
+          {
+            path: ':id/:startTime/:endTime',
+            component: DataExplorerDashboardPanelComponent,
+            canDeactivate: [DataExplorerPanelCanDeactivateGuard]
+          }
+        ]
+      }
+    ]),
+
   ],
   declarations: [
     AggregateConfigurationComponent,
-    DataDownloadDialog,
-    DataExplorerComponent,
     DataExplorerDashboardGridComponent,
     DataExplorerDashboardOverviewComponent,
     DataExplorerDashboardPanelComponent,
+    DataExplorerDashboardSlideViewComponent,
     DataExplorerDashboardWidgetComponent,
     DataExplorerDesignerPanelComponent,
     DataExplorerEditDataViewDialogComponent,
@@ -212,18 +230,11 @@ export const MY_NATIVE_FORMATS = {
     SemanticTypeUtilsService,
     TimeSelectionService,
     WidgetConfigurationService,
-    WidgetTypeService,
     {
       provide: OWL_DATE_TIME_FORMATS, useValue: MY_NATIVE_FORMATS
     }
   ],
   exports: [
-    DataExplorerComponent
-  ],
-  entryComponents: [
-    DataExplorerComponent,
-    DataDownloadDialog,
-    DataExplorerEditDataViewDialogComponent
   ]
 })
 export class DataExplorerModule {

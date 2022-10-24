@@ -33,6 +33,9 @@ import { OrderByPipe } from './filter/order-by.pipe';
 import { EndpointInstallationComponent } from './dialogs/endpoint-installation/endpoint-installation.component';
 import { PipelineElementNameFilter } from './filter/pipeline-element-name.pipe';
 import { PipelineElementInstallationStatusFilter } from './filter/pipeline-element-installation-status.pipe';
+import { RouterModule } from "@angular/router";
+import { SharedUiModule } from '../../../projects/streampipes/shared-ui/src/lib/shared-ui.module';
+
 
 @NgModule({
   imports: [
@@ -42,7 +45,19 @@ import { PipelineElementInstallationStatusFilter } from './filter/pipeline-eleme
     FlexLayoutModule,
     CoreUiModule,
     CustomMaterialModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RouterModule.forChild([
+      {
+        path: 'add',
+        children: [
+          {
+            path: '',
+            component: AddComponent
+          }
+        ]
+      }
+    ]),
+    SharedUiModule
   ],
   declarations: [
     AddComponent,
@@ -62,9 +77,6 @@ import { PipelineElementInstallationStatusFilter } from './filter/pipeline-eleme
     PipelineElementTypeFilter
   ],
   exports: [
-    AddComponent
-  ],
-  entryComponents: [
     AddComponent
   ]
 })

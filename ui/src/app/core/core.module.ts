@@ -22,7 +22,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommonModule } from '@angular/common';
 import { StreampipesComponent } from './components/streampipes/streampipes.component';
-import { FeedbackComponent } from './components/feedback/feedback.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
@@ -37,6 +36,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SpBreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { SharedUiModule } from '@streampipes/shared-ui';
 
 @NgModule({
   imports: [
@@ -56,18 +57,16 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     FormsModule,
     RouterModule,
     MatSlideToggleModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedUiModule
   ],
   declarations: [
+    SpBreadcrumbComponent,
     StreampipesComponent,
-    FeedbackComponent,
     IconbarComponent,
     ToolbarComponent
   ],
-  providers: [],
-  entryComponents: [
-    StreampipesComponent
-  ]
+  providers: []
 })
 export class CoreModule {
 }

@@ -185,7 +185,7 @@ services:
 
   # Lite version pipeline elements
   pipeline-elements-all-jvm:
-    image: "fouo/pipeline-elements-gft-all-jvm:latest"
+    image: "${SP_DOCKER_REGISTRY}/pipeline-elements-all-jvm:${SP_VERSION}"
     depends_on:
       - consul
     volumes:

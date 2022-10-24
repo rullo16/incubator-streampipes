@@ -25,7 +25,7 @@
     <version>${version}</version>
 
     <properties>
-        <sp.version>0.69.0</sp.version>
+        <sp.version>0.70.0</sp.version>
     </properties>
 
     <dependencies>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
+            <version>1.9.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>

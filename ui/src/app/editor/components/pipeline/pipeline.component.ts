@@ -43,11 +43,9 @@ import {
 } from '@streampipes/platform-services';
 import { ObjectProvider } from '../../services/object-provider.service';
 import { CustomizeComponent } from '../../dialog/customize/customize.component';
-import { PanelType } from '../../../core-ui/dialog/base-dialog/base-dialog.model';
-import { DialogService } from '../../../core-ui/dialog/base-dialog/base-dialog.service';
+import { DialogService, PanelType, ConfirmDialogComponent } from '@streampipes/shared-ui';
 import { EditorService } from '../../services/editor.service';
 import { MatchingErrorComponent } from '../../dialog/matching-error/matching-error.component';
-import { ConfirmDialogComponent } from '../../../core-ui/dialog/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { JsplumbFactoryService } from '../../services/jsplumb-factory.service';
@@ -155,8 +153,8 @@ export class PipelineComponent implements OnInit, OnDestroy {
 
   getElementCss(currentPipelineElementSettings) {
     return 'position:absolute;'
-      + (this.preview ? 'width:75px;' : 'width:110px;')
-      + (this.preview ? 'height:75px;' : 'height:110px;')
+      + (this.preview ? 'width:75px;' : 'width:90px;')
+      + (this.preview ? 'height:75px;' : 'height:90px;')
       + 'left: ' + currentPipelineElementSettings.position.x + 'px; '
       + 'top: ' + currentPipelineElementSettings.position.y + 'px; ';
   }
@@ -340,8 +338,9 @@ export class PipelineComponent implements OnInit, OnDestroy {
                   this.showCustomizeDialog(pe);
                 } else {
                   (pe.payload as InvocablePipelineElementUnion).configured = true;
-                  this.pipelineStyleService.updatePeConfigurationStatus(pe, PipelineElementConfigurationStatus.INCOMPLETE);
+                  this.pipelineStyleService.updatePeConfigurationStatus(pe, PipelineElementConfigurationStatus.OK);
                   this.announceConfiguredElement(pe);
+                  this.triggerPipelineCacheUpdate();
                 }
               }
             } else {
@@ -410,11 +409,13 @@ export class PipelineComponent implements OnInit, OnDestroy {
 
   isCustomOutput(pe) {
     let custom = false;
-    pe.payload.outputStrategies.forEach(strategy => {
-      if (strategy instanceof CustomOutputStrategy) {
-        custom = true;
-      }
-    });
+    if (pe.payload instanceof DataProcessorInvocation) {
+      pe.payload.outputStrategies.forEach(strategy => {
+        if (strategy instanceof CustomOutputStrategy) {
+          custom = true;
+        }
+      });
+    }
     return custom;
   }
 

@@ -24,7 +24,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { CustomMaterialModule } from '../CustomMaterial/custom-material.module';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { PipelineDetailsComponent } from './pipeline-details.component';
 import { PipelinePreviewComponent } from './components/preview/pipeline-preview.component';
 import { EditorModule } from '../editor/editor.module';
 import { PipelineActionsComponent } from './components/actions/pipeline-actions.component';
@@ -39,6 +38,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BarchartWidgetComponent } from './components/monitoring/widget/barchart/barchart-widget.component';
 import { StatusWidgetComponent } from './components/monitoring/widget/status/status-widget.component';
 import { PlatformServicesModule } from '@streampipes/platform-services';
+import { SpPipelineDetailsOverviewComponent } from './components/overview/pipeline-details-overview.component';
+import { SharedUiModule } from '@streampipes/shared-ui';
 
 @NgModule({
   imports: [
@@ -54,27 +55,24 @@ import { PlatformServicesModule } from '@streampipes/platform-services';
     EditorModule,
     FormsModule,
     ReactiveFormsModule,
-    PlatformServicesModule
+    PlatformServicesModule,
+    SharedUiModule
   ],
   declarations: [
     PipelineActionsComponent,
     PipelineElementsComponent,
     PipelineElementsRowComponent,
     PipelineElementStatisticsComponent,
-    PipelineDetailsComponent,
     PipelineMonitoringComponent,
     PipelineStatusComponent,
     PipelinePreviewComponent,
     QuickEditComponent,
     StatusWidgetComponent,
-    BarchartWidgetComponent
+    BarchartWidgetComponent,
+    SpPipelineDetailsOverviewComponent,
   ],
   providers: [],
   exports: [
-    PipelineDetailsComponent
-  ],
-  entryComponents: [
-    PipelineDetailsComponent
   ]
 })
 export class PipelineDetailsModule {
