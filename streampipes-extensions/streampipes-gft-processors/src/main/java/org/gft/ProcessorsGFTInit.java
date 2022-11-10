@@ -31,8 +31,8 @@ import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 
 import org.gft.processors.interpolation.InterpolationDataProcessor;
 import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
+import org.gft.processors.powertracking.PowerTrackingProcessor;
 import org.gft.processors.trendfiltered.TrendFilteredController;
-import org.gft.processors.timetracking.TimeTrackingDataProcessor;
 
 public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
 
@@ -49,7 +49,7 @@ public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
                     new InterpolationDataProcessor(),
                     new TrendFilteredController(),
                     new LoessInterpolationDataProcessor(),
-                    new TimeTrackingDataProcessor())
+                    new PowerTrackingProcessor())
             .registerMessagingFormats(
                     new JsonDataFormatFactory(),
                     new CborDataFormatFactory(),
