@@ -19,7 +19,7 @@ consul
 gft-custom-extensions
 couchdb
 kafka
-ui
+gft-ui
 sources-watertank-simulator
 zookeeper
 influxdb
