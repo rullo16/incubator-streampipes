@@ -29,29 +29,20 @@ import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 
-import org.gft.processors.interpolation.InterpolationDataProcessor;
-import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
-import org.gft.processors.powertracking.PowerTrackingProcessor;
-import org.gft.processors.powertrackingdwm.PowerTrackingDWM;
-import org.gft.processors.trendfiltered.TrendFilteredController;
+import org.gft.processors.PLM_DataSink;
 
-public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
+public class Init extends ExtensionsModelSubmitter {
 
   public static void main (String[] args) {
-    new ProcessorsGFTInit().init();
+    new Init().init();
   }
 
   @Override
   public SpServiceDefinition provideServiceDefinition() {
     return SpServiceDefinitionBuilder.create("org.gft",
-                    "GFT Processors",
-                    "", 8090)
-            .registerPipelineElements(
-                    new InterpolationDataProcessor(),
-                    new TrendFilteredController(),
-                    new LoessInterpolationDataProcessor(),
-                    new PowerTrackingProcessor(),
-                    new PowerTrackingDWM())
+                    "PLM Datasink Module",
+                    "human-readable service description", 8090)
+            .registerPipelineElement(new PLM_DataSink())
             .registerMessagingFormats(
                     new JsonDataFormatFactory(),
                     new CborDataFormatFactory(),

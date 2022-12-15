@@ -13,28 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: "3.4"
-services:
-  ui:
-    image: ${SP_DOCKER_REGISTRY}/ui:${SP_VERSION}
-    ports:
-      - "80:80"
-    depends_on:
-      - couchdb
-      - consul
-    volumes:
-      - nginx:/etc/nginx/
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "1m"
-        max-file: "1"
-    networks:
-      spnet:
+FROM adoptopenjdk/openjdk8-openj9:alpine
 
-volumes:
-  nginx:
+EXPOSE 8090
+ENV CONSUL_LOCATION consul
 
-networks:
-  spnet:
-    external: true
+COPY ./target/PLM_Module.jar  /streampipes-extensions-service.jar
+
+ENTRYPOINT ["java", "-jar", "/streampipes-extensions-service.jar"]

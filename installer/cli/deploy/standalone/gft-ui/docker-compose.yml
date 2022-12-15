@@ -18,12 +18,16 @@ services:
   ui:
     image: ${SP_DOCKER_REGISTRY}/ui:${SP_VERSION}
     ports:
-      - "80:80"
+#     - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_SSL=true
+    volumes:
+      - /etc/letsencrypt/live/gft-kyklos.duckdns.org/privkey.pem:/etc/nginx/ssl/ssl.pem
+      - /etc/letsencrypt/live/gft-kyklos.duckdns.org/fullchain.pem:/etc/nginx/ssl/cert.pem
     depends_on:
       - couchdb
       - consul
-    volumes:
-      - nginx:/etc/nginx/
     logging:
       driver: "json-file"
       options:
@@ -31,9 +35,6 @@ services:
         max-file: "1"
     networks:
       spnet:
-
-volumes:
-  nginx:
 
 networks:
   spnet:
