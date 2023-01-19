@@ -18,11 +18,16 @@
 
 import { EventEmitter } from '@angular/core';
 import { GridsterItem, GridsterItemComponent } from 'angular-gridster2';
-import { DashboardItem, DataExplorerWidgetModel, TimeSettings } from '@streampipes/platform-services';
+import {
+  DashboardItem,
+  DataExplorerWidgetModel,
+  StreamPipesErrorMessage,
+  TimeSettings } from '@streampipes/platform-services';
 
 export interface BaseWidgetData<T extends DataExplorerWidgetModel> {
   removeWidgetCallback: EventEmitter<boolean>;
   timerCallback: EventEmitter<boolean>;
+  errorCallback: EventEmitter<StreamPipesErrorMessage>;
 
   gridsterItem: GridsterItem;
   gridsterItemComponent: GridsterItemComponent;
@@ -34,4 +39,6 @@ export interface BaseWidgetData<T extends DataExplorerWidgetModel> {
   dataExplorerWidget: T;
   previewMode: boolean;
   gridMode: boolean;
+
+  cleanupSubscriptions();
 }

@@ -19,9 +19,7 @@
 package org.apache.streampipes.ps;
 
 import org.apache.streampipes.dataexplorer.DataLakeManagementV4;
-import org.apache.streampipes.dataexplorer.DataLakeNoUserManagementV3;
 import org.apache.streampipes.model.datalake.DataLakeMeasure;
-import org.apache.streampipes.model.schema.EventSchema;
 import org.apache.streampipes.rest.core.base.impl.AbstractAuthGuardedRestResource;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 
@@ -46,5 +44,43 @@ public class DataLakeMeasureResourceV4 extends AbstractAuthGuardedRestResource {
     public Response addDataLake(DataLakeMeasure dataLakeMeasure) {
         DataLakeMeasure result = this.dataLakeManagement.addDataLake(dataLakeMeasure);
         return ok(result);
+    }
+
+    @GET
+    @JacksonSerialized
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response getDataLakeMeasure(@PathParam("id") String measureId) {
+        return ok(this.dataLakeManagement.getById(measureId));
+    }
+
+    @PUT
+    @JacksonSerialized
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response updateDataLakeMeasure(@PathParam("id") String measureId,
+                                          DataLakeMeasure measure) {
+        if (measureId.equals(measure.getElementId())) {
+            try {
+                this.dataLakeManagement.updateDataLake(measure);
+                return ok();
+            } catch (IllegalArgumentException e) {
+                return badRequest(e.getMessage());
+            }
+        }
+        return badRequest();
+    }
+
+    @DELETE
+    @JacksonSerialized
+    @Path("{id}")
+    public Response deleteDataLakeMeasure(@PathParam("id") String measureId) {
+        try {
+            this.dataLakeManagement.deleteDataLakeMeasure(measureId);
+            return ok();
+        } catch (IllegalArgumentException e) {
+            return badRequest(e.getMessage());
+        }
     }
 }

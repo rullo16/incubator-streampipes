@@ -29,7 +29,6 @@ import org.apache.streampipes.rest.impl.dashboard.VisualizablePipelineResource;
 import org.apache.streampipes.rest.impl.datalake.DataLakeDashboardResource;
 import org.apache.streampipes.rest.impl.datalake.DataLakeWidgetResource;
 import org.apache.streampipes.rest.impl.datalake.PersistedDataStreamResource;
-import org.apache.streampipes.rest.impl.nouser.PipelineElementImportNoUser;
 import org.apache.streampipes.rest.impl.pe.DataProcessorResource;
 import org.apache.streampipes.rest.impl.pe.DataSinkResource;
 import org.apache.streampipes.rest.impl.pe.DataStreamResource;
@@ -49,6 +48,7 @@ public class StreamPipesResourceConfig extends ResourceConfig {
     public StreamPipesResourceConfig() {
         setProperties(Collections.singletonMap("jersey.config.server.response.setStatusOverSendError", true));
         register(AccountActivationResource.class);
+        register(AdapterMonitoringResource.class);
         register(Authentication.class);
         register(AssetDashboardResource.class);
         register(AssetManagementResource.class);
@@ -68,6 +68,7 @@ public class StreamPipesResourceConfig extends ResourceConfig {
         register(EmailConfigurationResource.class);
         register(EmailResource.class);
         register(ExtensionsServiceEndpointResource.class);
+        register(FunctionsResource.class);
         register(GeneralConfigurationResource.class);
         register(GenericStorageResource.class);
         register(LabelResource.class);
@@ -83,7 +84,6 @@ public class StreamPipesResourceConfig extends ResourceConfig {
         register(PipelineElementAsset.class);
         register(PipelineElementCategory.class);
         register(PipelineElementFile.class);
-        register(PipelineElementImportNoUser.class);
         register(PipelineElementImport.class);
         register(PipelineElementPreview.class);
         register(PipelineElementRuntimeInfo.class);

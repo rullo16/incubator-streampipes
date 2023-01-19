@@ -17,10 +17,7 @@
  */
 package org.apache.streampipes.rest.impl;
 
-import org.apache.streampipes.manager.monitoring.pipeline.PipelineExecutionStatusCollector;
-import org.apache.streampipes.rest.api.IPipelineMonitoring;
-import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
-import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
+import org.apache.streampipes.manager.monitoring.pipeline.ExtensionsLogProvider;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -30,14 +27,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/v2/pipeline-monitoring")
-public class PipelineMonitoring extends AbstractRestResource implements IPipelineMonitoring {
+public class PipelineMonitoring extends AbstractMonitoringResource {
 
-  @JacksonSerialized
-  @Path("{pipelineId}")
+  @Path("pipeline/{pipelineId}/logs")
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Override
-  public Response getPipelineMonitoringInfo(@PathParam("pipelineId") String pipelineId) {
-    return ok(new PipelineExecutionStatusCollector(pipelineId).makePipelineMonitoringInfo());
+  public Response getLogInfoForPipeline(@PathParam("pipelineId") String pipelineId) {
+    return ok(ExtensionsLogProvider.INSTANCE.getLogInfosForPipeline(pipelineId));
   }
+
+  @Path("pipeline/{pipelineId}/metrics")
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getMetricsInfoForPipeline(@PathParam("pipelineId") String pipelineId) {
+    return ok(ExtensionsLogProvider.INSTANCE.getMetricInfosForPipeline(pipelineId));
+  }
+
 }

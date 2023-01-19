@@ -20,7 +20,7 @@
     <parent>
         <artifactId>streampipes-extensions</artifactId>
         <groupId>org.apache.streampipes</groupId>
-        <version>0.70.0</version>
+        <version>0.90.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-container-extensions</artifactId>
-            <version>0.70.0</version>
+            <version>0.90.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.graalvm.nativeimage</groupId>
@@ -43,25 +43,31 @@
             </exclusions>
         </dependency>
         <!-- StreamPipes pipeline elements all (JVM) -->
-            <dependency>
-                <groupId>org.apache.streampipes</groupId>
-                <artifactId>streampipes-pipeline-elements-all-jvm</artifactId>
-                <version>0.70.0</version>
-                <classifier>embed</classifier>
-            </dependency>
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-pipeline-elements-all-jvm</artifactId>
+            <version>0.90.0</version>
+            <classifier>embed</classifier>
+        </dependency>
 
         <!-- StreamPipes connect adapters -->
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-connect-adapters</artifactId>
-            <version>0.70.0</version>
+            <version>0.90.0</version>
             <classifier>embed</classifier>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-connect-adapters-iiot</artifactId>
-            <version>0.70.0</version>
+            <version>0.90.0</version>
             <classifier>embed</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-messaging-nats</artifactId>
+            <version>0.90.0</version>
         </dependency>
 
         <!-- Dependency convergence -->
@@ -73,6 +79,23 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <failOnViolation>true</failOnViolation>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -92,6 +115,6 @@
     </build>
 
   <scm>
-    <tag>release/0.70.0</tag>
+    <tag>release/0.90.0</tag>
   </scm>
 </project>

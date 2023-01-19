@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.streampipes</groupId>
         <artifactId>streampipes-extensions</artifactId>
-        <version>0.70.0</version>
+        <version>0.90.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -34,17 +34,17 @@
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sdk-bundle</artifactId>
-            <version>0.70.0</version>
+            <version>0.90.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-wrapper-standalone</artifactId>
-            <version>0.70.0</version>
+            <version>0.90.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sources</artifactId>
-            <version>0.70.0</version>
+            <version>0.90.0</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-wrapper-siddhi</artifactId>
-            <version>0.70.0</version>
+            <version>0.90.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -74,7 +74,7 @@
             <plugin>
                 <groupId>org.apache.streampipes</groupId>
                 <artifactId>streampipes-maven-plugin</artifactId>
-                <version>0.70.0</version>
+                <version>0.90.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

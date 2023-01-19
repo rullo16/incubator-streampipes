@@ -24,6 +24,7 @@ import org.apache.streampipes.commons.exceptions.SepaParseException;
 import org.apache.streampipes.connect.adapter.GroundingService;
 import org.apache.streampipes.connect.api.exception.AdapterException;
 import org.apache.streampipes.connect.container.master.util.WorkerPaths;
+import org.apache.streampipes.manager.monitoring.pipeline.ExtensionsLogProvider;
 import org.apache.streampipes.manager.verification.DataStreamVerifier;
 import org.apache.streampipes.model.SpDataStream;
 import org.apache.streampipes.model.connect.adapter.AdapterDescription;
@@ -51,20 +52,25 @@ public class AdapterMasterManagement {
   private final IAdapterStorage adapterInstanceStorage;
   private final AdapterResourceManager adapterResourceManager;
 
+  private final DataStreamResourceManager dataStreamResourceManager;
+
   public AdapterMasterManagement() {
     this.adapterInstanceStorage = getAdapterInstanceStorage();
     this.adapterResourceManager = new SpResourceManager().manageAdapters();
+    this.dataStreamResourceManager = new SpResourceManager().manageDataStreams();
   }
 
   public AdapterMasterManagement(IAdapterStorage adapterStorage,
-                                 AdapterResourceManager adapterResourceManager) {
+                                 AdapterResourceManager adapterResourceManager,
+                                 DataStreamResourceManager dataStreamResourceManager) {
     this.adapterInstanceStorage = adapterStorage;
     this.adapterResourceManager = adapterResourceManager;
+    this.dataStreamResourceManager = dataStreamResourceManager;
   }
 
   public String addAdapter(AdapterDescription ad,
                            String principalSid)
-          throws AdapterException {
+      throws AdapterException {
 
     // Create elementId for adapter
     // TODO centralized provisioning of element id
@@ -94,6 +100,15 @@ public class AdapterMasterManagement {
     return storedDescription.getElementId();
   }
 
+  public void updateAdapter(AdapterDescription ad,
+                            String principalSid)
+      throws AdapterException {
+    // update adapter in database
+    this.adapterResourceManager.encryptAndUpdate(ad);
+
+    // update data source in database
+    this.updateDataSource(ad);
+  }
 
   public AdapterDescription getAdapter(String elementId) throws AdapterException {
     List<AdapterDescription> allAdapters = adapterInstanceStorage.getAllAdapters();
@@ -111,8 +126,9 @@ public class AdapterMasterManagement {
 
   /**
    * First the adapter is stopped removed, then the corresponding data source is deleted
-   * @param elementId: The elementId of the adapter instance
-   * @throws AdapterException
+   *
+   * @param elementId The elementId of the adapter instance
+   * @throws AdapterException when adapter can not be stopped
    */
   public void deleteAdapter(String elementId) throws AdapterException {
 
@@ -128,11 +144,11 @@ public class AdapterMasterManagement {
     AdapterDescription adapter = adapterInstanceStorage.getAdapter(elementId);
     // Delete adapter
     adapterResourceManager.delete(elementId);
+    ExtensionsLogProvider.INSTANCE.remove(elementId);
     LOG.info("Successfully deleted adapter: " + elementId);
 
     // Delete data stream
-    DataStreamResourceManager resourceManager = new SpResourceManager().manageDataStreams();
-    resourceManager.delete(adapter.getCorrespondingDataStreamElementId());
+    this.dataStreamResourceManager.delete(adapter.getCorrespondingDataStreamElementId());
     LOG.info("Successfully deleted data stream: " + adapter.getCorrespondingDataStreamElementId());
   }
 
@@ -165,6 +181,7 @@ public class AdapterMasterManagement {
       throw new AdapterException("Adapter " + elementId + "is not a stream adapter.");
     } else {
       WorkerRestClient.stopStreamAdapter(ad.getSelectedEndpointUrl(), (AdapterStreamDescription) ad);
+      ExtensionsLogProvider.INSTANCE.reset(elementId);
     }
   }
 
@@ -189,9 +206,19 @@ public class AdapterMasterManagement {
 
         LOG.info("Started adapter " + elementId + " on: " + baseUrl);
       } catch (NoServiceEndpointsAvailableException | URISyntaxException e) {
-        e.printStackTrace();
+        throw new AdapterException("Could not start adapter due to unavailable service endpoint", e);
       }
     }
+  }
+
+  private void updateDataSource(AdapterDescription ad) throws AdapterException {
+    // get data source
+    SpDataStream dataStream = this.dataStreamResourceManager.find(ad.getCorrespondingDataStreamElementId());
+
+    dataStream = SourcesManagement.updateDataStream(ad, dataStream);
+
+    // Update data source in database
+    this.dataStreamResourceManager.update(dataStream);
   }
 
   private void installDataSource(SpDataStream stream,

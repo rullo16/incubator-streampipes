@@ -29,4 +29,8 @@ public interface IDataLakeStorage {
     List<DataLakeMeasure> getAllDataLakeMeasures();
 
     DataLakeMeasure findOne(String id);
+
+    void updateDataLakeMeasure(DataLakeMeasure measure);
+
+    void deleteDataLakeMeasure(String id);
 }

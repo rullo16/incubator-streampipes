@@ -47,6 +47,10 @@ import { EditorComponent } from '../editor/editor.component';
 import { SpPipelineDetailsOverviewComponent } from '../pipeline-details/components/overview/pipeline-details-overview.component';
 import { PipelineMonitoringComponent } from '../pipeline-details/components/monitoring/pipeline-monitoring.component';
 import { QuickEditComponent } from '../pipeline-details/components/edit/quickedit.component';
+import { PipelineLogsComponent } from '../pipeline-details/components/pipeline-logs/pipeline-logs.component';
+import { FunctionsOverviewComponent } from './components/functions-overview/functions-overview.component';
+import { SpFunctionsMetricsComponent } from './components/functions-overview/functions-metrics/functions-metrics.component';
+import { SpFunctionsLogsComponent } from './components/functions-overview/functions-logs/functions-logs.component';
 
 @NgModule({
   imports: [
@@ -73,6 +77,14 @@ import { QuickEditComponent } from '../pipeline-details/components/edit/quickedi
             component: PipelinesComponent
           },
           {
+            path: 'functions/:functionId/metrics',
+            component: SpFunctionsMetricsComponent
+          },
+          {
+            path: 'functions/:functionId/logs',
+            component: SpFunctionsLogsComponent
+          },
+          {
             path: 'details/:pipelineId',
             children: [
               {
@@ -85,8 +97,12 @@ import { QuickEditComponent } from '../pipeline-details/components/edit/quickedi
                 component: SpPipelineDetailsOverviewComponent,
               },
               {
-                path: 'monitoring',
+                path: 'metrics',
                 component: PipelineMonitoringComponent,
+              },
+              {
+                path: 'logs',
+                component: PipelineLogsComponent,
               },
               {
                 path: 'quick-edit',
@@ -108,6 +124,7 @@ import { QuickEditComponent } from '../pipeline-details/components/edit/quickedi
   ],
   declarations: [
     DeletePipelineDialogComponent,
+    FunctionsOverviewComponent,
     ImportPipelineDialogComponent,
     PipelinesComponent,
     PipelineCategoriesDialogComponent,
@@ -116,7 +133,9 @@ import { QuickEditComponent } from '../pipeline-details/components/edit/quickedi
     PipelineStatusDialogComponent,
     StartAllPipelinesDialogComponent,
     PipelineInCategoryPipe,
-    CategoryAlreadyInPipelinePipe
+    CategoryAlreadyInPipelinePipe,
+    SpFunctionsMetricsComponent,
+    SpFunctionsLogsComponent
   ],
   providers: [
     PipelineOperationsService,

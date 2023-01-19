@@ -31,7 +31,6 @@ import { DataExplorerFieldProviderService } from '../../../services/data-explore
 import { WidgetType } from '../../../registry/data-explorer-widgets';
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
 export abstract class BaseWidgetConfig<T extends DataExplorerWidgetModel, V extends DataExplorerVisConfig> implements OnChanges {
 
   @Input() currentlyConfiguredWidget: T;

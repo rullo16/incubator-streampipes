@@ -27,6 +27,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.streampipes.dataexplorer.DataLakeManagementV4;
 import org.apache.streampipes.dataexplorer.v4.ProvidedQueryParams;
+import org.apache.streampipes.dataexplorer.v4.query.writer.OutputFormat;
+import org.apache.streampipes.model.StreamPipesErrorMessage;
 import org.apache.streampipes.model.datalake.DataLakeConfiguration;
 import org.apache.streampipes.model.datalake.DataLakeMeasure;
 import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
@@ -148,6 +150,7 @@ public class DataLakeResourceV4 extends AbstractRestResource {
             , @Parameter(in = ParameterIn.QUERY, description = "only return the number of results") @QueryParam(QP_COUNT_ONLY) String countOnly
             , @Parameter(in = ParameterIn.QUERY, description = "auto-aggregate the number of results to avoid browser overload") @QueryParam(QP_AUTO_AGGREGATE) boolean autoAggregate
             , @Parameter(in = ParameterIn.QUERY, description = "filter conditions (a comma-separated list of filter conditions such as [field,operator,condition])") @QueryParam(QP_FILTER) String filter
+            , @Parameter(in = ParameterIn.QUERY, description = "missingValueBehaviour (ignore or empty)") @QueryParam(QP_MISSING_VALUE_BEHAVIOUR) String missingValueBehaviour
             , @Parameter(in = ParameterIn.QUERY, description = "the maximum amount of resulting events, when too high the query status is set to TOO_MUCH_DATA") @QueryParam(QP_MAXIMUM_AMOUNT_OF_EVENTS) Integer maximumAmountOfResults
             , @Context UriInfo uriInfo) {
 
@@ -158,10 +161,11 @@ public class DataLakeResourceV4 extends AbstractRestResource {
         } else {
             ProvidedQueryParams sanitizedParams = populate(measurementID, queryParams);
             try {
-                SpQueryResult result = this.dataLakeManagement.getData(sanitizedParams);
+                SpQueryResult result =
+                    this.dataLakeManagement.getData(sanitizedParams, isIgnoreMissingValues(missingValueBehaviour));
                 return ok(result);
-            } catch (IllegalArgumentException e) {
-                return badRequest(e.getMessage());
+            } catch (RuntimeException e) {
+                return badRequest(StreamPipesErrorMessage.from(e));
             }
         }
     }
@@ -174,7 +178,7 @@ public class DataLakeResourceV4 extends AbstractRestResource {
         var results = queryParams
           .stream()
           .map(qp -> new ProvidedQueryParams(qp.get("measureName"), qp))
-          .map(params -> this.dataLakeManagement.getData(params))
+          .map(params -> this.dataLakeManagement.getData(params, true))
           .collect(Collectors.toList());
 
         return ok(results);
@@ -200,26 +204,33 @@ public class DataLakeResourceV4 extends AbstractRestResource {
             , @Parameter(in = ParameterIn.QUERY, description = "time interval for aggregation (e.g. 1m - one minute) for grouping operation") @QueryParam(QP_TIME_INTERVAL) String timeInterval
             , @Parameter(in = ParameterIn.QUERY, description = "format specification (csv, json - default is csv) for data download") @QueryParam(QP_FORMAT) String format
             , @Parameter(in = ParameterIn.QUERY, description = "csv delimiter (comma or semicolon)") @QueryParam(QP_CSV_DELIMITER) String csvDelimiter
+            , @Parameter(in = ParameterIn.QUERY, description = "missingValueBehaviour (ignore or empty)") @QueryParam(QP_MISSING_VALUE_BEHAVIOUR) String missingValueBehaviour
             , @Parameter(in = ParameterIn.QUERY, description = "filter conditions (a comma-separated list of filter conditions such as [field,operator,condition])") @QueryParam(QP_FILTER) String filter
             , @Context UriInfo uriInfo) {
 
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 
-        if (! (checkProvidedQueryParams(queryParams))) {
+        if (!(checkProvidedQueryParams(queryParams))) {
             return badRequest();
         } else {
             ProvidedQueryParams sanitizedParams = populate(measurementID, queryParams);
             if (format == null) {
                 format = "csv";
             }
-            String outputFormat = format;
-            StreamingOutput streamingOutput = output -> dataLakeManagement.getDataAsStream(sanitizedParams, outputFormat, output);
+
+            OutputFormat outputFormat = format.equals("csv") ? OutputFormat.CSV : OutputFormat.JSON;
+            StreamingOutput streamingOutput = output -> dataLakeManagement.getDataAsStream(
+                sanitizedParams,
+                outputFormat,
+                isIgnoreMissingValues(missingValueBehaviour),
+                output);
 
             return Response.ok(streamingOutput, MediaType.APPLICATION_OCTET_STREAM).
                     header("Content-Disposition", "attachment; filename=\"datalake." + outputFormat + "\"")
                     .build();
         }
     }
+
 
     @GET
     @Path("/configuration")
@@ -242,25 +253,7 @@ public class DataLakeResourceV4 extends AbstractRestResource {
     }
 
     private boolean checkProvidedQueryParams(MultivaluedMap<String, String> providedParams) {
-        if (supportedParams.containsAll(providedParams.keySet())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private boolean columnsEmpty(MultivaluedMap<String, String> providedParams) {
-        if (providedParams.containsKey("columns")) {
-            for (String column : providedParams.get("columns")) {
-                if ("".equals(column)) {
-                    return true;
-                }
-            };
-        } else {
-            return true;
-        }
-
-        return false;
+        return supportedParams.containsAll(providedParams.keySet());
     }
 
     private ProvidedQueryParams populate(String measurementId, MultivaluedMap<String, String> rawParams) {
@@ -269,4 +262,16 @@ public class DataLakeResourceV4 extends AbstractRestResource {
 
         return new ProvidedQueryParams(measurementId, queryParamMap);
     }
+
+    // Checks if the parameter for missing value behaviour is set
+    private boolean isIgnoreMissingValues(String missingValueBehaviour) {
+        boolean ignoreMissingValues;
+        if ("ignore".equals(missingValueBehaviour)) {
+            ignoreMissingValues = true;
+        } else {
+            ignoreMissingValues = false;
+        }
+        return ignoreMissingValues;
+    }
+
 }
