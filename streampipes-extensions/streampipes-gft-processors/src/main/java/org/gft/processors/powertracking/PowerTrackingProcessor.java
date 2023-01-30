@@ -45,22 +45,24 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
     private Double waiting_time;
     private Double waitingtime_start = 0.0;
     private Double hourlytime_start = 0.0;
-    double power_hourly = 0.0;
-    double power_waitingtime = 0.0;
+    private double hourly_consumption = 0.0;
+    private double waitingtime_consumption = 0.0;
+    private static final String ID = "org.gft.processors.powertracking";
     private static final String INPUT_VALUE = "value";
     private static final String TIMESTAMP_VALUE = "timestamp_value";
     private static final String WAITING_TIME = "time_range";
-    private static final String POWER_HOURLY = "power_hourly";
-    private static final String POWER_WAITINGTIME = "power_waitingtime";
+    private static final String HOURLY_CONSUMPTION = "hourly_consumption";
+    private static final String WAITINGTIME_CONSUMPTION = "waitingtime_consumption";
 
     List<Double> powersListForHourlyBasedComputation = new ArrayList<>();
     List<Double> timestampsListForHourlyBasedComputation = new ArrayList<>();
     List<Double> powersListForWaitingTimeBasedComputation = new ArrayList<>();
     List<Double> timestampsListForWaitingTimeBasedComputation = new ArrayList<>();
 
+
     @Override
     public DataProcessorDescription declareModel() {
-        return ProcessingElementBuilder.create("org.gft.processors.powertracking","PowerTracking", "Convert Instantaneous Power to Hourly Power")
+        return ProcessingElementBuilder.create(ID)
                 .withAssets(Assets.DOCUMENTATION, Assets.ICON)
                 .withLocales(Locales.EN)
                 .category(DataProcessorType.AGGREGATE)
@@ -71,11 +73,11 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                                 Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
                         .build())
                 .requiredIntegerParameter(Labels.withId(WAITING_TIME))
-                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(POWER_WAITINGTIME), "power waitingtime", SO.Number),
-                        EpProperties.doubleEp(Labels.withId(POWER_HOURLY), "power hourly", SO.Number)))
+
+                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtime consumption", SO.Number),
+                        EpProperties.doubleEp(Labels.withId(HOURLY_CONSUMPTION), "hourly consumption", SO.Number)))
                 .build();
     }
-
 
     @Override
     public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
@@ -90,23 +92,19 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
 
         //recovery input value
         Double power = event.getFieldBySelector(this.input_power_value).getAsPrimitive().getAsDouble();
-        // System.out.println("power value: " + power);
-
         //recovery timestamp value
         Double timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsDouble();
-        // System.out.println("timestamp value: " + timestamp);
 
         if(((timestamp - waitingtime_start >= waiting_time) || (timestamp - hourlytime_start >= 3600000)) && waitingtime_start != 0.0){
 
             if(timestamp - waitingtime_start >= waiting_time){
                 // reset the start time for computations
                 waitingtime_start = timestamp;
-                // add power to the lists
+                // Add newly current events for the next computation
                 powersListForWaitingTimeBasedComputation.add(power);
                 timestampsListForWaitingTimeBasedComputation.add(timestamp);
                 //perform operations to obtain waiting time power from instantaneous powers
-                power_waitingtime = powerToEnergy(powersListForWaitingTimeBasedComputation, timestampsListForWaitingTimeBasedComputation);
-                logger.info("=== OUTPUT WAITING TIME VALUE =======" + power_waitingtime);
+                waitingtime_consumption = powerToEnergy(powersListForWaitingTimeBasedComputation, timestampsListForWaitingTimeBasedComputation);
                 // Remove all elements from the Lists
                 powersListForWaitingTimeBasedComputation.clear();
                 timestampsListForWaitingTimeBasedComputation.clear();
@@ -118,12 +116,11 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
             if (timestamp - hourlytime_start >= 3600000) {
                 // reset the start time for computations
                 hourlytime_start  = timestamp;
-                // add power to the lists
+                // Add newly current events for the next computation
                 powersListForHourlyBasedComputation.add(power);
                 timestampsListForHourlyBasedComputation.add(timestamp);
                 //perform operations to obtain hourly power from instantaneous powers
-                power_hourly = powerToEnergy(powersListForHourlyBasedComputation, timestampsListForHourlyBasedComputation);
-                logger.info("============================= OUTPUT HOURLY VALUE =========" + power_hourly);
+                hourly_consumption = powerToEnergy(powersListForHourlyBasedComputation, timestampsListForHourlyBasedComputation);
                 // Remove all elements from the Lists
                 powersListForHourlyBasedComputation.clear();
                 timestampsListForHourlyBasedComputation.clear();
@@ -145,8 +142,8 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
             timestampsListForWaitingTimeBasedComputation.add(timestamp);
         }
 
-        event.addField("power waitingtime", power_waitingtime);
-        event.addField("power hourly", power_hourly);
+        event.addField("waitingtime consumption", waitingtime_consumption);
+        event.addField("hourly consumption", hourly_consumption);
         out.collect(event);
 
     }
@@ -169,7 +166,6 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
         }
         return Double.parseDouble(df.format(sum/3600));
     }
-
 
     @Override
     public void onDetach(){
