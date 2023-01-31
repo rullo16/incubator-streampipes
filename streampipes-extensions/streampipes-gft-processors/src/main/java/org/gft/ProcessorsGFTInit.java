@@ -54,8 +54,8 @@ public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
                     new LoessInterpolationDataProcessor(),
                     new PowerTrackingProcessor(),
                     new PowerTrackingDWM(),
-                    new WaterFlowTracking(),
-                    new BackendHttpStreamProtocol())
+                    new WaterFlowTracking())
+            .registerAdapters(new BackendHttpStreamProtocol())
             .registerMessagingFormats(
                     new JsonDataFormatFactory(),
                     new CborDataFormatFactory(),
