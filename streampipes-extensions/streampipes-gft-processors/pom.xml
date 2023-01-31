@@ -30,21 +30,30 @@
     <artifactId>streampipes-gft-processors</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <sp.version>0.70.0</sp.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sdk-bundle</artifactId>
-            <version>0.70.0</version>
+            <version>${sp.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-wrapper-standalone</artifactId>
-            <version>0.70.0</version>
+            <version>${sp.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-sources</artifactId>
-            <version>0.70.0</version>
+            <version>${sp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220924</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
@@ -59,7 +68,7 @@
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-wrapper-siddhi</artifactId>
-            <version>0.70.0</version>
+            <version>${sp.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -74,7 +83,7 @@
             <plugin>
                 <groupId>org.apache.streampipes</groupId>
                 <artifactId>streampipes-maven-plugin</artifactId>
-                <version>0.70.0</version>
+                <version>${sp.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
