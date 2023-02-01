@@ -25,12 +25,12 @@
 ***
 
 ## Description
-Describe your new data sink here!
+Describe your new data processor here!
 
 ***
 
 ## Required input
-What are the input requirements of your data sink?
+What are the input requirements of your data processor?
 
 ***
 
@@ -38,4 +38,4 @@ What are the input requirements of your data sink?
 What are the configurations a user has to provide?
 
 ## Output
-How do the events your data sink emits look like?
+How do the events your data processor emits look like?

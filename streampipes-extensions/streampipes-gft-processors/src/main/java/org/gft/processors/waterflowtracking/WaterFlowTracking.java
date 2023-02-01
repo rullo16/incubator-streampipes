@@ -72,7 +72,7 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
 
   @Override
   public DataProcessorDescription declareModel() {
-    return ProcessingElementBuilder.create(ID)
+    return ProcessingElementBuilder.create("org.gft.processors.waterflowtracking")
             .withAssets(Assets.DOCUMENTATION, Assets.ICON)
             .withLocales(Locales.EN)
             .category(DataProcessorType.AGGREGATE)

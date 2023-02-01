@@ -77,8 +77,6 @@ public class InterpolationDataProcessor extends StreamPipesDataProcessor {
             .requiredSingleValueSelection(Labels.withId(INTERPOLATION_OPERATION), Options.from("Linear",
                     "Spline", "Cubic", "Neville"))
 
-//"Loess"  *rimosso temporaneamente perchè da rivedere */
-
             .requiredFloatParameter(Labels.withId(THRESHOLD))
 
             .outputStrategy(OutputStrategies.append(PrimitivePropertyBuilder.create(Datatypes.Double, "chosen_timestamp").build()

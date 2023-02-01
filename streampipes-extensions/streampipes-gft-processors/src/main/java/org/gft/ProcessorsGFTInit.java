@@ -29,6 +29,7 @@ import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 
+import org.gft.adapters.plm.PLMHttpStreamProtocol;
 import org.gft.processors.interpolation.InterpolationDataProcessor;
 import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
 import org.gft.processors.powertracking.PowerTrackingProcessor;
@@ -53,9 +54,10 @@ public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
                     new TrendFilteredController(),
                     new LoessInterpolationDataProcessor(),
                     new PowerTrackingProcessor(),
-                    new PowerTrackingDWM(),
-                    new WaterFlowTracking())
-            .registerAdapters(new BackendHttpStreamProtocol())
+                    new PowerTrackingDWM())
+            .registerPipelineElement(new WaterFlowTracking())
+            .registerAdapter(new BackendHttpStreamProtocol())
+            .registerAdapter(new PLMHttpStreamProtocol())
             .registerMessagingFormats(
                     new JsonDataFormatFactory(),
                     new CborDataFormatFactory(),
