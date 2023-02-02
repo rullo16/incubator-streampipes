@@ -49,7 +49,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
 
   private static final long interval = 300;
   Logger logger = LoggerFactory.getLogger(Protocol.class);
-  //public static final String ID = "org.gft.adapters.backend";
+  public static final String ID = "org.gft.adapters.backend";
   BackendHttpConfig config;
   public BackendHttpStreamProtocol() {
   }
@@ -61,7 +61,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
 
   @Override
   public ProtocolDescription declareModel() {
-    return ProtocolDescriptionBuilder.create("org.gft.adapters.backend")
+    return ProtocolDescriptionBuilder.create(ID)
             .withAssets(Assets.DOCUMENTATION, Assets.ICON)
             .withLocales(Locales.EN)
             .sourceType(AdapterSourceType.STREAM)
@@ -177,7 +177,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
 
   @Override
   public String getId() {
-    return "org.gft.adapters.backend";
+    return ID;
   }
 
   private String login() throws org.apache.http.ParseException {
