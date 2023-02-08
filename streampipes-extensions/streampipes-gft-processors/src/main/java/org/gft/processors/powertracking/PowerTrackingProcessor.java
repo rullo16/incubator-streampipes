@@ -95,7 +95,7 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
         //recovery timestamp value
         Double timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsDouble();
 
-        if(((timestamp - waitingtime_start >= waiting_time) || (timestamp - hourlytime_start >= 3600000)) && waitingtime_start != 0.0){
+       if(((timestamp - waitingtime_start >= waiting_time) || (timestamp - hourlytime_start >= 3600000)) && waitingtime_start != 0.0){
 
             if(timestamp - waitingtime_start >= waiting_time){
                 // reset the start time for computations
@@ -130,16 +130,17 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
             }
 
         }else {
-            // set the start time for computations
-            if (waitingtime_start == 0.0){
-                hourlytime_start = timestamp;
-                waitingtime_start = timestamp;
-            }
-            // add power to the lists
-            powersListForHourlyBasedComputation.add(power);
-            timestampsListForHourlyBasedComputation.add(timestamp);
-            powersListForWaitingTimeBasedComputation.add(power);
-            timestampsListForWaitingTimeBasedComputation.add(timestamp);
+           // set the start time for computations
+           if (waitingtime_start == 0.0){
+               hourlytime_start = timestamp;
+               waitingtime_start = timestamp;
+           }
+           // add power to the lists
+           powersListForWaitingTimeBasedComputation.add(power);
+           timestampsListForWaitingTimeBasedComputation.add(timestamp);
+           powersListForHourlyBasedComputation.add(power);
+           timestampsListForHourlyBasedComputation.add(timestamp);
+
         }
 
         event.addField("waitingtime consumption", waitingtime_consumption);
@@ -156,8 +157,8 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
         DecimalFormat df = new DecimalFormat("#.#####");
         df.setRoundingMode(RoundingMode.CEILING);
         //perform Riemann approximations by trapezoids which is an approximation of the area
-        // under the curve (which corresponds to the energy/hourly power) formed by the points
-        // with coordinate power(ordinate) e timestamp(abscissa)
+        // under the curve (which corresponds to the energy consumption) formed by the points
+        // with coordinate powers(ordinate) e timestamps(abscissa)
         for(int i = 0; i<powers.size()-1; i++){
             first_base = powers.get(i);
             second_base = powers.get(i+1);

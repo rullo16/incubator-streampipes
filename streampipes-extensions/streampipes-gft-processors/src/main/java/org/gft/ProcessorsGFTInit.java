@@ -29,13 +29,13 @@ import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 
+import org.gft.adapters.backend.BackendHttpStreamProtocol;
 import org.gft.adapters.plm.PLMHttpStreamProtocol;
 import org.gft.processors.interpolation.InterpolationDataProcessor;
 import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
 import org.gft.processors.powertracking.PowerTrackingProcessor;
 import org.gft.processors.powertrackingdwm.PowerTrackingDWM;
 import org.gft.processors.trendfiltered.TrendFilteredController;
-import org.gft.adapters.backend.BackendHttpStreamProtocol;
 import org.gft.processors.waterflowtracking.WaterFlowTracking;
 
 public class ProcessorsGFTInit extends ExtensionsModelSubmitter {

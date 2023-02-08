@@ -34,36 +34,42 @@ import org.apache.streampipes.wrapper.standalone.ProcessorParams;
 import org.apache.streampipes.wrapper.standalone.StreamPipesDataProcessor;
 
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
 public class PowerTrackingDWM extends StreamPipesDataProcessor {
 
-
   private String input_power_value;
   private String input_timestamp_value;
-  private String input_date;
-  private static int day_precedent = -1, month_precedent = -1, range = 0;
-  double daily_consumption = 0.0;
-  double monthly_consumption = 0.0;
-  double seven_day_consumption = 0.0;
+  private static int day_precedent = -1, month_precedent = -1;
+  private static double daily_consumption = 0.0;
+  private static double monthly_consumption = 0.0;
+  private static double weekly_consumption = 0.0;
+  private static final String ID = "org.gft.processors.powertrackingdwm";
   private static final String INPUT_VALUE = "value";
   private static final String TIMESTAMP_VALUE = "timestamp_value";
-  private static final String DATE_VALUE = "date";
   private static final String DAILY_CONSUMPTION = "daily_consumption";
-  private static final String SEVENDAY_CONSUMPTION = "seven_day_consumption";
+  private static final String WEEKLY_CONSUMPTION = "weekly_consumption";
   private static final String MONTHLY_CONSUMPTION = "monthly_consumption";
 
+  private final DateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   List<Double> powersList = new ArrayList<>();
   List<Long> timestampsList = new ArrayList<>();
   List<Double> dailyConsumptionListForMonth = new ArrayList<>();
-  List<Double> dailyConsumptionListForSevenDay = new ArrayList<>();
+  List<Double> dailyConsumptionListForWeek = new ArrayList<>();
 
   @Override
   public DataProcessorDescription declareModel() {
-    return ProcessingElementBuilder.create("org.gft.processors.powertrackingdwm","PowerTrackingDWM", "Computes Daily and Monthly Energy Consumption based on the given instantaneous powers and timestamps values.")
+    return ProcessingElementBuilder.create(ID)
             .withAssets(Assets.DOCUMENTATION, Assets.ICON)
             .withLocales(Locales.EN)
             .category(DataProcessorType.AGGREGATE)
@@ -72,12 +78,10 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
                             Labels.withId(INPUT_VALUE), PropertyScope.NONE)
                     .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                             Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
-                    .requiredPropertyWithUnaryMapping(EpRequirements.stringReq(),
-                            Labels.withId(DATE_VALUE), PropertyScope.NONE)
                     .build())
             .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthly consumption", SO.Number),
                     EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "daily consumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(SEVENDAY_CONSUMPTION), "seven day consumption", SO.Number)))
+                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weekly consumption", SO.Number)))
             .build();
   }
 
@@ -85,66 +89,41 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
   public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
     this.input_power_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
     this.input_timestamp_value = parameters.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
-    this.input_date= parameters.extractor().mappingPropertyValue(DATE_VALUE);
   }
 
   @Override
   public void onEvent(Event event,SpOutputCollector out){
     //recovery power value
     Double power = event.getFieldBySelector(this.input_power_value).getAsPrimitive().getAsDouble();
-
     //recovery timestamp value
     Long timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsLong();
-    String date = event.getFieldBySelector(this.input_date).getAsPrimitive().getAsString();
+    //recovery date value
+    String date = getTheDate(timestamp);
 
+    // Day and Month extraction
     String[] ymd_hms = date.split(" ");
     String[] ymd = ymd_hms[0].split("-");
-
     int day_current = Integer.parseInt(ymd[2]);
     int month_current = Integer.parseInt(ymd[1]);
 
     if((day_current != day_precedent || month_current != month_precedent) && day_precedent != -1){
 
-      if(day_current == day_precedent){
-        range = range + 1;
-        //perform operations to obtain hourly power from instantaneous powers
-        daily_consumption = powersToEnergyConsumption(powersList, timestampsList);
-        logger.info("=============== OUTPUT DAILY CONSUMPTION  =========" + daily_consumption  + " kWh" + timestamp);
-        dailyConsumptionListForSevenDay.add(daily_consumption);
-        dailyConsumptionListForMonth.add(daily_consumption);
-        // Remove all elements from the Lists
-        clearLists(powersList, timestampsList);
-        // Add current events for the next computation
-        addToLists(power, timestamp);
-      }
-
       if(day_current != day_precedent){
-        range = range + 1;
         // reset day for computations
         day_precedent = day_current;
+        // Add current events for the next computation
+        powersList.add(power);
+        timestampsList.add(timestamp);
         //perform operations to obtain hourly power from instantaneous powers
-        daily_consumption = powersToEnergyConsumption(powersList, timestampsList);
-        logger.info("=============== OUTPUT DAILY CONSUMPTION  =========" + daily_consumption + " kWh" + timestamp);
-        dailyConsumptionListForSevenDay.add(daily_consumption);
+        daily_consumption = instantToDailyConsumption(powersList, timestampsList);
+        dailyConsumptionListForWeek.add(daily_consumption);
         dailyConsumptionListForMonth.add(daily_consumption);
         // Remove all elements from the Lists
-        clearLists(powersList, timestampsList);
+        powersList.clear();
+        timestampsList.clear();
         // Add current events for the next computation
-        addToLists(power, timestamp);
-      }
-
-      if(range == 7){
-        range = 0;
-        seven_day_consumption = dailyConsumptionsToSevenDayOrMonthlyConsumption(dailyConsumptionListForSevenDay);
-        logger.info("=============== OUTPUT SEVEN DAY CONSUMPTION  =========" + seven_day_consumption +" kWh");
-        dailyConsumptionListForSevenDay.clear();
-      }
-
-      if(month_current != month_precedent){
-        month_precedent = month_current;
-        monthly_consumption = dailyConsumptionsToSevenDayOrMonthlyConsumption(dailyConsumptionListForMonth);
-        logger.info("=============== OUTPUT MONTHLY CONSUMPTION  =========" + monthly_consumption + " kWh");
-        dailyConsumptionListForMonth.clear();
+        powersList.add(power);
+        timestampsList.add(timestamp);
       }
 
     }else {
@@ -154,34 +133,59 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
         day_precedent = day_current;
       }
       // add power to the lists
-      addToLists(power, timestamp);
+      powersList.add(power);
+      timestampsList.add(timestamp);
+    }
+
+    if(getCurrentDay(date).equals("Mon")){
+      weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
+      dailyConsumptionListForWeek.clear();
+    }
+
+    if(month_current != month_precedent){
+      month_precedent = month_current;
+      monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
+      dailyConsumptionListForMonth.clear();
     }
 
     event.addField("daily consumption", daily_consumption);
-    event.addField("seven day consumption", seven_day_consumption);
+    event.addField("weekly consumption", weekly_consumption);
     event.addField("monthly consumption", monthly_consumption);
 
     out.collect(event);
 
   }
 
-  private void addToLists(Double power, Long timestamp) {
-    powersList.add(power);
-    timestampsList.add(timestamp);
+  private String getTheDate(Long timestamp) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(timestamp);
+    return  date_format.format(cal.getTime());
   }
 
-  private void clearLists(List<Double> powersList, List<Long> timestampsList) {
-    powersList.clear();
-    timestampsList.clear();
+  private String getCurrentDay(String date){
+    String day = null;
+    try{
+      Date myDate = date_format.parse(date);
+      LocalDateTime localDateTime = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+      // convert LocalDateTime to date
+      Date date_plus = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+      String[] s = date_plus.toString().split(" ");
+      day = s[0];
+    }catch (ParseException e){
+      e.printStackTrace();
+    }
+    return day;
   }
 
-  private double dailyConsumptionsToSevenDayOrMonthlyConsumption(List<Double> dailyConsumptionList) {
+  private double dailyConsumptionsToWeeklyOrMonthlyConsumption(List<Double> dailyConsumptionList) {
     double sum = 0.0;
+    DecimalFormat df = new DecimalFormat("#.#####");
+    df.setRoundingMode(RoundingMode.CEILING);
     for (Double value : dailyConsumptionList) sum = sum + value;
-    return sum;
+    return Double.parseDouble(df.format(sum));
   }
 
-  public double powersToEnergyConsumption(List<Double> powers, List<Long> timestamps) {
+  public double instantToDailyConsumption(List<Double> powers, List<Long> timestamps) {
     double sum = 0.0;
     double first_base;
     double second_base;
@@ -189,15 +193,15 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     DecimalFormat df = new DecimalFormat("#.#####");
     df.setRoundingMode(RoundingMode.CEILING);
     //perform Riemann approximations by trapezoids which is an approximation of the area
-    // under the curve (which corresponds to the energy/hourly power) formed by the points
-    // with coordinate power(ordinate) e timestamp(abscissa)
+    // under the curve (which corresponds to the energy consumption) formed by the points
+    // with coordinate powers(ordinate) e timestamps(abscissa)
     for(int i = 0; i<powers.size()-1; i++){
       first_base = powers.get(i);
       second_base = powers.get(i+1);
       height = (timestamps.get(i+1) - timestamps.get(i))/1000;
       sum += ((first_base + second_base) / 2) * height ;
     }
-    return Double.parseDouble(df.format(sum/3600/1000));
+    return Double.parseDouble(df.format(sum/3600));
   }
 
   @Override

@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PLMHttpStreamProtocol extends PLMPullProtocol {
-    private static final long interval = 10;
+    private static final long interval = 5;
     Logger logger = LoggerFactory.getLogger(PLMHttpStreamProtocol.class);
     public static final String ID = "org.gft.adapters.plm";
     PLMHttpConfig config;
@@ -65,7 +65,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
 
     @Override
     public ProtocolDescription declareModel() {
-        return ProtocolDescriptionBuilder.create("org.gft.adapters.plm")
+        return ProtocolDescriptionBuilder.create(ID)
                 .withAssets(Assets.DOCUMENTATION, Assets.ICON)
                 .withLocales(Locales.EN)
                 .sourceType(AdapterSourceType.STREAM)
@@ -130,7 +130,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
 
     @Override
     public String getId() {
-        return "org.gft.adapters.plm";
+        return ID;
     }
 
     @Override
@@ -142,7 +142,9 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         String urlString = getUrl(this.selected_sensors);
 
         if (config.getLowestDate().compareToIgnoreCase(config.getHighestDate()) >= 0) {
-            return null;
+            logger.warn("Adapter Stopped: there is not anymore data to retrieve in the time interval!!!");
+            logger.warn("Stop Adapter on the User Interface!!!");
+            stop();
         }
 
         try {
@@ -157,8 +159,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
             connection.setRequestProperty("transfer-encoding", "chunked");
             connection.setRequestProperty("connection", "keep-alive");
             //connection.setDoOutput(true);
-            connection.setConnectTimeout(60000);
-            connection.setReadTimeout(120000);
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(60000);
             // Send the GET request to the API endpoint
             connection.connect();
 
@@ -183,8 +185,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
 
         try {
             Request request = Request.Post(urlString)
-                    .connectTimeout(120000)
-                    .socketTimeout(120000)
+                    .connectTimeout(5000)
+                    .socketTimeout(60000)
                     .setHeader("Content-Type", "application/json");
 
             response = request

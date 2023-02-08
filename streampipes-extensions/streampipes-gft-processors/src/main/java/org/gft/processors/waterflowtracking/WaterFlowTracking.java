@@ -50,7 +50,7 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
 
   private String input_WaterFlow_value;
   private String input_timestamp_value;
-  //private String input_choice;
+  private String input_choice;
   private static int day_precedent = -1, month_precedent = -1;
   private static double daily_consumption = 0.0;
   private static double monthly_consumption = 0.0;
@@ -58,7 +58,7 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
   private static final String ID = "org.gft.processors.waterflowtracking";
   private static final String INPUT_VALUE = "value";
   private static final String TIMESTAMP_VALUE = "timestamp_value";
-  //private static final String CHOICE = "choice";
+  private static final String CHOICE = "choice";
   private static final String DAILY_CONSUMPTION = "daily_consumption";
   private static final String WEEKLY_CONSUMPTION = "weekly_consumption";
   private static final String MONTHLY_CONSUMPTION = "monthly_consumption";
@@ -72,7 +72,7 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
 
   @Override
   public DataProcessorDescription declareModel() {
-    return ProcessingElementBuilder.create("org.gft.processors.waterflowtracking")
+    return ProcessingElementBuilder.create(ID)
             .withAssets(Assets.DOCUMENTATION, Assets.ICON)
             .withLocales(Locales.EN)
             .category(DataProcessorType.AGGREGATE)
@@ -82,10 +82,8 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
                     .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                             Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
                     .build())
-/*            .requiredSingleValueSelection(Labels.withId(CHOICE),
-                Options.from("True", "False"))
-           .requiredMultiValueSelection(Labels.withId(CHOICE),
-                    Options.from(""))*/
+            .requiredSingleValueSelection(Labels.withId(CHOICE),
+                Options.from("No", "Yes"))
             .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthly consumption", SO.Number),
                     EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "daily consumption", SO.Number),
                     EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weekly consumption", SO.Number)))
@@ -96,8 +94,7 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
   public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
     this.input_WaterFlow_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
     this.input_timestamp_value = parameters.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
-    //List<String> choiceStringList = parameters.extractor().selectedMultiValues(CHOICE, String.class);
-    //this.input_choice  = parameters.extractor().selectedSingleValue(CHOICE, String.class);
+    this.input_choice  = parameters.extractor().selectedSingleValue(CHOICE, String.class);
   }
 
   @Override
@@ -106,8 +103,6 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
     Double water_flow = event.getFieldBySelector(this.input_WaterFlow_value).getAsPrimitive().getAsDouble();
     //recovery timestamp value
     Long timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsLong();
-    //Recovery choice
-       //String choice = event.getFieldBySelector(this.input_choice).getAsPrimitive().getAsString();
     //recovery date value
     String date = getTheDate(timestamp);
 
@@ -119,17 +114,6 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
 
     if((day_current != day_precedent || month_current != month_precedent) && day_precedent != -1){
 
-      if(getCurrentDay(date).equals("Mon")){
-        weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
-        dailyConsumptionListForWeek.clear();
-      }
-
-      if(month_current != month_precedent){
-        month_precedent = month_current;
-        monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
-        dailyConsumptionListForMonth.clear();
-      }
-
       if(day_current != day_precedent){
         // reset day for computations
         day_precedent = day_current;
@@ -137,7 +121,11 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
         waterFlowList.add(water_flow );
         timestampsList.add(timestamp);
         //perform operations to obtain hourly power from instantaneous powers
-        daily_consumption = instantToDailyConsumption(waterFlowList, timestampsList);
+        if(this.input_choice.equals("Yes")){
+          daily_consumption = waterFlowList.get(waterFlowList.size()-1) - waterFlowList.get(0);
+        }else{
+          daily_consumption = instantToDailyConsumption(waterFlowList, timestampsList);
+        }
         dailyConsumptionListForWeek.add(daily_consumption);
         dailyConsumptionListForMonth.add(daily_consumption);
         // Remove all elements from the Lists
@@ -157,6 +145,17 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
       // add power to the lists
       waterFlowList.add(water_flow);
       timestampsList.add(timestamp);
+    }
+
+    if(getCurrentDay(date).equals("Mon")){
+      weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
+      dailyConsumptionListForWeek.clear();
+    }
+
+    if(month_current != month_precedent){
+      month_precedent = month_current;
+      monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
+      dailyConsumptionListForMonth.clear();
     }
 
     event.addField("daily consumption", daily_consumption);
@@ -203,15 +202,15 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
     DecimalFormat df = new DecimalFormat("#.#####");
     df.setRoundingMode(RoundingMode.CEILING);
     //perform Riemann approximations by trapezoids which is an approximation of the area
-    // under the curve (which corresponds to the energy/hourly power) formed by the points
-    // with coordinate power(ordinate) e timestamp(abscissa)
+    // under the curve (which corresponds to the water consumption) formed by the points
+    // with coordinate water flows(ordinate) e timestamps(abscissa)
     for(int i = 0; i<water_flows.size()-1; i++){
       first_base = water_flows.get(i);
       second_base = water_flows.get(i+1);
       height = (timestamps.get(i+1) - timestamps.get(i))/1000;
-      sum += ((first_base + second_base) / 2) * height ;
+      sum += ((first_base + second_base) / (2*3600)) * height ;
     }
-    return Double.parseDouble(df.format(sum/3600*1000));
+    return Double.parseDouble(df.format(sum));
   }
 
   @Override
