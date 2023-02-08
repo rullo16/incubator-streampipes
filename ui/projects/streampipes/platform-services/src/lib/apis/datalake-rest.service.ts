@@ -38,11 +38,19 @@ export class DatalakeRestService {
     return this.baseUrl + '/api/v4' + '/datalake';
   }
 
+  public get dataLakeMeasureUrl() {
+    return this.baseUrl + '/api/v4/datalake/measure';
+  }
+
   getAllMeasurementSeries(): Observable<DataLakeMeasure[]> {
     const url = this.dataLakeUrl + '/measurements/';
     return this.http.get(url).pipe(map(response => {
       return (response as any[]).map(p => DataLakeMeasure.fromData(p));
     }));
+  }
+
+  getMeasurement(id: string): Observable<DataLakeMeasure> {
+    return this.http.get(`${this.dataLakeMeasureUrl}/${id}`).pipe(map(res => res as DataLakeMeasure));
   }
 
   performMultiQuery(queryParams: DatalakeQueryParameters[]): Observable<SpQueryResult[]> {
@@ -93,11 +101,13 @@ export class DatalakeRestService {
   downloadRawData(index: string,
                   format: string,
                   delimiter: string,
+                  missingValueBehaviour: string,
                   startTime?: number,
                   endTime?: number) {
     const queryParams = (startTime && endTime) ? {format, delimiter, startDate: startTime, endDate: endTime} : {
       format,
-      delimiter
+      delimiter,
+      missingValueBehaviour
     };
     return this.buildDownloadRequest(index, queryParams);
   }
@@ -106,10 +116,13 @@ export class DatalakeRestService {
     index: string,
     format: string,
     delimiter: string,
+    missingValueBehaviour: string,
     queryParams: DatalakeQueryParameters) {
 
     (queryParams as any).format = format;
     (queryParams as any).delimiter = delimiter;
+    (queryParams as any).missingValueBehaviour = missingValueBehaviour;
+
     return this.buildDownloadRequest(index, queryParams);
 
   }

@@ -7,6 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "prefix": "sp",
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
@@ -80,8 +81,7 @@
           "options": {
             "browserTarget": "app:build:development"
           },
-          "configurations": {
-          }
+          "configurations": {}
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -99,7 +99,15 @@
             "assets": [
               "src/assets"
             ],
-            "scripts": [
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         }
@@ -173,5 +181,15 @@
       }
     }
   },
-  "defaultProject": "app"
+  "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "cli": {
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "analytics": false
+  }
 }

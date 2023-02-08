@@ -16,7 +16,7 @@
 [environment:pipeline-element]
 backend
 consul
-gft-custom-extensions
+extensions-all-jvm
 couchdb
 kafka
 ui

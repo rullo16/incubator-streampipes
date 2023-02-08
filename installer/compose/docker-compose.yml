@@ -46,6 +46,8 @@ services:
       - couchdb
       - consul
       - backend
+    volumes:
+      - nginx:/etc/nginx/
     logging: *default-logging
     restart: unless-stopped
     networks:
@@ -132,7 +134,7 @@ services:
 
   # Lite version pipeline elements
   extensions-all-jvm:
-    image: "fouo/gft-custom-extensions:latest"
+    image: "${SP_DOCKER_REGISTRY}/extensions-all-jvm:${SP_VERSION}"
     depends_on:
       - consul
     volumes:
@@ -162,6 +164,7 @@ volumes:
   zookeeper:
   influxdb:
   files:
+  nginx:
 
 
 networks:
@@ -170,3 +173,4 @@ networks:
     ipam:
      config:
        - subnet: ${SP_SUBNET}
+

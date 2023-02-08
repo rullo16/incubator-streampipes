@@ -18,12 +18,12 @@
 
 import { EventSchema, StaticProperty, StaticPropertyUnion } from '@streampipes/platform-services';
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ConfigurationInfo } from '../../../connect/model/ConfigurationInfo';
 import { InvocablePipelineElementUnion } from '../../../editor/model/editor.model';
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class AbstractStaticPropertyRenderer<T extends StaticProperty> {
 
   @Input()
@@ -42,7 +42,7 @@ export abstract class AbstractStaticPropertyRenderer<T extends StaticProperty> {
   pipelineElement: InvocablePipelineElementUnion;
 
   @Input()
-  parentForm: FormGroup;
+  parentForm: UntypedFormGroup;
 
   @Input()
   fieldName: string;

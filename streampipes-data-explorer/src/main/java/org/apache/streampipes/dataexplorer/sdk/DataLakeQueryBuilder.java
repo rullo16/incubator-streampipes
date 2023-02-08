@@ -38,6 +38,7 @@ public class DataLakeQueryBuilder {
   private final List<Clause> groupByClauses;
   private Ordering ordering;
   private int limit = Integer.MIN_VALUE;
+  private int offset = Integer.MIN_VALUE;
 
   public static DataLakeQueryBuilder create(String measurementId) {
     return new DataLakeQueryBuilder(measurementId);
@@ -52,6 +53,12 @@ public class DataLakeQueryBuilder {
 
   public DataLakeQueryBuilder withSimpleColumn(String columnName) {
     this.selectionQuery.column(columnName);
+
+    return this;
+  }
+
+  public DataLakeQueryBuilder withSimpleColumns(List<String> columnNames) {
+    columnNames.forEach(this.selectionQuery::column);
 
     return this;
   }
@@ -160,6 +167,12 @@ public class DataLakeQueryBuilder {
     return this;
   }
 
+  public DataLakeQueryBuilder withOffset(int offset) {
+    this.offset = offset;
+
+    return this;
+  }
+
   public Query build() {
     var selectQuery = this.selectionQuery.from(BackendConfig.INSTANCE.getInfluxDatabaseName(), "\"" +measurementId + "\"");
     this.whereClauses.forEach(selectQuery::where);
@@ -174,6 +187,10 @@ public class DataLakeQueryBuilder {
 
     if (this.limit != Integer.MIN_VALUE) {
       selectQuery.limit(this.limit);
+    }
+
+    if (this.offset > 0) {
+      selectQuery.limit(this.limit, this.offset);
     }
 
     return selectQuery;

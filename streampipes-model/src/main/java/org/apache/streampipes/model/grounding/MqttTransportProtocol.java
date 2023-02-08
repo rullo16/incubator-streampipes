@@ -20,20 +20,17 @@ public class MqttTransportProtocol extends TransportProtocol {
 
   private int port;
 
-  public MqttTransportProtocol(String hostname, int port, String topicName)
-  {
+  public MqttTransportProtocol(String hostname, int port, String topicName) {
     super(hostname, new SimpleTopicDefinition(topicName));
     this.port = port;
   }
 
-  public MqttTransportProtocol(MqttTransportProtocol other)
-  {
+  public MqttTransportProtocol(MqttTransportProtocol other) {
     super(other);
     this.port = other.getPort();
   }
 
-  public MqttTransportProtocol()
-  {
+  public MqttTransportProtocol() {
     super();
   }
 

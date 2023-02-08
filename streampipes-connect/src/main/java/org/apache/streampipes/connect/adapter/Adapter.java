@@ -18,16 +18,15 @@
 
 package org.apache.streampipes.connect.adapter;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.streampipes.connect.adapter.model.pipeline.AdapterPipeline;
 import org.apache.streampipes.connect.adapter.preprocessing.elements.SendToJmsAdapterSink;
 import org.apache.streampipes.connect.adapter.preprocessing.elements.SendToKafkaAdapterSink;
 import org.apache.streampipes.connect.adapter.preprocessing.elements.SendToMqttAdapterSink;
+import org.apache.streampipes.connect.adapter.preprocessing.elements.SendToNatsAdapterSink;
 import org.apache.streampipes.connect.api.IAdapter;
 import org.apache.streampipes.model.connect.adapter.AdapterDescription;
-import org.apache.streampipes.model.grounding.JmsTransportProtocol;
-import org.apache.streampipes.model.grounding.KafkaTransportProtocol;
-import org.apache.streampipes.model.grounding.MqttTransportProtocol;
-import org.apache.streampipes.model.grounding.TransportProtocol;
+import org.apache.streampipes.model.grounding.*;
 
 public abstract class Adapter<T extends AdapterDescription> implements IAdapter<T> {
 
@@ -81,6 +80,12 @@ public abstract class Adapter<T extends AdapterDescription> implements IAdapter<
                 //((MqttTransportProtocol) transportProtocol).setPort(1883);
             }
             sink.changeTransportProtocol((MqttTransportProtocol) transportProtocol);
+        } else if (transportProtocol instanceof NatsTransportProtocol) {
+            SendToNatsAdapterSink sink = (SendToNatsAdapterSink) this.adapterPipeline.getPipelineSink();
+            if ("true".equals(System.getenv("SP_DEBUG"))) {
+                transportProtocol.setBrokerHostname("localhost");
+            }
+            sink.changeTransportProtocol((NatsTransportProtocol) transportProtocol);
         }
     }
 
@@ -91,6 +96,11 @@ public abstract class Adapter<T extends AdapterDescription> implements IAdapter<
     @Override
     public boolean isDebug() {
         return debug;
+    }
+
+    @VisibleForTesting
+    public AdapterPipeline getAdapterPipeline() {
+        return adapterPipeline;
     }
 
 }

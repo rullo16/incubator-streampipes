@@ -18,7 +18,6 @@
 
 package org.apache.streampipes.dataexplorer;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.streampipes.config.backend.BackendConfig;
 import org.apache.streampipes.dataexplorer.param.RetentionPolicyQueryParams;
@@ -26,11 +25,12 @@ import org.apache.streampipes.dataexplorer.query.DeleteDataQuery;
 import org.apache.streampipes.dataexplorer.query.EditRetentionPolicyQuery;
 import org.apache.streampipes.dataexplorer.query.ShowRetentionPolicyQuery;
 import org.apache.streampipes.dataexplorer.utils.DataExplorerUtils;
-import org.apache.streampipes.dataexplorer.v4.AutoAggregationHandler;
 import org.apache.streampipes.dataexplorer.v4.ProvidedQueryParams;
-import org.apache.streampipes.dataexplorer.v4.SupportedDataLakeQueryParameters;
 import org.apache.streampipes.dataexplorer.v4.params.QueryParamsV4;
 import org.apache.streampipes.dataexplorer.v4.query.DataExplorerQueryV4;
+import org.apache.streampipes.dataexplorer.v4.query.writer.OutputFormat;
+import org.apache.streampipes.dataexplorer.v4.query.QueryResultProvider;
+import org.apache.streampipes.dataexplorer.v4.query.StreamedQueryResultProvider;
 import org.apache.streampipes.dataexplorer.v4.utils.DataLakeManagementUtils;
 import org.apache.streampipes.model.datalake.DataLakeConfiguration;
 import org.apache.streampipes.model.datalake.DataLakeMeasure;
@@ -50,163 +50,35 @@ import org.lightcouch.CouchDbClient;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.apache.streampipes.dataexplorer.v4.SupportedDataLakeQueryParameters.*;
-
 public class DataLakeManagementV4 {
-
-    public static final String FOR_ID_KEY = "forId";
-
-    private static final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-            .appendPattern("uuuu[-MM[-dd]]['T'HH[:mm[:ss[.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSSS][.SSS][.SS][.S]]]][XXX]")
-            .parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
-            .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-            .toFormatter();
 
     public List<DataLakeMeasure> getAllMeasurements() {
         return DataExplorerUtils.getInfos();
     }
 
-    public SpQueryResult getData(ProvidedQueryParams queryParams) throws IllegalArgumentException {
-        if (queryParams.has(QP_AUTO_AGGREGATE)) {
-            queryParams = new AutoAggregationHandler(queryParams).makeAutoAggregationQueryParams();
-        }
-        Map<String, QueryParamsV4> queryParts = DataLakeManagementUtils.getSelectQueryParams(queryParams);
-
-        if (queryParams.getProvidedParams().containsKey(QP_MAXIMUM_AMOUNT_OF_EVENTS)) {
-            int maximumAmountOfEvents = Integer.parseInt(queryParams.getProvidedParams().get(QP_MAXIMUM_AMOUNT_OF_EVENTS));
-            return new DataExplorerQueryV4(queryParts, maximumAmountOfEvents).executeQuery();
-        }
-
-        if (queryParams.getProvidedParams().containsKey(FOR_ID_KEY)) {
-            String forWidgetId = queryParams.getProvidedParams().get(FOR_ID_KEY);
-            return new DataExplorerQueryV4(queryParts, forWidgetId).executeQuery();
-        } else {
-            return new DataExplorerQueryV4(queryParts).executeQuery();
-        }
+    public DataLakeMeasure getById(String measureId) {
+        return getDataLakeStorage().findOne(measureId);
     }
 
-    public void getDataAsStream(ProvidedQueryParams params, String format, OutputStream outputStream) throws IOException {
-        if (!params.has(QP_LIMIT)) {
-            params.update(QP_LIMIT, 500000);
-        }
+    public SpQueryResult getData(ProvidedQueryParams queryParams,
+                                 boolean ignoreMissingData) throws IllegalArgumentException {
+        return new QueryResultProvider(queryParams, ignoreMissingData).getData();
+    }
 
-        SpQueryResult dataResult;
-        //JSON
-        if (format.equals("json")) {
+    public void getDataAsStream(ProvidedQueryParams params,
+                                OutputFormat format,
+                                boolean ignoreMissingValues,
+                                OutputStream outputStream) throws IOException {
 
-            Gson gson = new Gson();
-            int i = 0;
-            if (params.has(QP_PAGE)) {
-                i = params.getAsInt(QP_PAGE);
-            }
-
-            boolean isFirstDataObject = true;
-
-            outputStream.write(toBytes("["));
-            do {
-                params.update(SupportedDataLakeQueryParameters.QP_PAGE, String.valueOf(i));
-                dataResult = getData(params);
-
-                if (dataResult.getTotal() > 0) {
-                    for (List<Object> row : dataResult.getAllDataSeries().get(0).getRows()) {
-                        if (!isFirstDataObject) {
-                            outputStream.write(toBytes(","));
-                        }
-
-                        //produce one json object
-                        boolean isFirstElementInRow = true;
-                        outputStream.write(toBytes("{"));
-                        for (int i1 = 0; i1 < row.size(); i1++) {
-                            Object element = row.get(i1);
-                            if (!isFirstElementInRow) {
-                                outputStream.write(toBytes(","));
-                            }
-                            isFirstElementInRow = false;
-                            if (i1 == 0) {
-                                element = parseTime(element.toString());
-                            }
-                            //produce json e.g. "name": "Pipes" or "load": 42
-                            outputStream.write(toBytes("\"" + dataResult.getHeaders().get(i1) + "\": "
-                                    + gson.toJson(element)));
-                        }
-                        outputStream.write(toBytes("}"));
-                        isFirstDataObject = false;
-                    }
-
-                    i++;
-                }
-            } while (dataResult.getTotal() > 0);
-            outputStream.write(toBytes("]"));
-
-            //CSV
-        } else if (format.equals("csv")) {
-            int i = 0;
-            if (params.has(QP_PAGE)) {
-                i = params.getAsInt(QP_PAGE);
-            }
-
-            boolean isFirstDataObject = true;
-            String delimiter = ",";
-
-            if (params.has(QP_CSV_DELIMITER)) {
-                delimiter = params.getAsString(QP_CSV_DELIMITER).equals("comma") ? "," : ";";
-            }
-
-            do {
-                params.update(SupportedDataLakeQueryParameters.QP_PAGE, String.valueOf(i));
-                dataResult = getData(params);
-                //Send first header
-                if (dataResult.getTotal() > 0) {
-                    if (isFirstDataObject) {
-                        boolean isFirst = true;
-                        for (int i1 = 0; i1 < dataResult.getHeaders().size(); i1++) {
-                            if (!isFirst) {
-                                outputStream.write(toBytes(delimiter));
-                            }
-                            isFirst = false;
-                            outputStream.write(toBytes(dataResult.getHeaders().get(i1)));
-                        }
-                    }
-                    outputStream.write(toBytes("\n"));
-                    isFirstDataObject = false;
-                }
-
-                if (dataResult.getTotal() > 0) {
-                    for (List<Object> row : dataResult.getAllDataSeries().get(0).getRows()) {
-                        boolean isFirstInRow = true;
-                        for (int i1 = 0; i1 < row.size(); i1++) {
-                            Object element = row.get(i1);
-                            if (!isFirstInRow) {
-                                outputStream.write(toBytes(delimiter));
-                            }
-                            isFirstInRow = false;
-                            if (i1 == 0) {
-                                element = parseTime(element.toString());
-                            }
-                            if (element == null) {
-                                outputStream.write(toBytes(""));
-                            } else {
-                                outputStream.write(toBytes(element.toString()));
-                            }
-                        }
-                        outputStream.write(toBytes("\n"));
-                    }
-                }
-                i++;
-            } while (dataResult.getTotal() > 0);
-        }
+        new StreamedQueryResultProvider(params, format, ignoreMissingValues).getDataAsStream(outputStream);
     }
 
     public boolean removeAllMeasurements() {
@@ -239,7 +111,7 @@ public class DataLakeManagementV4 {
 
     public SpQueryResult deleteData(String measurementID, Long startDate, Long endDate) {
         Map<String, QueryParamsV4> queryParts = DataLakeManagementUtils.getDeleteQueryParams(measurementID, startDate, endDate);
-        return new DataExplorerQueryV4(queryParts).executeQuery();
+        return new DataExplorerQueryV4(queryParts).executeQuery(true);
     }
 
     public DataLakeConfiguration getDataLakeConfiguration() {
@@ -304,20 +176,6 @@ public class DataLakeManagementV4 {
         return isSuccess;
     }
 
-    private byte[] toBytes(String value) {
-        return value.getBytes();
-    }
-
-    private static Long parseTime(String v) {
-        TemporalAccessor temporalAccessor = formatter.parseBest(v,
-                ZonedDateTime::from,
-                LocalDateTime::from,
-                LocalDate::from);
-
-        Instant instant = Instant.from(temporalAccessor);
-        return Instant.EPOCH.until(instant, ChronoUnit.MILLIS);
-    }
-
     public Map<String, Object> getTagValues(String measurementId,
                                             String fields) {
         InfluxDB influxDB = DataExplorerUtils.getInfluxDBClient();
@@ -343,8 +201,24 @@ public class DataLakeManagementV4 {
         return tags;
     }
 
+    public void updateDataLake(DataLakeMeasure measure) throws IllegalArgumentException {
+        var existingMeasure = getDataLakeStorage().findOne(measure.getElementId());
+        if (existingMeasure != null) {
+            measure.setRev(existingMeasure.getRev());
+            getDataLakeStorage().updateDataLakeMeasure(measure);
+        } else {
+            getDataLakeStorage().storeDataLakeMeasure(measure);
+        }
+    }
 
-    // TODO validate method
+    public void deleteDataLakeMeasure(String elementId) throws IllegalArgumentException {
+        if (getDataLakeStorage().findOne(elementId) != null) {
+            getDataLakeStorage().deleteDataLakeMeasure(elementId);
+        } else {
+            throw new IllegalArgumentException("Could not find measure with this ID");
+        }
+    }
+
     public DataLakeMeasure addDataLake(DataLakeMeasure measure) {
         List<DataLakeMeasure> dataLakeMeasureList = getDataLakeStorage().getAllDataLakeMeasures();
         Optional<DataLakeMeasure> optional = dataLakeMeasureList.stream().filter(entry -> entry.getMeasureName().equals(measure.getMeasureName())).findFirst();

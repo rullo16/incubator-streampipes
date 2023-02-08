@@ -16,8 +16,8 @@
  *
  */
 
-import { Component, EventEmitter, OnInit, Output, ViewChild, } from '@angular/core';
-import { Observable, of, zip } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
+import { Observable, of, Subscription, zip } from 'rxjs';
 import { DataExplorerDashboardGridComponent } from '../widget-view/grid-view/data-explorer-dashboard-grid.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Tuple2 } from '../../../core-model/base/Tuple2';
@@ -45,7 +45,7 @@ import { SpDataExplorerRoutes } from '../../data-explorer.routes';
   templateUrl: './data-explorer-dashboard-panel.component.html',
   styleUrls: ['./data-explorer-dashboard-panel.component.css'],
 })
-export class DataExplorerDashboardPanelComponent implements OnInit {
+export class DataExplorerDashboardPanelComponent implements OnInit, OnDestroy {
   dashboardLoaded = false;
   dashboard: Dashboard;
 
@@ -57,9 +57,6 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
 
   editMode = false;
   timeRangeVisible = true;
-
-  @Output()
-  editModeChange: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('dashboardGrid')
   dashboardGrid: DataExplorerDashboardGridComponent;
@@ -89,6 +86,8 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
   showDesignerPanel = false;
   showEditingHelpInfo = false;
 
+  authSubscription: Subscription;
+
   constructor(
     private dataViewDataExplorerService: DataViewDataExplorerService,
     private dialog: MatDialog,
@@ -112,7 +111,7 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
     this.getDashboard(params.id, startTime, endTime);
 
 
-    this.authService.user$.subscribe(user => {
+    this.authSubscription = this.authService.user$.subscribe(_ => {
       this.hasDataExplorerWritePrivileges = this.authService.hasRole(
         UserPrivilege.PRIVILEGE_WRITE_DATA_EXPLORER_VIEW
       );
@@ -123,6 +122,12 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
         this.editMode = true;
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   triggerResize() {
@@ -141,7 +146,7 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
   }
 
   addWidgetToDashboard(widget: DataExplorerWidgetModel) {
-    // tslint:disable-next-line:no-object-literal-type-assertion
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const dashboardItem = {} as ClientDashboardItem;
     dashboardItem.id = widget._id;
     dashboardItem.cols = 3;
@@ -188,20 +193,18 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
     } else {
       this.dashboardSlide.updateAllWidgets();
     }
-    this.editModeChange.emit(false);
     this.closeDesignerPanel();
   }
 
   startEditMode(widgetModel: DataExplorerWidgetModel) {
     this.editMode = true;
-    this.editModeChange.emit(true);
     this.updateCurrentlyConfiguredWidget(widgetModel);
     this.showEditingHelpInfo = false;
   }
 
   prepareWidgetUpdates(): Observable<any>[] {
     const promises: Observable<any>[] = [];
-    this.widgetsToUpdate.forEach((widget, key) => {
+    this.widgetsToUpdate.forEach((widget, _) => {
       promises.push(this.dataViewDataExplorerService.updateWidget(widget));
     });
 
@@ -229,7 +232,7 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
     });
   }
 
-  toggleGrid(gridVisible: boolean) {
+  toggleGrid() {
     this.dashboardGrid.toggleGrid();
   }
 
@@ -257,9 +260,14 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
 
   triggerEditMode() {
     this.showEditingHelpInfo = false;
-    this.editMode = true;
-    this.editModeChange.emit(true);
-    this.createWidget();
+    if (this.dashboard.widgets.length > 0) {
+      this.currentlyConfiguredWidgetId = this.dashboard.widgets[0].id;
+      const currentView = this.dashboardGrid ? this.dashboardGrid : this.dashboardSlide;
+      currentView.selectFirstWidgetForEditing(this.currentlyConfiguredWidgetId);
+    } else {
+      this.editMode = true;
+      this.createWidget();
+    }
   }
 
   createWidget() {
@@ -271,9 +279,11 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
     this.currentlyConfiguredWidget.baseAppearanceConfig.widgetTitle =
       'New Widget';
     this.currentlyConfiguredWidget.dataConfig = {};
+    this.currentlyConfiguredWidget.dataConfig.ignoreMissingValues = false;
     this.currentlyConfiguredWidget.baseAppearanceConfig.backgroundColor =
       '#FFFFFF';
     this.currentlyConfiguredWidget.baseAppearanceConfig.textColor = '#3e3e3e';
+    this.currentlyConfiguredWidget = {...this.currentlyConfiguredWidget};
     this.newWidgetMode = true;
     this.showDesignerPanel = true;
     this.newWidgetMode = true;
@@ -290,7 +300,7 @@ export class DataExplorerDashboardPanelComponent implements OnInit {
   }
 
   deleteDashboard(dashboard: Dashboard) {
-    this.dashboardService.deleteDashboard(dashboard).subscribe((result) => {
+    this.dashboardService.deleteDashboard(dashboard).subscribe((_) => {
       this.goBackToOverview();
     });
   }

@@ -18,7 +18,7 @@
 
 
 import { SpecificAdapterBuilder } from '../builder/SpecificAdapterBuilder';
-import { ConnectUtils } from './ConnectUtils';
+import { ConnectUtils } from './connect/ConnectUtils';
 import { PipelineBuilder } from '../builder/PipelineBuilder';
 import { PipelineUtils } from './PipelineUtils';
 import { PipelineElementInput } from '../model/PipelineElementInput';
@@ -44,7 +44,7 @@ export class ThirdPartyIntegrationUtils {
       .addSink(sink)
       .build();
 
-    PipelineUtils.testPipeline(pipelineInput);
+    PipelineUtils.addPipeline(pipelineInput);
 
     if (adapter instanceof SpecificAdapterInput) {
       ConnectUtils.testSpecificStreamAdapter(adapter);
