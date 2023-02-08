@@ -66,6 +66,8 @@
 
         <module>streampipes-sources-watertank-simulator</module>
         <module>streampipes-sources-vehicle-simulator</module>
+
+        <module>streampipes-gft-processors</module>
     </modules>
 
     <properties>

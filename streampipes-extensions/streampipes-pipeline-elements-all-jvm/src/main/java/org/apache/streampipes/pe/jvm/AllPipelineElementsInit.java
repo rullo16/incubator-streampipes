@@ -39,6 +39,7 @@ import org.apache.streampipes.sinks.brokers.jvm.BrokersJvmInit;
 import org.apache.streampipes.sinks.databases.jvm.DatabasesJvmInit;
 import org.apache.streampipes.sinks.internal.jvm.SinksInternalJvmInit;
 import org.apache.streampipes.sinks.notifications.jvm.SinksNotificationsJvmInit;
+import org.gft.ProcessorsGFTInit;
 
 public class AllPipelineElementsInit extends StandaloneModelSubmitter {
 
@@ -64,6 +65,7 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .merge(new BrokersJvmInit().provideServiceDefinition())
             .merge(new DatabasesJvmInit().provideServiceDefinition())
             .merge(new SinksNotificationsJvmInit().provideServiceDefinition())
+            .merge(new ProcessorsGFTInit().provideServiceDefinition())
             .registerMessagingFormats(
                     new JsonDataFormatFactory(),
                     new CborDataFormatFactory(),
