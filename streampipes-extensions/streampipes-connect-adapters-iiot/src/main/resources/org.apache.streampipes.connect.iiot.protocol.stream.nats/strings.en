@@ -1,0 +1,57 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+org.apache.streampipes.connect.iiot.protocol.stream.nats.title=NATS
+org.apache.streampipes.connect.iiot.protocol.stream.nats.description=Consumes messages from a NATS broker
+
+subject.title=NATS Subject
+subject.description=Select a NATS subject from where events are consumed.
+
+natsUrls.title=NATS broker URLs
+natsUrls.description=Provide NATS server URLs (can be provided multiple urls separated by commas).
+
+username.title=Username
+username.description=The username to authenticate with the broker
+
+password.title=Password
+password.description=The password to authenticate with the broker
+
+access-mode.title=Access Mode
+access-mode.description=Unauthenticated or SASL/PLAIN
+
+anonymous-alternative.title=Unauthenticated
+anonymous-alternative.description=No authentication and plaintext
+
+username-alternative.title=SASL/PLAIN
+username-alternative.description=Username and password, no encryption
+
+username-group.title=Username and password
+
+properties.title=NATS connection properties
+properties.description=Other possible connection configuration (key-value pairs separated by colons and commas)
+
+connection-properties.title=Client Connection Properties
+connection-properties.description=Optional client connection configuration
+
+none-properties-alternative.title=None
+none-properties-alternative.description=No optional client properties
+
+custom-properties-alternative.title=Custom Properties
+custom-properties-alternative.description=Custom NATS connection properties
+
+connection-group.title=NATS connection optional properties
