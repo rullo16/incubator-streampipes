@@ -46,15 +46,15 @@ import java.util.Date;
 import java.util.List;
 
 
-public class WaterFlowTracking extends StreamPipesDataProcessor {
+public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
 
   private String input_WaterFlow_value;
   private String input_timestamp_value;
   private String input_choice;
-  private static int day_precedent = -1, month_precedent = -1;
-  private static double daily_consumption = 0.0;
-  private static double monthly_consumption = 0.0;
-  private static double weekly_consumption = 0.0;
+  private int day_precedent = -1, month_precedent = -1;
+  private double daily_consumption = 0.0;
+  private double monthly_consumption = 0.0;
+  private double weekly_consumption = 0.0;
   private static final String ID = "org.gft.processors.waterflowtracking";
   private static final String INPUT_VALUE = "value";
   private static final String TIMESTAMP_VALUE = "timestamp_value";
@@ -84,9 +84,9 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
                     .build())
             .requiredSingleValueSelection(Labels.withId(CHOICE),
                 Options.from("No", "Yes"))
-            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthly consumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "daily consumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weekly consumption", SO.Number)))
+            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthlyConsumption", SO.Number),
+                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "dailyConsumption", SO.Number),
+                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weeklyConsumption", SO.Number)))
             .build();
   }
 
@@ -112,55 +112,56 @@ public class WaterFlowTracking extends StreamPipesDataProcessor {
     int day_current = Integer.parseInt(ymd[2]);
     int month_current = Integer.parseInt(ymd[1]);
 
-    if((day_current != day_precedent || month_current != month_precedent) && day_precedent != -1){
+    String day = getCurrentDay(date);
 
-      if(day_current != day_precedent){
-        // reset day for computations
-        day_precedent = day_current;
-        // Add current events for the next computation
-        waterFlowList.add(water_flow );
-        timestampsList.add(timestamp);
-        //perform operations to obtain hourly power from instantaneous powers
-        if(this.input_choice.equals("Yes")){
-          daily_consumption = waterFlowList.get(waterFlowList.size()-1) - waterFlowList.get(0);
-        }else{
-          daily_consumption = instantToDailyConsumption(waterFlowList, timestampsList);
-        }
-        dailyConsumptionListForWeek.add(daily_consumption);
-        dailyConsumptionListForMonth.add(daily_consumption);
-        // Remove all elements from the Lists
-        waterFlowList.clear();
-        timestampsList.clear();
-        // Add current events for the next computation
-        waterFlowList.add(water_flow );
-        timestampsList.add(timestamp);
+    if(day_current != this.day_precedent && this.day_precedent != -1){
+
+      // reset day for computations
+      day_precedent = day_current;
+      // Add current events for the next computation
+      waterFlowList.add(water_flow );
+      timestampsList.add(timestamp);
+      //perform operations to obtain hourly power from instantaneous powers
+      if(this.input_choice.equals("Yes")){
+        this.daily_consumption = waterFlowList.get(waterFlowList.size()-1) - waterFlowList.get(0);
+      }else{
+        this.daily_consumption = instantToDailyConsumption(waterFlowList, timestampsList);
+      }
+
+      dailyConsumptionListForWeek.add(this.daily_consumption);
+      dailyConsumptionListForMonth.add(this.daily_consumption);
+      // Remove all elements from the Lists
+      waterFlowList.clear();
+      timestampsList.clear();
+      // Add current events for the next computation
+      waterFlowList.add(water_flow );
+      timestampsList.add(timestamp);
+
+      if(day.equals("Mon")){
+        this.weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
+        dailyConsumptionListForWeek.clear();
+      }
+
+      if(month_current != this.month_precedent){
+        this.month_precedent = month_current;
+        this.monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
+        dailyConsumptionListForMonth.clear();
       }
 
     }else {
       // set the start time for computations
-      if (day_precedent == -1){
-        month_precedent = month_current;
-        day_precedent = day_current;
+      if (this.day_precedent == -1){
+        this.month_precedent = month_current;
+        this.day_precedent = day_current;
       }
       // add power to the lists
       waterFlowList.add(water_flow);
       timestampsList.add(timestamp);
     }
 
-    if(getCurrentDay(date).equals("Mon")){
-      weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
-      dailyConsumptionListForWeek.clear();
-    }
-
-    if(month_current != month_precedent){
-      month_precedent = month_current;
-      monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
-      dailyConsumptionListForMonth.clear();
-    }
-
-    event.addField("daily consumption", daily_consumption);
-    event.addField("weekly consumption", weekly_consumption);
-    event.addField("monthly consumption", monthly_consumption);
+    event.addField("dailyConsumption", this.daily_consumption);
+    event.addField("weeklyConsumption", this.weekly_consumption);
+    event.addField("monthlyConsumption", this.monthly_consumption);
 
     out.collect(event);
   }

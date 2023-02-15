@@ -16,7 +16,7 @@
   ~
   -->
 
-## Example
+## Power Tracking DWM (Day, Weekly, Month)
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -25,24 +25,23 @@
 ***
 
 ## Description
-This processor computes daily , seven day and monthly Energy consumption, based on the given instantaneous powers and timestamps values that are transmitted as fields from events.
+This processor computes daily, seven day and monthly Energy consumption, based on the given instantaneous powers and timestamps values that are transmitted as fields from events.
 
 ***
 
-## Required input
-Input event requires to have power and timestamp values.
+## Required inputs
+#### value and date_unix_ts
 
 ***
 
 ## Configuration
-### Instantaneous Power
-The field containing the power value as a double in Kilowatt (kW).
-### Timestamp
+### Instantaneous Power: value
+The field containing the power value as a double in Kilowatt (kW or kJ/s).
+### Timestamp :  date_unix_ts
 The field containing the time value (in millisecond) at which the power was taken.
-### Waiting Time
-The field containing the period or time value (in minute as a double) after which an output will be computed.
 
 ***
 
 ## Output
-The Power Tracking processor appends the calculated power as a double in Kilowatt-hour (kWh).
+The Power Tracking processor appends the results of the calculated consumptions
+(daily, weekly and monthly), as a double in kWh.

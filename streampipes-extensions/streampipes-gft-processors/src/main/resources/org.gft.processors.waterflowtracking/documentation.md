@@ -16,7 +16,7 @@
   ~
   -->
 
-## Example
+## Water Flow Tracking
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -25,17 +25,22 @@
 ***
 
 ## Description
-Describe your new data processor here!
+It Computes Daily, weekly and Monthly Water Consumption based on the given instant water flows and timestamps values.
 
 ***
 
-## Required input
-What are the input requirements of your data processor?
+## Required inputs
+#### value and date_unix_ts
 
 ***
 
 ## Configuration
-What are the configurations a user has to provide?
+#### Instant Water Flow : value
+Amount of water flowing (as past a valve) per unit of time (express in cubic meter per hour, cm/h) .
+
+#### Timestamp : date_unix_ts
+The field containing the time value (in millisecond) at which the water flow was taken.
 
 ## Output
-How do the events your data processor emits look like?
+The Water Flow Tracking processor appends the results of the calculated consumptions 
+(daily, weekly and monthly), as a double in Cubic meter.

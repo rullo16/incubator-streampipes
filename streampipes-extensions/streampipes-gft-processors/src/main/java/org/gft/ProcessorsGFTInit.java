@@ -36,7 +36,7 @@ import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
 import org.gft.processors.powertracking.PowerTrackingProcessor;
 import org.gft.processors.powertrackingdwm.PowerTrackingDWM;
 import org.gft.processors.trendfiltered.TrendFilteredController;
-import org.gft.processors.waterflowtracking.WaterFlowTracking;
+import org.gft.processors.waterflowtracking.WaterFlowTrackingDWM;
 
 public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
 
@@ -55,7 +55,7 @@ public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
                     new LoessInterpolationDataProcessor(),
                     new PowerTrackingProcessor(),
                     new PowerTrackingDWM())
-            .registerPipelineElement(new WaterFlowTracking())
+            .registerPipelineElement(new WaterFlowTrackingDWM())
             .registerAdapter(new BackendHttpStreamProtocol())
             .registerAdapter(new PLMHttpStreamProtocol())
             .registerMessagingFormats(
