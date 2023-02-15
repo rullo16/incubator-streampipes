@@ -16,7 +16,7 @@
  *
  */
 
-package org.gft;
+package org.example;
 
 import org.apache.streampipes.container.extensions.ExtensionsModelSubmitter;
 import org.apache.streampipes.container.model.SpServiceDefinition;
@@ -29,35 +29,22 @@ import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 
-import org.gft.adapters.backend.BackendHttpStreamProtocol;
-import org.gft.adapters.plm.PLMHttpStreamProtocol;
-import org.gft.processors.interpolation.InterpolationDataProcessor;
-import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
-import org.gft.processors.powertracking.PowerTrackingProcessor;
-import org.gft.processors.powertrackingdwm.PowerTrackingDWM;
-import org.gft.processors.trendfiltered.TrendFilteredController;
-import org.gft.processors.waterflowtracking.WaterFlowTrackingDWM;
+import org.example.pe.example.ExampleDataProcessor;
+import org.example.pe.example.ExampleDataSink;
 
-public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
+public class Init extends ExtensionsModelSubmitter {
 
   public static void main (String[] args) {
-    new ProcessorsGFTInit().init();
+    new Init().init();
   }
 
   @Override
   public SpServiceDefinition provideServiceDefinition() {
-    return SpServiceDefinitionBuilder.create("org.gft",
-                    "GFT Processors",
-                    "", 8090)
-            .registerPipelineElements(
-                    new InterpolationDataProcessor(),
-                    new TrendFilteredController(),
-                    new LoessInterpolationDataProcessor(),
-                    new PowerTrackingProcessor(),
-                    new PowerTrackingDWM())
-            .registerPipelineElement(new WaterFlowTrackingDWM())
-            .registerAdapter(new BackendHttpStreamProtocol())
-            .registerAdapter(new PLMHttpStreamProtocol())
+    return SpServiceDefinitionBuilder.create("org.example",
+                    "human-readable service name",
+                    "human-readable service description", 8090)
+            .registerPipelineElement(new ExampleDataProcessor())
+            .registerPipelineElement(new ExampleDataSink())
             .registerMessagingFormats(
                     new JsonDataFormatFactory(),
                     new CborDataFormatFactory(),

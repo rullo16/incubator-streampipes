@@ -13,13 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[environment:pipeline-element]
-backend
-consul
-gft-custom-extensions
-couchdb
-kafka
-ui
-sources-watertank-simulator
-zookeeper
-influxdb
+FROM adoptopenjdk/openjdk8-openj9:alpine
+
+EXPOSE 8090
+ENV CONSUL_LOCATION consul
+
+COPY ./target/untitled.jar  /streampipes-extensions-service.jar
+
+ENTRYPOINT ["java", "-jar", "/streampipes-extensions-service.jar"]

@@ -74,8 +74,8 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                         .build())
                 .requiredIntegerParameter(Labels.withId(WAITING_TIME))
 
-                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtime consumption", SO.Number),
-                        EpProperties.doubleEp(Labels.withId(HOURLY_CONSUMPTION), "hourly consumption", SO.Number)))
+                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtimeConsumption", SO.Number),
+                        EpProperties.doubleEp(Labels.withId(HOURLY_CONSUMPTION), "hourlyConsumption", SO.Number)))
                 .build();
     }
 
@@ -95,16 +95,16 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
         //recovery timestamp value
         Double timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsDouble();
 
-       if(((timestamp - waitingtime_start >= waiting_time) || (timestamp - hourlytime_start >= 3600000)) && waitingtime_start != 0.0){
+       if(((timestamp - this.waitingtime_start >= waiting_time) || (timestamp - this.hourlytime_start >= 3600000)) && this.waitingtime_start != 0.0){
 
-            if(timestamp - waitingtime_start >= waiting_time){
+            if(timestamp - this.waitingtime_start >= waiting_time){
                 // reset the start time for computations
-                waitingtime_start = timestamp;
+                this.waitingtime_start = timestamp;
                 // Add newly current events for the next computation
                 powersListForWaitingTimeBasedComputation.add(power);
                 timestampsListForWaitingTimeBasedComputation.add(timestamp);
                 //perform operations to obtain waiting time power from instantaneous powers
-                waitingtime_consumption = powerToEnergy(powersListForWaitingTimeBasedComputation, timestampsListForWaitingTimeBasedComputation);
+                this.waitingtime_consumption = powerToEnergy(powersListForWaitingTimeBasedComputation, timestampsListForWaitingTimeBasedComputation);
                 // Remove all elements from the Lists
                 powersListForWaitingTimeBasedComputation.clear();
                 timestampsListForWaitingTimeBasedComputation.clear();
@@ -113,14 +113,14 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                 timestampsListForWaitingTimeBasedComputation.add(timestamp);
             }
 
-            if (timestamp - hourlytime_start >= 3600000) {
+            if (timestamp - this.hourlytime_start >= 3600000) {
                 // reset the start time for computations
-                hourlytime_start  = timestamp;
+                this.hourlytime_start  = timestamp;
                 // Add newly current events for the next computation
                 powersListForHourlyBasedComputation.add(power);
                 timestampsListForHourlyBasedComputation.add(timestamp);
                 //perform operations to obtain hourly power from instantaneous powers
-                hourly_consumption = powerToEnergy(powersListForHourlyBasedComputation, timestampsListForHourlyBasedComputation);
+                this.hourly_consumption = powerToEnergy(powersListForHourlyBasedComputation, timestampsListForHourlyBasedComputation);
                 // Remove all elements from the Lists
                 powersListForHourlyBasedComputation.clear();
                 timestampsListForHourlyBasedComputation.clear();
@@ -131,9 +131,9 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
 
         }else {
            // set the start time for computations
-           if (waitingtime_start == 0.0){
-               hourlytime_start = timestamp;
-               waitingtime_start = timestamp;
+           if (this.waitingtime_start == 0.0){
+               this.hourlytime_start = timestamp;
+               this.waitingtime_start = timestamp;
            }
            // add power to the lists
            powersListForWaitingTimeBasedComputation.add(power);
@@ -143,9 +143,10 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
 
         }
 
-        event.addField("waitingtime consumption", waitingtime_consumption);
-        event.addField("hourly consumption", hourly_consumption);
-        out.collect(event);
+       event.addField("waitingtimeConsumption", this.waitingtime_consumption);
+       event.addField("hourlyConsumption", this.hourly_consumption);
+
+       out.collect(event);
 
     }
 

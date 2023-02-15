@@ -16,7 +16,7 @@
 [environment:pipeline-element]
 backend
 consul
-extensions-all-jvm
+gft-custom-extensions
 couchdb
 ui
 sources-watertank-simulator

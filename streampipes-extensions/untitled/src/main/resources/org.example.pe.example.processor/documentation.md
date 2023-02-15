@@ -16,7 +16,7 @@
   ~
   -->
 
-## HTTP Stream (PLM KYKLOS)
+## Example
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -25,22 +25,17 @@
 ***
 
 ## Description
-Continuously fetched events from the HTTP REST endpoint.
+Describe your new data processor here!
+
+***
+
+## Required input
+What are the input requirements of your data processor?
 
 ***
 
 ## Configuration
-Configurations a user has to provide
-#### Username
-#### Password
-User dedicated password
-#### Model
-Project Name oder Use Case Name
-#### Signal 
-The name of the sensor signal
-#### From - The Lowest Date of the Interval
-First value of the key for filtering - Example: 2022-07-21 00:00:00 (YYYY-MM-DD HH:mm:ss)
-#### To - The Highest Date of the Interval
-Last value of the key for filtering - Example: 2022-12-21 00:00:00 (YYYY-MM-DD HH:mm:ss). 
-The default increasing value (CurrentDateTime that corresponds to the time of the polling.) can be replaced by a static one (past or future).
+What are the configurations a user has to provide?
 
+## Output
+How do the events your data processor emits look like?

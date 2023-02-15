@@ -36,6 +36,7 @@
 
         <module>streampipes-extensions-all-iiot</module>
         <module>streampipes-extensions-all-jvm</module>
+        <module>streampipes-gft-processors</module>
 
         <module>streampipes-pipeline-elements-all-jvm</module>
         <module>streampipes-pipeline-elements-all-flink</module>
@@ -67,7 +68,6 @@
         <module>streampipes-sources-watertank-simulator</module>
         <module>streampipes-sources-vehicle-simulator</module>
 
-        <module>streampipes-gft-processors</module>
     </modules>
 
     <properties>
