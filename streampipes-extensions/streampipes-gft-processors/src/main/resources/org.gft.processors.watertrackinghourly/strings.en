@@ -1,0 +1,20 @@
+org.gft.processors.watertrackinghourly.title=Water Flow Tracking Hourly
+org.gft.processors.watertrackinghourly.description=It Computes Waiting Time and Hourly Water Consumption based on the given instant/total water flows and timestamps values.
+
+value.title=Instant Water Flow
+value.description=Amount of water flowing (as past a valve) per unit of time (cm/h).
+
+timestamp_value.title=Timestamp
+timestamp_value.description= Time at which the water flow was taken.
+
+time_range.title = Waiting Time
+time_range.description = Insert the period or time value (in minute as a double) after which an output will be generated.
+
+waitingtime_consumption.title = Waiting Consumption
+waitingtime_consumption.description =  The value of waiting time consumption
+
+hourly_consumption.title = Hourly Consumption
+hourly_consumption.description =  The value of hourly consumption
+
+choice.title= Is the input value the total water flow?
+choice.description=Compute total water flow (increasing value) instead of instant water flow?

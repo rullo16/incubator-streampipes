@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PLMHttpStreamProtocol extends PLMPullProtocol {
-    private static final long interval = 300;
+    private static final long interval = 600;
     Logger logger = LoggerFactory.getLogger(PLMHttpStreamProtocol.class);
     public static final String ID = "org.gft.adapters.plm";
     PLMHttpConfig config;
@@ -160,8 +160,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
             connection.setRequestProperty("transfer-encoding", "chunked");
             connection.setRequestProperty("connection", "keep-alive");
             //connection.setDoOutput(true);
-            connection.setConnectTimeout(120000);
-            connection.setReadTimeout(240000);
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(60000);
             // Send the GET request to the API endpoint
             connection.connect();
 
@@ -186,8 +186,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
 
         try {
             Request request = Request.Post(urlString)
-                    .connectTimeout(60000)
-                    .socketTimeout(60000)
+                    .connectTimeout(5000)
+                    .socketTimeout(30000)
                     .setHeader("Content-Type", "application/json");
 
             response = request
@@ -216,7 +216,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
 
         try {
             Request request = Request.Get(urlString)
-                    .connectTimeout(10000)
+                    .connectTimeout(5000)
                     .socketTimeout(30000)
                     .setHeader("Content-Type", "application/json");
 
@@ -292,8 +292,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                 urn = sensor.getAsJsonArray("props").get(0).getAsJsonObject().get("urn").getAsString();
 
                 try {
-                    String first_date = config.LastDateTime();
-                    String second_date = config.NextDateTime();
+                    String first_date = config.firstDateTime();
+                    String second_date = config.secondDateTime();
                     urlString = config.getBaseUrl() + "bkd/aggr_exp_dt/" + config.getRepository() + "/" + config.getModel() + "/" + sensor.get("id") + "/" + urn + "/"
                             + this.accessToken + "/" + "?format=json" + "&from=" + first_date + "&to=" + second_date;
                     //replace spaces by "%20" and the two points by %3A to avoid 400 Bad Request

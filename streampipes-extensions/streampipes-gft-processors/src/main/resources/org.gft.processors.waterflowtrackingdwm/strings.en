@@ -1,5 +1,5 @@
-org.gft.processors.waterflowtracking.title=Water Flow Tracking
-org.gft.processors.waterflowtracking.description=It Computes Daily, weekly and Monthly Water Consumption based on the given instant/total water flows and timestamps values.
+org.gft.processors.waterflowtrackingdwm.title=Water Flow Tracking DWM
+org.gft.processors.waterflowtrackingdwm.description=It Computes Daily, weekly and Monthly Water Consumption based on the given instant/total water flows and timestamps values.
 
 value.title=Instant Water Flow
 value.description=Amount of water flowing (as past a valve) per unit of time (cm/h).

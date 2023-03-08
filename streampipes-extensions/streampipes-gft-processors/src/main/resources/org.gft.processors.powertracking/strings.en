@@ -1,4 +1,4 @@
-org.gft.processors.powertracking.title=PowerTracking
+org.gft.processors.powertracking.title=Power Tracking Hourly
 org.gft.processors.powertracking.description= It Computes waiting time and hourly Energy consumption based on the given instantaneous powers and timestamps values.
 
 value.title= Instantaneous Power

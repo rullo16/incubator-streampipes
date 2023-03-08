@@ -70,7 +70,6 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
             .requiredTextParameter(BackendHttpUtils.getUsernameLabel())
             .requiredSecret(BackendHttpUtils.getPasswordLabel())
             .requiredTextParameter(BackendHttpUtils.getSignalLabel())
-            //.requiredIntegerParameter(BackendHttpUtils.getLengthLabel())
             .requiredTextParameter(BackendHttpUtils.getLowestLabel())
             .requiredTextParameter(BackendHttpUtils.getHighestLabel(), "CurrentDateTime")
             .build();
@@ -129,8 +128,6 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
     String accessToken = login();
     String urlString = getUrl();
 
-    System.out.println(urlString);
-
     if (!config.getHighestDate().equals("CurrentDateTime") && config.getLowestDate().compareToIgnoreCase(config.getHighestDate()) >= 0) {
       logger.warn("Adapter Stopped: there is not anymore data to retrieve in the time interval!!!");
       logger.warn("Stop Adapter on the User Interface!!!");
@@ -150,8 +147,8 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
       connection.setRequestProperty("Transfer-Encoding", "chunked");
       connection.setRequestProperty("Connection", "keep-alive");
       connection.setDoOutput(true);
-      connection.setConnectTimeout(60000);
-      connection.setReadTimeout(120000);
+      connection.setConnectTimeout(5000);
+      connection.setReadTimeout(30000);
       // Send the GET request to the API endpoint
       connection.connect();
 
@@ -163,16 +160,19 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
     return result;
   }
 
-  private String getUrl(){
-    String urlString;
-    double hours = 24*60*60* 1_000;
-    double time_difference = Long.parseLong(config.getMillis(config.CurrentDateTime())) - Long.parseLong(config.getMillis(config.getLowestDate()));
 
-    if(time_difference <= hours && config.getHighestDate().equals("CurrentDateTime")){
-      urlString = config.getBaseUrl()+"?page="+config.getPage()+"&length="+config.getLength()+"&filter="+config.getFilter(config.LastDateTime(5),config.CurrentDateTime())+"&sort="+config.getSort();
+  private String getUrl(){
+    String urlString, first_date, second_date, current_time = config.CurrentDateTime();
+
+    if((config.getSecondDate().compareToIgnoreCase(current_time)>0) && config.getHighestDate().equals("CurrentDateTime")){
+      first_date = config.precedentCurrentTime(current_time);
+      second_date = current_time;
     }else{
-      urlString = config.getBaseUrl()+"?page="+config.getPage()+"&length="+config.getLength()+"&filter="+config.getFilter(config.LastDateTime(1360),config.NextDateTime(1380))+"&sort="+config.getSort();
+      first_date = config.firstDateTime();
+      second_date = config.secondDateTime();
     }
+
+    urlString = config.getBaseUrl()+"?page="+config.getPage()+"&length="+config.getLength()+"&filter="+config.getFilter(first_date,second_date)+"&sort="+config.getSort();
 
     //replace spaces by "%20" to avoid 400 Bad Request
     if(urlString.contains(" "))
@@ -180,7 +180,6 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
 
     return urlString;
   }
-
 
   @Override
   public String getId() {
@@ -193,7 +192,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
     try {
       Request request = Request.Post(config.getLoginUrl())
               .connectTimeout(1000)
-              .socketTimeout(100000)
+              .socketTimeout(10000)
               .setHeader("Content-Type", "application/x-www-form-urlencoded")
               .setHeader("Accept","application/json")
               .bodyForm(Form.form().add("grant_type", config.getGrantType()).add("client_id", config.getClientId())

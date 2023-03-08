@@ -51,14 +51,14 @@ public class PLMHttpUtils {
         String lowest_date = extractor.singleValueParameter(LOWEST_DATE, String.class).trim();//TODO .strip
         String highest_date = extractor.singleValueParameter(HIGHEST_DATE, String.class).trim();//TODO .strip
 
-        if(!highest_date.equals("CurrentDateTime")){
-            try {
-                sdf.parse(highest_date);
-                sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+
+        try {
+            sdf.parse(highest_date);
+            sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
 
         try {
             sdf.parse(lowest_date);

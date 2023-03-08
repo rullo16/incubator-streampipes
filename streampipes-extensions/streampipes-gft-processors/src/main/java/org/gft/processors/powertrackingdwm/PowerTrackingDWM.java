@@ -86,7 +86,7 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
   }
 
   @Override
-  public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
+  public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException {
     this.input_power_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
     this.input_timestamp_value = parameters.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
   }
@@ -113,28 +113,28 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
       // reset day for computations
       this.day_precedent = day_current;
       // Add current events for the next computation
-      powersList.add(power);
-      timestampsList.add(timestamp);
+      this.powersList.add(power);
+      this.timestampsList.add(timestamp);
       //perform operations to obtain hourly power from instantaneous powers
-      this.daily_consumption = instantToDailyConsumption(powersList, timestampsList);
-      dailyConsumptionListForWeek.add(this.daily_consumption);
-      dailyConsumptionListForMonth.add(this.daily_consumption);
+      this.daily_consumption = instantToDailyConsumption(this.powersList, this.timestampsList);
+      this.dailyConsumptionListForWeek.add(this.daily_consumption);
+      this.dailyConsumptionListForMonth.add(this.daily_consumption);
       // Remove all elements from the Lists
-      powersList.clear();
-      timestampsList.clear();
+      this.powersList.clear();
+      this.timestampsList.clear();
       // Add current events for the next computation
-      powersList.add(power);
-      timestampsList.add(timestamp);
+      this.powersList.add(power);
+      this.timestampsList.add(timestamp);
 
       if(day.equals("Mon")){
-        this.weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
-        dailyConsumptionListForWeek.clear();
+        this.weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(this.dailyConsumptionListForWeek);
+        this.dailyConsumptionListForWeek.clear();
       }
 
       if(month_current != this.month_precedent){
         this.month_precedent = month_current;
-        this.monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
-        dailyConsumptionListForMonth.clear();
+        this.monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(this.dailyConsumptionListForMonth);
+        this.dailyConsumptionListForMonth.clear();
       }
 
     }else {
@@ -144,8 +144,8 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
         this.day_precedent = day_current;
       }
       // add power to the lists
-      powersList.add(power);
-      timestampsList.add(timestamp);
+      this.powersList.add(power);
+      this.timestampsList.add(timestamp);
     }
 
     event.addField("dailyConsumption", this.daily_consumption);

@@ -16,7 +16,7 @@
  *
  */
 
-package org.gft.processors.powertracking;
+package org.gft.processors.watertrackinghourly;
 
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.model.DataProcessorType;
@@ -39,24 +39,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PowerTrackingProcessor extends StreamPipesDataProcessor {
+public class WaterTrackingHourly extends StreamPipesDataProcessor {
     private String input_power_value;
     private String input_timestamp_value;
+    private String input_choice;
     private Double waiting_time;
     private Double waitingtime_start = 0.0;
     private Double hourlytime_start = 0.0;
     private double hourly_consumption = 0.0;
     private double waitingtime_consumption = 0.0;
-    private static final String ID = "org.gft.processors.powertracking";
+    private static final String ID = "org.gft.processors.watertrackinghourly";
     private static final String INPUT_VALUE = "value";
     private static final String TIMESTAMP_VALUE = "timestamp_value";
     private static final String WAITING_TIME = "time_range";
     private static final String HOURLY_CONSUMPTION = "hourly_consumption";
     private static final String WAITINGTIME_CONSUMPTION = "waitingtime_consumption";
+    private static final String CHOICE = "choice";
 
-    List<Double> powersListForHourlyBasedComputation = new ArrayList<>();
+    List<Double> waterFlowListForHourlyBasedComputation = new ArrayList<>();
     List<Double> timestampsListForHourlyBasedComputation = new ArrayList<>();
-    List<Double> powersListForWaitingTimeBasedComputation = new ArrayList<>();
+    List<Double> waterFlowListForWaitingTimeBasedComputation = new ArrayList<>();
     List<Double> timestampsListForWaitingTimeBasedComputation = new ArrayList<>();
 
 
@@ -72,6 +74,8 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                         .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                                 Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
                         .build())
+                .requiredSingleValueSelection(Labels.withId(CHOICE),
+                        Options.from("No", "Yes"))
                 .requiredIntegerParameter(Labels.withId(WAITING_TIME))
 
                 .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtimeConsumption", SO.Number),
@@ -84,6 +88,7 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
         this.input_power_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
         this.input_timestamp_value = parameters.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
         this.waiting_time = parameters.extractor().singleValueParameter(WAITING_TIME, Double.class);
+        this.input_choice  = parameters.extractor().selectedSingleValue(CHOICE, String.class);
     }
 
     @Override
@@ -101,15 +106,21 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                 // reset the start time for computations
                 this.waitingtime_start = timestamp;
                 // Add newly current events for the next computation
-                this.powersListForWaitingTimeBasedComputation.add(power);
+                this.waterFlowListForWaitingTimeBasedComputation.add(power);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
                 //perform operations to obtain waiting time power from instantaneous powers
-                this.waitingtime_consumption = powerToEnergy(this.powersListForWaitingTimeBasedComputation, this.timestampsListForWaitingTimeBasedComputation);
+                if(this.input_choice.equals("Yes")){
+                    this.waitingtime_consumption = this.waterFlowListForWaitingTimeBasedComputation.get(this.waterFlowListForWaitingTimeBasedComputation.size()-1)
+                            - this.waterFlowListForWaitingTimeBasedComputation.get(0);
+                }else{
+                    this.waitingtime_consumption = powerToEnergy(this.waterFlowListForWaitingTimeBasedComputation, this.timestampsListForWaitingTimeBasedComputation);
+                }
+
                 // Remove all elements from the Lists
-                this.powersListForWaitingTimeBasedComputation.clear();
+                this.waterFlowListForWaitingTimeBasedComputation.clear();
                 this.timestampsListForWaitingTimeBasedComputation.clear();
                 // Add newly current events for the next computation
-                this.powersListForWaitingTimeBasedComputation.add(power);
+                this.waterFlowListForWaitingTimeBasedComputation.add(power);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
             }
 
@@ -117,15 +128,21 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                 // reset the start time for computations
                 this.hourlytime_start  = timestamp;
                 // Add newly current events for the next computation
-                this.powersListForHourlyBasedComputation.add(power);
+                this.waterFlowListForHourlyBasedComputation.add(power);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
                 //perform operations to obtain hourly power from instantaneous powers
-                this.hourly_consumption = powerToEnergy(this.powersListForHourlyBasedComputation, this.timestampsListForHourlyBasedComputation);
+                if(this.input_choice.equals("Yes")){
+                    this.hourly_consumption = this.waterFlowListForHourlyBasedComputation.get(this.waterFlowListForHourlyBasedComputation.size()-1)
+                            - this.waterFlowListForHourlyBasedComputation.get(0);
+                }else{
+                    this.hourly_consumption = powerToEnergy(this.waterFlowListForHourlyBasedComputation, this.timestampsListForHourlyBasedComputation);
+                }
+
                 // Remove all elements from the Lists
-                this.powersListForHourlyBasedComputation.clear();
+                this.waterFlowListForHourlyBasedComputation.clear();
                 this.timestampsListForHourlyBasedComputation.clear();
                 // Add newly current events for the next computation
-                this.powersListForHourlyBasedComputation.add(power);
+                this.waterFlowListForHourlyBasedComputation.add(power);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
             }
 
@@ -136,18 +153,16 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                this.waitingtime_start = timestamp;
            }
            // add power to the lists
-           this.powersListForWaitingTimeBasedComputation.add(power);
+           this.waterFlowListForWaitingTimeBasedComputation.add(power);
            this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
-           this.powersListForHourlyBasedComputation.add(power);
+           this.waterFlowListForHourlyBasedComputation.add(power);
            this.timestampsListForHourlyBasedComputation.add(timestamp);
-
         }
 
-        event.addField("waitingtimeConsumption", this.waitingtime_consumption);
-        event.addField("hourlyConsumption", this.hourly_consumption);
+       event.addField("waitingtimeConsumption", this.waitingtime_consumption);
+       event.addField("hourlyConsumption", this.hourly_consumption);
 
-        out.collect(event);
-
+       out.collect(event);
     }
 
     public double powerToEnergy(List<Double> powers, List<Double> timestamps) {

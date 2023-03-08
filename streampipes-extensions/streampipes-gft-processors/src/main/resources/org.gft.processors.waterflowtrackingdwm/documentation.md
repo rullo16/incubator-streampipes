@@ -30,7 +30,7 @@ It Computes Daily, weekly and Monthly Water Consumption based on the given insta
 ***
 
 ## Required inputs
-#### value and date_unix_ts
+#### value ,date_unix_ts and (Yes/No)
 
 ***
 
@@ -41,6 +41,8 @@ Amount of water flowing (as past a valve) per unit of time (express in cubic met
 #### Timestamp : date_unix_ts
 The field containing the time value (in millisecond) at which the water flow was taken.
 
+#### Is the input value the total water flow? : (Yes/No)
+Compute total water flow (increasing value) instead of instant water flow?
 ## Output
 The Water Flow Tracking processor appends the results of the calculated consumptions 
 (daily, weekly and monthly), as a double in Cubic meter.

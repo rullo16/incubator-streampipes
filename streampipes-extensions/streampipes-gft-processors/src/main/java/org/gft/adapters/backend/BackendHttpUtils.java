@@ -48,8 +48,7 @@ public class BackendHttpUtils {
         String signal_name = extractor.singleValueParameter(SENSOR_SIGNAL, String.class).trim();
         String lowest_date = extractor.singleValueParameter(LOWEST_DATE, String.class).trim();//TODO .strip
         String highest_date = extractor.singleValueParameter(HIGHEST_DATE, String.class).trim();//TODO .strip
-        //Integer length = extractor.singleValueParameter(LENGTH, Integer.class);
-        Integer length = 300;
+        Integer length = 30000;
 
         if(!highest_date.equals("CurrentDateTime")){
             try {
@@ -66,10 +65,6 @@ public class BackendHttpUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        /*if(length < 20 || length > 30000){
-            throw new RuntimeException("ERROR! The Length Input Don't Respect The Requirement");
-        }*/
 
         return new BackendHttpConfig(username, password, signal_name, lowest_date, highest_date, length);
     }

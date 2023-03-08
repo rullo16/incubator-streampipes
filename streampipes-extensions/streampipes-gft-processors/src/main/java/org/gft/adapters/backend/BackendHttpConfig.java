@@ -19,8 +19,10 @@ public class BackendHttpConfig {
     private final String username;
     private final String password;
     private final String signal_name;
-    private String lowest_date;
+    private final String lowest_date;
     private final String highest_date;
+    private String first_date = "00-00-00 00:00:00";
+    private String second_date = " ";
     private String filter;
 
     private final JsonObject pindos_signals = new Gson().fromJson("{\"PINDOS Signal HW_FM_Flow - FD\":\"618d4fade191ea48057c1a8d\", \"PINDOS Signal HW_FM_Tot - FD\":\"618d4fcd68387a67545e67e3\", " +
@@ -28,9 +30,14 @@ public class BackendHttpConfig {
             "\"PINDOS Signal Ptot - Ph\":\"618d415e54ef02535004a25a\", \"PINDOS Signal Ptot - Ww1\":\"618d43633f6027149c2c0f5f\", \"PINDOS Signal Ptot - Ww2\":\"618d4507536f70692e5839be\", " +
             "\"PINDOS Signal SB_FM_Flow - FD\":\"618d4b40ba7f19144a228d90\", \"PINDOS Signal SB_FM_Tot - FD\":\"618d4f4e536f70692e5839f2\", \"PINDOS Signal SH_FM_Flow - FD\":\"618d4ff7ba7f19144a228d9f\", " +
             "\"PINDOS Signal SH_FM_Tot - FD\":\"618d51aaa73af145294f138f\"}", JsonObject.class);
-    private final JsonObject astander_signals = new Gson().fromJson("{\"Altivar fault code\":\"6167f85c151693290874fd32\", \"Drive state\":\"6167f85c151693290874fd33\"}", JsonObject.class);
+    private final JsonObject astander_signals = new Gson().fromJson("{\"Altivar fault code\":\"6167f85c151693290874fd32\", \"Drive state\":\"6167f85c151693290874fd33\", \"JoystickTraslación\":\"61cacfe88f0ae61d1f16d2ff\", " +
+            "\"JoystickElevation\":\"61cacfe88f0ae61d1f16d2fc\", \"JoystickGiro\":\"61cacfe88f0ae61d1f16d2fd\", \"JoystickRadio\":\"61cacfe88f0ae61d1f16d2fe\", \"ExtensionPluma\":\"61cacfe88f0ae61d1f16d2fb\", " +
+            "\"PesoCargaKg\":\"61cacfe88f0ae61d1f16d2f9\", \"Rmax\":\"61dff3c8d1a1a768084e7c99\", \"CargaMax\":\"61dff3c8d1a1a768084e7c9a\", \"Drive thermal state\":\"6167f85c151693290874fd34\", " +
+            "\"Motor thermal state\":\"6167f85c151693290874fd35\", \"Resistor thermal state\":\"6167f85c151693290874fd36\", \"Motor current\":\"6167f85c151693290874fd37\", " +
+            "\"Motor torque\":\"6167f85c151693290874fd38\", \"Output velocity\":\"6167f85c151693290874fd39\", \"AnalogOutw1\":\"61dff3c8d1a1a768084e7c98\", " +
+            "\"Rmax\":\"61dff3c8d1a1a768084e7c99\", \"PesoCargaTn\":\"61cacfe88f0ae61d1f16d2fa\", \"CargaMax\":\"61dff3c8d1a1a768084e7c9a\"}", JsonObject.class);
     private final JsonObject nodes_id = new Gson().fromJson("{\"PINDOS\":\"61855a064f181d0f3a3b4d42\",\"ASTANDER\":\"6167f8078870124d6f1bc5e2\"}", JsonObject.class);
-    private boolean first_time = true;
+
     DateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public BackendHttpConfig(String username, String password, String signal_name, String lowest_date, String highest_date, Integer length) {
@@ -85,8 +92,9 @@ public class BackendHttpConfig {
         return highest_date;
     }
     public String getLowestDate(){
-        return lowest_date;
+        return first_date;
     }
+    public String getSecondDate(){return second_date;}
 
     public String getScope(){
         return "read_scheduler_administrator write_scheduler_administrator read_dashboards_administrator write_dashboards_administrator " +
@@ -132,58 +140,69 @@ public class BackendHttpConfig {
         return dtf.format(now);
     }
 
-    public String NextDateTime(long offset){
+    public String secondDateTime(){
         Date myDate = null;
 
         try{
-            myDate = date_format.parse(this.lowest_date);
+            myDate = date_format.parse(this.first_date);
         }catch (ParseException e){
             e.printStackTrace();
         }
 
         assert myDate != null;
         LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        local_date_time = local_date_time.plusMinutes(offset);
+        local_date_time = local_date_time.plusMinutes(2880); //2 days
 
+        Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
+        this.second_date = date_format.format(date_plus);
+
+        //return the last date (highest_date: required as parameter) in the visualisation date interval, in order to not go out range.
+        if(this.second_date.compareToIgnoreCase(this.highest_date) >= 0 && !this.highest_date.equals("CurrentDateTime")){
+            return this.highest_date;
+        }
+        return this.second_date;
+    }
+
+    public String firstDateTime() {
+        Date myDate = null;
+        String first_date;
+
+        if(this.first_date.equals("00-00-00 00:00:00")){
+            this.first_date = this.lowest_date;
+            return this.lowest_date;
+        }
+
+        try{
+            myDate = date_format.parse(this.first_date);
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        assert myDate != null;
+        LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        local_date_time = local_date_time.plusMinutes(2880); // 2 days
+        Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
+
+        first_date = date_format.format(date_plus);
+        this.first_date = first_date;
+
+        return first_date;
+    }
+
+    public String precedentCurrentTime(String current_time) {
+        Date myDate = null;
+        try{
+            myDate = date_format.parse(current_time);
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        assert myDate != null;
+        LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        local_date_time = local_date_time.minusMinutes(5);
         Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
 
         return date_format.format(date_plus);
-    }
-
-    public String LastDateTime(long offset) {
-        Date myDate = null;
-
-        try{
-            myDate = date_format.parse(this.lowest_date);
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-
-        assert myDate != null;
-        LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-        if(this.first_time){
-            this.first_time = false;
-            local_date_time = local_date_time.minusMinutes(offset);
-        }
-        local_date_time = local_date_time.plusMinutes(offset);
-
-        Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
-        String date = date_format.format(date_plus);
-        this.lowest_date = date;
-
-        return date;
-    }
-
-    String getMillis(String date){
-        String timestamp = null;
-        try{
-            Date myDate = date_format.parse(date);
-            timestamp = String.valueOf(myDate.getTime());
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-        return timestamp;
     }
 
 }
