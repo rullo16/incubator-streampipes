@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PLMHttpStreamProtocol extends PLMPullProtocol {
-    private static final long interval = 600;
+    private static final long interval = 300;
     Logger logger = LoggerFactory.getLogger(PLMHttpStreamProtocol.class);
     public static final String ID = "org.gft.adapters.plm";
     PLMHttpConfig config;

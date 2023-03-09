@@ -151,7 +151,7 @@ public class BackendHttpConfig {
 
         assert myDate != null;
         LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        local_date_time = local_date_time.plusMinutes(2880); //2 days
+        local_date_time = local_date_time.plusDays(5); //5 days
 
         Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
         this.second_date = date_format.format(date_plus);
@@ -180,7 +180,7 @@ public class BackendHttpConfig {
 
         assert myDate != null;
         LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        local_date_time = local_date_time.plusMinutes(2880); // 2 days
+        local_date_time = local_date_time.plusDays(5); // 5 days
         Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
 
         first_date = date_format.format(date_plus);
