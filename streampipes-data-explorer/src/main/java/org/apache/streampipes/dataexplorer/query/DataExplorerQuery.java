@@ -17,10 +17,12 @@
  */
 package org.apache.streampipes.dataexplorer.query;
 
-import org.apache.streampipes.config.backend.BackendConfig;
-import org.apache.streampipes.dataexplorer.utils.DataExplorerUtils;
+import org.apache.streampipes.commons.environment.Environment;
+import org.apache.streampipes.commons.environment.Environments;
+import org.apache.streampipes.dataexplorer.commons.influx.InfluxClientProvider;
 import org.apache.streampipes.model.datalake.DataSeries;
 import org.apache.streampipes.model.datalake.SpQueryResult;
+
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 
@@ -28,21 +30,23 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class DataExplorerQuery<OUT> {
+public abstract class DataExplorerQuery<T> {
 
-  public OUT executeQuery() throws RuntimeException {
-    InfluxDB influxDB = DataExplorerUtils.getInfluxDBClient();
-    DataExplorerQueryBuilder queryBuilder = DataExplorerQueryBuilder.create(BackendConfig.INSTANCE.getInfluxDatabaseName());
+  public T executeQuery() throws RuntimeException {
+    InfluxDB influxDB = InfluxClientProvider.getInfluxDBClient();
+    var databaseName = getEnvironment().getTsStorageBucket().getValueOrDefault();
+    DataExplorerQueryBuilder queryBuilder =
+        DataExplorerQueryBuilder.create(databaseName);
     getQuery(queryBuilder);
     Query query = queryBuilder.toQuery();
     org.influxdb.dto.QueryResult result;
     if (queryBuilder.hasTimeUnit()) {
-      result = influxDB.query(query, queryBuilder.getTimeUnit());;
+      result = influxDB.query(query, queryBuilder.getTimeUnit());
     } else {
       result = influxDB.query(query);
     }
 
-    OUT dataResult = postQuery(result);
+    T dataResult = postQuery(result);
     influxDB.close();
 
     return dataResult;
@@ -80,7 +84,11 @@ public abstract class DataExplorerQuery<OUT> {
 
   }
 
+  private Environment getEnvironment() {
+    return Environments.getEnvironment();
+  }
+
   protected abstract void getQuery(DataExplorerQueryBuilder queryBuilder);
 
-  protected abstract OUT postQuery(org.influxdb.dto.QueryResult result) throws RuntimeException;
+  protected abstract T postQuery(org.influxdb.dto.QueryResult result) throws RuntimeException;
 }

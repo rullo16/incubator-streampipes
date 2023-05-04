@@ -17,17 +17,25 @@
  */
 package org.apache.streampipes.rest.impl;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.streampipes.model.client.assetdashboard.AssetDashboardConfig;
 import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 import org.apache.streampipes.storage.api.IAssetDashboardStorage;
 import org.apache.streampipes.storage.management.StorageDispatcher;
+
+import org.apache.commons.io.FileUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,7 +127,7 @@ public class AssetDashboardResource extends AbstractRestResource {
 
   private String getTargetDirectory() {
     return System.getProperty("user.home") + File.separator + ".streampipes"
-            + File.separator + "assets" + File.separator + APP_ID;
+        + File.separator + "assets" + File.separator + APP_ID;
   }
 
   private String getTargetFile(String filename) {

@@ -21,25 +21,27 @@ package org.apache.streampipes.test.generator.pipeline;
 import org.apache.streampipes.model.pipeline.Pipeline;
 import org.apache.streampipes.test.generator.pipelineelement.DummyProcessorGenerator;
 import org.apache.streampipes.test.generator.pipelineelement.DummySinkGenerator;
+import org.apache.streampipes.test.generator.pipelineelement.DummyStreamGenerator;
 
 import java.util.Collections;
 
 public class DummyPipelineGenerator {
-    public static String PIPELINE_NAME = "Test Pipeline";
+  public static final String PIPELINE_NAME = "Test Pipeline";
 
-    public static Pipeline makePipelineWithPipelineName() {
-        Pipeline pipeline = new Pipeline();
-        pipeline.setName(PIPELINE_NAME);
+  public static Pipeline makePipelineWithPipelineName() {
+    Pipeline pipeline = new Pipeline();
+    pipeline.setName(PIPELINE_NAME);
 
-        return pipeline;
-    }
+    return pipeline;
+  }
 
-    public static Pipeline makePipelineWithProcessorAndSink() {
-        Pipeline pipeline = makePipelineWithPipelineName();
+  public static Pipeline makePipelineWithProcessorAndSink() {
+    Pipeline pipeline = makePipelineWithPipelineName();
 
-        pipeline.setSepas(Collections.singletonList(DummyProcessorGenerator.makeDummyProcessor()));
-        pipeline.setActions(Collections.singletonList(DummySinkGenerator.makeDummySink()));
+    pipeline.setStreams(Collections.singletonList(DummyStreamGenerator.makeDummyStream()));
+    pipeline.setSepas(Collections.singletonList(DummyProcessorGenerator.makeDummyProcessor()));
+    pipeline.setActions(Collections.singletonList(DummySinkGenerator.makeDummySink()));
 
-        return pipeline;
-    }
+    return pipeline;
+  }
 }

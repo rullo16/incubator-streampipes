@@ -19,69 +19,81 @@
 import { ShepherdService } from '../../../services/tour/shepherd.service';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { LoginModel } from './login.model';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+    UntypedFormBuilder,
+    UntypedFormControl,
+    UntypedFormGroup,
+    Validators,
+} from '@angular/forms';
 
 @Component({
-    selector: 'login',
+    selector: 'sp-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
-    parentForm: FormGroup;
+    parentForm: UntypedFormGroup;
     configReady = false;
     loading: boolean;
     authenticationFailed: boolean;
     credentials: any;
 
     loginSettings: LoginModel;
+    returnUrl: string;
 
-    constructor(private loginService: LoginService,
-                private router: Router,
-                private shepherdService: ShepherdService,
-                private authService: AuthService,
-                private fb: FormBuilder) {
+    constructor(
+        private loginService: LoginService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private shepherdService: ShepherdService,
+        private authService: AuthService,
+        private fb: UntypedFormBuilder,
+    ) {
         this.loading = false;
         this.authenticationFailed = false;
         this.credentials = {};
     }
 
     ngOnInit() {
-      this.loginService.fetchLoginSettings().subscribe(result => {
-        this.loginSettings = result;
-        this.configReady = true;
-        this.parentForm = this.fb.group({});
-        this.parentForm.addControl('username', new FormControl('', Validators.required));
-        this.parentForm.addControl('password', new FormControl('', Validators.required));
+        this.loginService.fetchLoginSettings().subscribe(result => {
+            this.loginSettings = result;
+            this.configReady = true;
+            this.parentForm = this.fb.group({});
+            this.parentForm.addControl(
+                'username',
+                new UntypedFormControl('', Validators.required),
+            );
+            this.parentForm.addControl(
+                'password',
+                new UntypedFormControl('', Validators.required),
+            );
 
-        this.parentForm.valueChanges.subscribe(v => {
-          this.credentials.username = v.username;
-          this.credentials.password = v.password;
+            this.parentForm.valueChanges.subscribe(v => {
+                this.credentials.username = v.username;
+                this.credentials.password = v.password;
+            });
+            this.returnUrl = this.route.snapshot.queryParams.returnUrl || '';
         });
-      });
     }
-
-
 
     logIn() {
         this.authenticationFailed = false;
         this.loading = true;
-        this.loginService.login(this.credentials)
-            .subscribe(response => { // success
-                    this.authService.login(response);
-                    this.loading = false;
-                    this.router.navigate(['']);
-                }, response => { // error
-                    this.loading = false;
-                    this.authenticationFailed = true;
-                }
-            );
-    }
-
-    setSheperdServiceDelay() {
-        // this.ShepherdService.setTimeWaitMillies(100);
+        this.loginService.login(this.credentials).subscribe(
+            response => {
+                // success
+                this.authService.login(response);
+                this.loading = false;
+                this.router.navigateByUrl(this.returnUrl);
+            },
+            response => {
+                // error
+                this.loading = false;
+                this.authenticationFailed = true;
+            },
+        );
     }
 }

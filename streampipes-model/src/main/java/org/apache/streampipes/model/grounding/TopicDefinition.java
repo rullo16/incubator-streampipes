@@ -19,13 +19,14 @@
 package org.apache.streampipes.model.grounding;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import org.apache.streampipes.model.base.UnnamedStreamPipesEntity;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonSubTypes({
-        @JsonSubTypes.Type(SimpleTopicDefinition.class),
-        @JsonSubTypes.Type(WildcardTopicDefinition.class)
+    @JsonSubTypes.Type(SimpleTopicDefinition.class),
+    @JsonSubTypes.Type(WildcardTopicDefinition.class)
 })
-public abstract class TopicDefinition extends UnnamedStreamPipesEntity {
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
+public abstract class TopicDefinition {
 
   private String actualTopicName;
 
@@ -39,7 +40,6 @@ public abstract class TopicDefinition extends UnnamedStreamPipesEntity {
   }
 
   public TopicDefinition(TopicDefinition other) {
-    super(other);
     this.actualTopicName = other.getActualTopicName();
   }
 

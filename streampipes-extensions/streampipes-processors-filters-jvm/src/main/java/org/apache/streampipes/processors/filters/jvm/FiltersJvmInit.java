@@ -18,13 +18,12 @@
 
 package org.apache.streampipes.processors.filters.jvm;
 
-import org.apache.streampipes.container.model.SpServiceDefinition;
-import org.apache.streampipes.container.model.SpServiceDefinitionBuilder;
-import org.apache.streampipes.container.standalone.init.StandaloneModelSubmitter;
 import org.apache.streampipes.dataformat.cbor.CborDataFormatFactory;
 import org.apache.streampipes.dataformat.fst.FstDataFormatFactory;
 import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
 import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinition;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinitionBuilder;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
@@ -33,15 +32,17 @@ import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposePr
 import org.apache.streampipes.processors.filters.jvm.processor.enrich.MergeByEnrichProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.limit.RateLimitProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.merge.MergeByTimeProcessor;
+import org.apache.streampipes.processors.filters.jvm.processor.movingaverage.MovingAverageProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.numericalfilter.NumericalFilterProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.numericaltextfilter.NumericalTextFilterProcessor;
-import org.apache.streampipes.processors.filters.jvm.processor.throughputmon.ThroughputMonitorProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.projection.ProjectionProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.schema.MergeBySchemaProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.textfilter.TextFilterProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.threshold.ThresholdDetectionProcessor;
+import org.apache.streampipes.processors.filters.jvm.processor.throughputmon.ThroughputMonitorProcessor;
+import org.apache.streampipes.service.extensions.ExtensionsModelSubmitter;
 
-public class FiltersJvmInit extends StandaloneModelSubmitter {
+public class FiltersJvmInit extends ExtensionsModelSubmitter {
 
   public static void main(String[] args) {
     new FiltersJvmInit().init();
@@ -53,28 +54,29 @@ public class FiltersJvmInit extends StandaloneModelSubmitter {
             "StreamPipes Processors Filters (JVM)",
             "",
             8090)
-            .registerPipelineElements(
-                    new BooleanFilterProcessor(),
-                    new TextFilterProcessor(),
-                    new NumericalFilterProcessor(),
-                    new ThresholdDetectionProcessor(),
-                    new ThroughputMonitorProcessor(),
-                    new ProjectionProcessor(),
-                    new MergeByEnrichProcessor(),
-                    new MergeByTimeProcessor(),
-                    new MergeBySchemaProcessor(),
-                    new ComposeProcessor(),
-                    new NumericalTextFilterProcessor(),
-                    new RateLimitProcessor())
-            .registerMessagingFormats(
-                    new JsonDataFormatFactory(),
-                    new CborDataFormatFactory(),
-                    new SmileDataFormatFactory(),
-                    new FstDataFormatFactory())
-            .registerMessagingProtocols(
-                    new SpKafkaProtocolFactory(),
-                    new SpJmsProtocolFactory(),
-                    new SpMqttProtocolFactory())
-            .build();
+        .registerPipelineElements(
+            new BooleanFilterProcessor(),
+            new TextFilterProcessor(),
+            new NumericalFilterProcessor(),
+            new ThresholdDetectionProcessor(),
+            new ThroughputMonitorProcessor(),
+            new ProjectionProcessor(),
+            new MergeByEnrichProcessor(),
+            new MergeByTimeProcessor(),
+            new MergeBySchemaProcessor(),
+            new ComposeProcessor(),
+            new NumericalTextFilterProcessor(),
+            new RateLimitProcessor(),
+            new MovingAverageProcessor())
+        .registerMessagingFormats(
+            new JsonDataFormatFactory(),
+            new CborDataFormatFactory(),
+            new SmileDataFormatFactory(),
+            new FstDataFormatFactory())
+        .registerMessagingProtocols(
+            new SpKafkaProtocolFactory(),
+            new SpJmsProtocolFactory(),
+            new SpMqttProtocolFactory())
+        .build();
   }
 }

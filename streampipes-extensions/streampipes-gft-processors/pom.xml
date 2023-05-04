@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.streampipes</groupId>
         <artifactId>streampipes-extensions</artifactId>
-        <version>0.70.0</version>
+        <version>0.91.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -31,7 +31,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <sp.version>0.70.0</sp.version>
+        <sp.version>0.91.0</sp.version>
     </properties>
 
     <dependencies>

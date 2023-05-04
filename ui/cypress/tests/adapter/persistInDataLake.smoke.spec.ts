@@ -16,34 +16,29 @@
  *
  */
 
-import { ConnectUtils } from '../../support/utils/ConnectUtils';
+import { ConnectUtils } from '../../support/utils/connect/ConnectUtils';
 import { PipelineUtils } from '../../support/utils/PipelineUtils';
 import { GenericAdapterBuilder } from '../../support/builder/GenericAdapterBuilder';
 import { FileManagementUtils } from '../../support/utils/FileManagementUtils';
 
 describe('Test File Stream Adapter', () => {
-  beforeEach('Setup Test', () => {
-    cy.initStreamPipesTest();
-    FileManagementUtils.addFile('fileTest/random.csv');
-  });
+    beforeEach('Setup Test', () => {
+        cy.initStreamPipesTest();
+        FileManagementUtils.addFile('fileTest/random.csv');
+    });
 
-  it('Perform Test', () => {
+    it('Perform Test', () => {
+        const adapterInput = GenericAdapterBuilder.create('File_Stream')
+            .setName('File Stream Adapter Test')
+            .setTimestampProperty('timestamp')
+            .setStoreInDataLake()
+            .addProtocolInput('checkbox', 'replaceTimestamp', 'check')
+            .setFormat('csv')
+            .addFormatInput('input', 'delimiter', ';')
+            .addFormatInput('checkbox', 'header', 'check')
+            .build();
 
-    const adapterInput = GenericAdapterBuilder
-      .create('File_Stream')
-      .setName('File Stream Adapter Test')
-      .setTimestampProperty('timestamp')
-      .setStoreInDataLake()
-      .addProtocolInput('input', 'speed', '1')
-      .addProtocolInput('checkbox', 'replaceTimestamp', 'check')
-      .setFormat('csv')
-      .addFormatInput('input', 'delimiter', ';')
-      .addFormatInput('checkbox', 'header', 'check')
-      .build();
-
-    ConnectUtils.testGenericStreamAdapter(adapterInput);
-    PipelineUtils.checkAmountOfPipelinesPipeline(1);
-  });
-
+        ConnectUtils.testGenericStreamAdapter(adapterInput);
+        PipelineUtils.checkAmountOfPipelinesPipeline(1);
+    });
 });
-

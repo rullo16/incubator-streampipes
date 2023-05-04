@@ -53,7 +53,7 @@ public class BackendHttpUtils {
         if(!highest_date.equals("CurrentDateTime")){
             try {
                 sdf.parse(highest_date);
-                sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
+                sdf.setLenient(false);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -61,7 +61,7 @@ public class BackendHttpUtils {
 
         try {
             sdf.parse(lowest_date);
-            sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
+            sdf.setLenient(false);
         } catch (ParseException e) {
             e.printStackTrace();
         }

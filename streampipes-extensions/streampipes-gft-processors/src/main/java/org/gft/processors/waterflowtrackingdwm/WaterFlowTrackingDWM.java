@@ -99,14 +99,14 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
 
   @Override
   public void onEvent(Event event,SpOutputCollector out){
-    //recovery power value
+
     Double water_flow = event.getFieldBySelector(this.input_WaterFlow_value).getAsPrimitive().getAsDouble();
-    //recovery timestamp value
+
     Long timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsLong();
-    //recovery date value
+
     String date = getTheDate(timestamp);
 
-    // Day and Month extraction
+
     String[] ymd_hms = date.split(" ");
     String[] ymd = ymd_hms[0].split("-");
     int day_current = Integer.parseInt(ymd[2]);
@@ -115,12 +115,12 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     String day = getCurrentDay(date);
 
     if(day_current != this.day_precedent && this.day_precedent != -1){
-      // reset day for computations
+
       this.day_precedent = day_current;
-      // Add current events for the next computation
+
       this.waterFlowList.add(water_flow );
       this.timestampsList.add(timestamp);
-      //perform operations to obtain hourly power from instantaneous powers
+
       if(this.input_choice.equals("Yes")){
         this.daily_consumption = this.waterFlowList.get(this.waterFlowList.size()-1) - this.waterFlowList.get(0);
       }else{
@@ -129,10 +129,10 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
 
       this.dailyConsumptionListForWeek.add(this.daily_consumption);
       this.dailyConsumptionListForMonth.add(this.daily_consumption);
-      // Remove all elements from the Lists
+
       this.waterFlowList.clear();
       this.timestampsList.clear();
-      // Add current events for the next computation
+
       this.waterFlowList.add(water_flow );
       this.timestampsList.add(timestamp);
 
@@ -148,12 +148,10 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
       }
 
     }else {
-      // set the start time for computations
       if (this.day_precedent == -1){
         this.month_precedent = month_current;
         this.day_precedent = day_current;
       }
-      // add power to the lists
       this.waterFlowList.add(water_flow);
       this.timestampsList.add(timestamp);
     }
@@ -176,7 +174,7 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     try{
       Date myDate = date_format.parse(date);
       LocalDateTime localDateTime = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-      // convert LocalDateTime to date
+
       Date date_plus = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
       String[] s = date_plus.toString().split(" ");
       day = s[0];
@@ -201,9 +199,7 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     long height;
     DecimalFormat df = new DecimalFormat("#.#####");
     df.setRoundingMode(RoundingMode.CEILING);
-    //perform Riemann approximations by trapezoids which is an approximation of the area
-    // under the curve (which corresponds to the water consumption) formed by the points
-    // with coordinate water flows(ordinate) e timestamps(abscissa)
+
     for(int i = 0; i<water_flows.size()-1; i++){
       first_base = water_flows.get(i);
       second_base = water_flows.get(i+1);

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/archetypes/streampipes-archetype-pe-processors-flink/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/archetypes/streampipes-archetype-pe-sinks-flink/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/archetypes/streampipes-archetype-extensions-jvm/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="streampipes-extensions-all-iiot" />
+        <module name="streampipes-processors-transformation-flink" />
+        <module name="streampipes-user-management" />
+        <module name="streampipes-service-extensions" />
+        <module name="streampipes-rest" />
+        <module name="streampipes-wrapper-siddhi" />
+        <module name="streampipes-messaging-nats" />
+        <module name="streampipes-messaging-jms" />
+        <module name="streampipes-pipeline-elements-shared" />
+        <module name="streampipes-processors-change-detection-jvm" />
+        <module name="streampipes-processors-text-mining-jvm" />
+        <module name="streampipes-security-jwt" />
+        <module name="streampipes-pipeline-management" />
+        <module name="streampipes-processors-enricher-jvm" />
+        <module name="streampipes-service-discovery-api" />
+        <module name="streampipes-service-base" />
+        <module name="streampipes-wrapper-kafka-streams" />
+        <module name="streampipes-messaging" />
+        <module name="streampipes-processors-geo-jvm" />
+        <module name="streampipes-processors-geo-flink" />
+        <module name="streampipes-sinks-databases-jvm" />
+        <module name="streampipes-sources" />
+        <module name="streampipes-client" />
+        <module name="streampipes-pipeline-elements-data-simulator" />
+        <module name="streampipes-model" />
+        <module name="streampipes-resource-management" />
+        <module name="streampipes-vocabulary" />
+        <module name="streampipes-connect-management" />
+        <module name="streampipes-archetype-extensions-jvm" />
+        <module name="streampipes-archetype-pe-sinks-flink" />
+        <module name="streampipes-data-export" />
+        <module name="streampipes-model-client" />
+        <module name="streampipes-connect-adapters" />
+        <module name="streampipes-commons" />
+        <module name="streampipes-extensions-all-jvm" />
+        <module name="streampipes-processors-transformation-jvm" />
+        <module name="streampipes-gft-processors" />
+        <module name="streampipes-processors-enricher-flink" />
+        <module name="streampipes-dataformat-fst" />
+        <module name="streampipes-wrapper" />
+        <module name="streampipes-wrapper-python" />
+        <module name="streampipes-sdk-bundle" />
+        <module name="streampipes-wrapper-flink" />
+        <module name="streampipes-processors-pattern-detection-flink" />
+        <module name="streampipes-sdk" />
+        <module name="streampipes-rest-shared" />
+        <module name="streampipes-model-shared" />
+        <module name="streampipes-sinks-brokers-jvm" />
+        <module name="streampipes-pipeline-elements-all-flink" />
+        <module name="streampipes-sources-watertank-simulator" />
+        <module name="streampipes-dataformat-cbor" />
+        <module name="streampipes-platform-services" />
+        <module name="streampipes-sinks-databases-flink" />
+        <module name="streampipes-sinks-notifications-jvm" />
+        <module name="streampipes-logging" />
+        <module name="streampipes-integration-tests" />
+        <module name="streampipes-processors-aggregation-flink" />
+        <module name="streampipes-data-explorer" />
+        <module name="streampipes-service-discovery-consul" />
+        <module name="streampipes-wrapper-distributed" />
+        <module name="streampipes-service-core" />
+        <module name="streampipes-processors-text-mining-flink" />
+        <module name="streampipes-measurement-units" />
+        <module name="streampipes-storage-api" />
+        <module name="streampipes-archetype-pe-processors-flink" />
+        <module name="streampipes-extensions-api" />
+        <module name="streampipes-maven-plugin" />
+        <module name="streampipes-service-discovery" />
+        <module name="streampipes-serializers-json" />
+        <module name="streampipes-storage-management" />
+        <module name="streampipes-connectors-influx" />
+        <module name="streampipes-processors-filters-jvm" />
+        <module name="streampipes-connect-adapters-iiot" />
+        <module name="streampipes-rest-extensions" />
+        <module name="streampipes-messaging-kafka" />
+        <module name="streampipes-messaging-mqtt" />
+        <module name="streampipes-pipeline-elements-all-jvm" />
+        <module name="streampipes-processors-filters-siddhi" />
+        <module name="streampipes-config" />
+        <module name="streampipes-rest-core-base" />
+        <module name="streampipes-processors-statistics-flink" />
+        <module name="streampipes-processors-image-processing-jvm" />
+        <module name="streampipes-sources-vehicle-simulator" />
+        <module name="streampipes-mail" />
+        <module name="streampipes-wrapper-standalone" />
+        <module name="streampipes-extensions-management" />
+        <module name="streampipes-sinks-internal-jvm" />
+        <module name="streampipes-data-explorer-commons" />
+        <module name="streampipes-dataformat" />
+        <module name="streampipes-test-utils" />
+        <module name="streampipes-storage-couchdb" />
+        <module name="streampipes-dataformat-smile" />
+        <module name="streampipes-dataformat-json" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="streampipes-parent" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

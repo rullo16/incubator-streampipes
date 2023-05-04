@@ -95,20 +95,19 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
     public void onEvent(Event event,SpOutputCollector out){
         double waiting_time = this.waiting_time*60*1000;
 
-        //recovery input value
         Double power = event.getFieldBySelector(this.input_power_value).getAsPrimitive().getAsDouble();
-        //recovery timestamp value
+
         Double timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsDouble();
 
        if(((timestamp - this.waitingtime_start >= waiting_time) || (timestamp - this.hourlytime_start >= 3600000)) && this.waitingtime_start != 0.0){
 
             if(timestamp - this.waitingtime_start >= waiting_time){
-                // reset the start time for computations
+
                 this.waitingtime_start = timestamp;
-                // Add newly current events for the next computation
+
                 this.waterFlowListForWaitingTimeBasedComputation.add(power);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
-                //perform operations to obtain waiting time power from instantaneous powers
+
                 if(this.input_choice.equals("Yes")){
                     this.waitingtime_consumption = this.waterFlowListForWaitingTimeBasedComputation.get(this.waterFlowListForWaitingTimeBasedComputation.size()-1)
                             - this.waterFlowListForWaitingTimeBasedComputation.get(0);
@@ -116,21 +115,20 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
                     this.waitingtime_consumption = powerToEnergy(this.waterFlowListForWaitingTimeBasedComputation, this.timestampsListForWaitingTimeBasedComputation);
                 }
 
-                // Remove all elements from the Lists
                 this.waterFlowListForWaitingTimeBasedComputation.clear();
                 this.timestampsListForWaitingTimeBasedComputation.clear();
-                // Add newly current events for the next computation
+
                 this.waterFlowListForWaitingTimeBasedComputation.add(power);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
             }
 
             if (timestamp - this.hourlytime_start >= 3600000) {
-                // reset the start time for computations
+
                 this.hourlytime_start  = timestamp;
-                // Add newly current events for the next computation
+
                 this.waterFlowListForHourlyBasedComputation.add(power);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
-                //perform operations to obtain hourly power from instantaneous powers
+
                 if(this.input_choice.equals("Yes")){
                     this.hourly_consumption = this.waterFlowListForHourlyBasedComputation.get(this.waterFlowListForHourlyBasedComputation.size()-1)
                             - this.waterFlowListForHourlyBasedComputation.get(0);
@@ -138,21 +136,18 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
                     this.hourly_consumption = powerToEnergy(this.waterFlowListForHourlyBasedComputation, this.timestampsListForHourlyBasedComputation);
                 }
 
-                // Remove all elements from the Lists
                 this.waterFlowListForHourlyBasedComputation.clear();
                 this.timestampsListForHourlyBasedComputation.clear();
-                // Add newly current events for the next computation
+
                 this.waterFlowListForHourlyBasedComputation.add(power);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
             }
 
         }else {
-           // set the start time for computations
            if (this.waitingtime_start == 0.0){
                this.hourlytime_start = timestamp;
                this.waitingtime_start = timestamp;
            }
-           // add power to the lists
            this.waterFlowListForWaitingTimeBasedComputation.add(power);
            this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
            this.waterFlowListForHourlyBasedComputation.add(power);
@@ -172,9 +167,7 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
         double height;
         DecimalFormat df = new DecimalFormat("#.#####");
         df.setRoundingMode(RoundingMode.CEILING);
-        //perform Riemann approximations by trapezoids which is an approximation of the area
-        // under the curve (which corresponds to the energy consumption) formed by the points
-        // with coordinate powers(ordinate) e timestamps(abscissa)
+
         for(int i = 0; i<powers.size()-1; i++){
             first_base = powers.get(i);
             second_base = powers.get(i+1);

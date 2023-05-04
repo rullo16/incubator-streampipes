@@ -18,13 +18,12 @@
 
 package org.apache.streampipes.processors.enricher.jvm;
 
-import org.apache.streampipes.container.model.SpServiceDefinition;
-import org.apache.streampipes.container.model.SpServiceDefinitionBuilder;
-import org.apache.streampipes.container.standalone.init.StandaloneModelSubmitter;
 import org.apache.streampipes.dataformat.cbor.CborDataFormatFactory;
 import org.apache.streampipes.dataformat.fst.FstDataFormatFactory;
 import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
 import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinition;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinitionBuilder;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
@@ -33,9 +32,10 @@ import org.apache.streampipes.processors.enricher.jvm.processor.math.MathOpProce
 import org.apache.streampipes.processors.enricher.jvm.processor.math.staticmathop.StaticMathOpProcessor;
 import org.apache.streampipes.processors.enricher.jvm.processor.sizemeasure.SizeMeasureController;
 import org.apache.streampipes.processors.enricher.jvm.processor.trigonometry.TrigonometryProcessor;
-import org.apache.streampipes.processors.enricher.jvm.processor.valueChange.ValueChangeProcessor;
+import org.apache.streampipes.processors.enricher.jvm.processor.valuechange.ValueChangeProcessor;
+import org.apache.streampipes.service.extensions.ExtensionsModelSubmitter;
 
-public class EnricherJvmInit extends StandaloneModelSubmitter {
+public class EnricherJvmInit extends ExtensionsModelSubmitter {
 
   public static void main(String[] args) {
     new EnricherJvmInit().init();
@@ -47,21 +47,21 @@ public class EnricherJvmInit extends StandaloneModelSubmitter {
             "Processors Enricher JVM",
             "",
             8090)
-            .registerPipelineElements(new SizeMeasureController(),
-                    new JSEvalController(),
-                    new MathOpProcessor(),
-                    new StaticMathOpProcessor(),
-                    new TrigonometryProcessor(),
-                    new ValueChangeProcessor())
-            .registerMessagingFormats(
-                    new JsonDataFormatFactory(),
-                    new CborDataFormatFactory(),
-                    new SmileDataFormatFactory(),
-                    new FstDataFormatFactory())
-            .registerMessagingProtocols(
-                    new SpKafkaProtocolFactory(),
-                    new SpJmsProtocolFactory(),
-                    new SpMqttProtocolFactory())
-            .build();
+        .registerPipelineElements(new SizeMeasureController(),
+            new JSEvalController(),
+            new MathOpProcessor(),
+            new StaticMathOpProcessor(),
+            new TrigonometryProcessor(),
+            new ValueChangeProcessor())
+        .registerMessagingFormats(
+            new JsonDataFormatFactory(),
+            new CborDataFormatFactory(),
+            new SmileDataFormatFactory(),
+            new FstDataFormatFactory())
+        .registerMessagingProtocols(
+            new SpKafkaProtocolFactory(),
+            new SpJmsProtocolFactory(),
+            new SpMqttProtocolFactory())
+        .build();
   }
 }

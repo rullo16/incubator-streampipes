@@ -18,15 +18,20 @@
 
 package org.apache.streampipes.model.connect.adapter;
 
+import org.apache.streampipes.model.schema.EventSchema;
 import org.apache.streampipes.model.shared.annotation.TsModel;
 
 @TsModel
 public class SpecificAdapterSetDescription extends AdapterSetDescription {
 
-    public SpecificAdapterSetDescription() {
-    }
+  public SpecificAdapterSetDescription() {
+  }
 
-    public SpecificAdapterSetDescription(AdapterSetDescription other) {
-        super(other);
-    }
+  public SpecificAdapterSetDescription(AdapterSetDescription other) {
+    super(other);
+  }
+
+  public EventSchema getEventSchema() {
+    return this.getDataSet().getEventSchema();
+  }
 }

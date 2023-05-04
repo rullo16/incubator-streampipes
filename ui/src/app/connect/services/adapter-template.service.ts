@@ -19,27 +19,21 @@
 import { Injectable } from '@angular/core';
 import { SpAdapterTemplateDialogComponent } from '../dialog/adapter-template/adapter-template-dialog.component';
 import { DialogService, PanelType } from '@streampipes/shared-ui';
-import { AdapterDescriptionUnion } from '@streampipes/platform-services';
 import { StaticPropertyUnion } from '../../../../projects/streampipes/platform-services/src/lib/model/gen/streampipes-model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AdapterTemplateService {
+    constructor(private dialogService: DialogService) {}
 
-  constructor(private dialogService: DialogService) {
-
-  }
-
-  getDialog(configs: StaticPropertyUnion[],
-            appId: string) {
-    return this.dialogService.open(SpAdapterTemplateDialogComponent, {
-      panelType: PanelType.SLIDE_IN_PANEL,
-      title: 'Create configuration template',
-      width: '50vw',
-      data: {
-        'configs': configs,
-        'appId': appId
-      }
-    });
-  }
-
+    getDialog(configs: StaticPropertyUnion[], appId: string) {
+        return this.dialogService.open(SpAdapterTemplateDialogComponent, {
+            panelType: PanelType.SLIDE_IN_PANEL,
+            title: 'Create configuration template',
+            width: '50vw',
+            data: {
+                configs: configs,
+                appId: appId,
+            },
+        });
+    }
 }

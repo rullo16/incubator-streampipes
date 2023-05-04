@@ -45,35 +45,35 @@ public class ApplyGroundingStep extends AbstractPipelineValidationStep {
 
     List<MatchingResultMessage> errorLog = getNewErrorLog();
     boolean match = new GroundingMatch().match(
-            getSourceGrounding(source),
-            target.getSupportedGrounding(),
-            errorLog
+        getSourceGrounding(source),
+        target.getSupportedGrounding(),
+        errorLog
     );
 
     if (!match) {
       throw new SpValidationException(errorLog);
     } else {
       EventGrounding selectedGrounding;
-      if (!sourceGroundingVisitorMap.containsKey(source.getDOM())) {
+      if (!sourceGroundingVisitorMap.containsKey(source.getDom())) {
         selectedGrounding = new GroundingBuilder(source, allTargets).getEventGrounding();
-        sourceGroundingVisitorMap.put(source.getDOM(), selectedGrounding);
+        sourceGroundingVisitorMap.put(source.getDom(), selectedGrounding);
       } else {
-        selectedGrounding = new EventGrounding(sourceGroundingVisitorMap.get(source.getDOM()));
+        selectedGrounding = new EventGrounding(sourceGroundingVisitorMap.get(source.getDom()));
       }
 
       if (source instanceof DataProcessorInvocation) {
         ((DataProcessorInvocation) source)
-                .getOutputStream()
-                .setEventGrounding(selectedGrounding);
+            .getOutputStream()
+            .setEventGrounding(selectedGrounding);
       }
 
       target
-              .getInputStreams()
-              .get(getIndex(target))
-              .setEventGrounding(selectedGrounding);
+          .getInputStreams()
+          .get(getIndex(target))
+          .setEventGrounding(selectedGrounding);
 
       if (target.getInputStreams().size() > 1) {
-        this.visitorHistory.put(target.getDOM(), 1);
+        this.visitorHistory.put(target.getDom(), 1);
       }
     }
   }

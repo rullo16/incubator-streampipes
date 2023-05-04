@@ -2,12 +2,21 @@
   "name": "@streampipes/platform-services",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^13.3.0",
-    "@angular/core": "^13.3.0",
-    "rxjs": "6.6.2",
-    "angular-gridster2": "^13.1.1"
+    "@angular/common": "^14.2.7",
+    "@angular/core": "^14.2.7",
+    "rxjs": "^7.5.7",
+    "angular-gridster2": "^14.1.2"
   },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "karma": "~6.4.1",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage-istanbul-reporter": "~3.0.2",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "^2.0.0",
+    "karma-verbose-reporter": "0.0.6"
   }
 }

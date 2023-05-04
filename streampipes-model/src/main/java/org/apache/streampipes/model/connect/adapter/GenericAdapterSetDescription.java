@@ -28,61 +28,52 @@ import org.apache.streampipes.model.util.ElementIdGenerator;
 @TsModel
 public class GenericAdapterSetDescription extends AdapterSetDescription implements GenericAdapterDescription {
 
-    public static final String ID = ElementIdGenerator.makeFixedElementId(GenericAdapterSetDescription.class);
+  public static final String ID = ElementIdGenerator.makeFixedElementId(GenericAdapterSetDescription.class);
 
-//    private String sourceType = "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription";
+  private FormatDescription formatDescription;
 
-    private FormatDescription formatDescription;
-
-    private ProtocolDescription protocolDescription;
+  private ProtocolDescription protocolDescription;
 
 
-    public GenericAdapterSetDescription() {
-        super(ID, "GenericAdapterSetDescription", "");
+  public GenericAdapterSetDescription() {
+    super(ID, "GenericAdapterSetDescription", "");
+  }
+
+
+  public GenericAdapterSetDescription(FormatDescription formatDescription, ProtocolSetDescription protocolDescription) {
+    this.formatDescription = formatDescription;
+    this.protocolDescription = protocolDescription;
+  }
+
+  public GenericAdapterSetDescription(GenericAdapterSetDescription other) {
+    super(other);
+
+    if (other.getFormatDescription() != null) {
+      this.formatDescription = new FormatDescription(other.getFormatDescription());
     }
-
-
-    public GenericAdapterSetDescription(FormatDescription formatDescription, ProtocolSetDescription protocolDescription) {
-        this.formatDescription = formatDescription;
-        this.protocolDescription = protocolDescription;
+    if (other.getProtocolDescription() != null) {
+      this.protocolDescription = new ProtocolSetDescription(other.getProtocolDescription());
     }
+  }
 
-    public GenericAdapterSetDescription(GenericAdapterSetDescription other) {
-        super(other);
+  public FormatDescription getFormatDescription() {
+    return formatDescription;
+  }
 
-        if (other.getFormatDescription() != null) this.formatDescription = new FormatDescription(other.getFormatDescription());
-        if (other.getProtocolDescription() != null) this.protocolDescription = new ProtocolSetDescription(other.getProtocolDescription());
-    }
+  public void setFormatDescription(FormatDescription formatDescription) {
+    this.formatDescription = formatDescription;
+  }
 
-    public FormatDescription getFormatDescription() {
-        return formatDescription;
-    }
+  public ProtocolDescription getProtocolDescription() {
+    return protocolDescription;
+  }
 
-    @Override
-    public EventSchema getEventSchema() {
-        if (this.getDataSet() != null) {
-            return this.getDataSet().getEventSchema();
-        }
-        return null;
-    }
+  public void setProtocolDescription(ProtocolDescription protocolDescription) {
+    this.protocolDescription = protocolDescription;
+  }
 
-    public void setFormatDescription(FormatDescription formatDescription) {
-        this.formatDescription = formatDescription;
-    }
+  public EventSchema getEventSchema() {
+    return this.getDataSet().getEventSchema();
+  }
 
-    public ProtocolDescription getProtocolDescription() {
-        return protocolDescription;
-    }
-
-    public void setProtocolDescription(ProtocolDescription protocolDescription) {
-        this.protocolDescription = protocolDescription;
-    }
-
-//    public String getSourceType() {
-//        return sourceType;
-//    }
-//
-//    public void setSourceType(String sourceType) {
-//        this.sourceType = sourceType;
-//    }
 }

@@ -17,22 +17,29 @@
  */
 
 import { FileManagementUtils } from './FileManagementUtils';
-import { ConnectUtils } from './ConnectUtils';
+import { ConnectUtils } from './connect/ConnectUtils';
 import { PipelineUtils } from './PipelineUtils';
-import { DataLakeUtils } from './DataLakeUtils';
+import { DataLakeUtils } from './datalake/DataLakeUtils';
 import { GenericAdapterBuilder } from '../builder/GenericAdapterBuilder';
 import { PipelineBuilder } from '../builder/PipelineBuilder';
 import { PipelineElementBuilder } from '../builder/PipelineElementBuilder';
 import { ProcessorTest } from '../model/ProcessorTest';
+import { ConnectBtns } from './connect/ConnectBtns';
 
 export class ProcessingElementTestUtils {
-
     public static testElement(pipelineElementTest: ProcessorTest) {
-        const inputFile = 'pipelineElement/' + pipelineElementTest.dir + '/' + pipelineElementTest.inputFile;
-        const expectedResultFile = 'pipelineElement/' + pipelineElementTest.dir + '/expected.csv';
+        const inputFile =
+            'pipelineElement/' +
+            pipelineElementTest.dir +
+            '/' +
+            pipelineElementTest.inputFile;
+        const expectedResultFile =
+            'pipelineElement/' + pipelineElementTest.dir + '/expected.csv';
 
         let formatType;
-        pipelineElementTest.inputFile.endsWith('.csv') ? formatType = 'csv' : formatType = 'json_array';
+        pipelineElementTest.inputFile.endsWith('.csv')
+            ? (formatType = 'csv')
+            : (formatType = 'json_array');
 
         FileManagementUtils.addFile(inputFile);
 
@@ -41,39 +48,51 @@ export class ProcessingElementTestUtils {
         const adapterName = pipelineElementTest.name.toLowerCase();
 
         // Build adapter
-        const adapterInputBuilder = GenericAdapterBuilder
-          .create('File_Set')
-          .setName(adapterName)
-          .setTimestampProperty('timestamp')
-          .setFormat(formatType);
+        const adapterInputBuilder = GenericAdapterBuilder.create('File_Stream')
+            .setName(adapterName)
+            .setTimestampProperty('timestamp')
+            .setFormat(formatType)
+            .setStartAdapter(false)
+            .addProtocolInput(
+                'radio',
+                'speed',
+                'fastest_\\(ignore_original_time\\)',
+            )
+            .addProtocolInput('radio', 'replayonce', 'yes');
 
         if (formatType === 'csv') {
             adapterInputBuilder
-              .addFormatInput('input', 'delimiter', ';')
-              .addFormatInput('checkbox', 'header', 'check');
+                .addFormatInput('input', 'delimiter', ';')
+                .addFormatInput('checkbox', 'header', 'check');
         }
 
         const adapterInput = adapterInputBuilder.build();
 
-        ConnectUtils.addGenericSetAdapter(adapterInput);
+        ConnectUtils.addGenericStreamAdapter(adapterInput);
 
         // Build Pipeline
         const pipelineInput = PipelineBuilder.create(pipelineElementTest.name)
-          .addSource(adapterName)
-          .addSourceType('set')
-          .addProcessingElement(pipelineElementTest.processor)
-          .addSink(
-            PipelineElementBuilder.create('data_lake')
-              .addInput('input', 'db_measurement', dataLakeIndex)
-              .build())
-          .build();
+            .addSource(adapterName)
+            .addSourceType('set')
+            .addProcessingElement(pipelineElementTest.processor)
+            .addSink(
+                PipelineElementBuilder.create('data_lake')
+                    .addInput('input', 'db_measurement', dataLakeIndex)
+                    .build(),
+            )
+            .build();
 
         PipelineUtils.addPipeline(pipelineInput);
 
-        // Wait till data is stored
-        cy.wait(10000);
+        ConnectUtils.goToConnect();
+        ConnectBtns.startAdapter().click();
 
-        DataLakeUtils.checkResults(dataLakeIndex, 'cypress/fixtures/' + expectedResultFile, pipelineElementTest.processor.ignoreTimestamp);
+        cy.wait(3000);
 
+        DataLakeUtils.checkResults(
+            dataLakeIndex,
+            'cypress/fixtures/' + expectedResultFile,
+            pipelineElementTest.processor.ignoreTimestamp,
+        );
     }
 }

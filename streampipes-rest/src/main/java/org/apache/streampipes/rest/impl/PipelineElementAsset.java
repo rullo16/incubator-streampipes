@@ -19,15 +19,17 @@ package org.apache.streampipes.rest.impl;
 
 import org.apache.streampipes.manager.assets.AssetManager;
 import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.io.IOException;
 
 @Path("/v2/pe")
@@ -61,7 +63,7 @@ public class PipelineElementAsset extends AbstractRestResource {
   @Path("{appId}/assets/{assetName}")
   @Produces("image/png")
   public Response getAsset(@PathParam("appId") String appId, @PathParam("assetName") String
-          assetName) {
+      assetName) {
     try {
       byte[] asset = AssetManager.getAsset(appId, assetName);
       return ok(asset);

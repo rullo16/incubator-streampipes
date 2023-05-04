@@ -17,18 +17,22 @@
  */
 package org.apache.streampipes.model;
 
-import org.apache.streampipes.model.base.UnnamedStreamPipesEntity;
+import org.apache.streampipes.model.shared.annotation.TsModel;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpDataStreamContainer extends UnnamedStreamPipesEntity {
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
+@TsModel
+public class SpDataStreamContainer {
 
   private List<SpDataStream> list;
 
   public SpDataStreamContainer() {
-      super();
-      this.list = new ArrayList<>();
+    super();
+    this.list = new ArrayList<>();
   }
 
   public SpDataStreamContainer(List<SpDataStream> dataStreams) {

@@ -18,10 +18,9 @@
 
 package org.apache.streampipes.rest.impl.admin;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+
 import org.apache.streampipes.config.backend.BackendConfig;
-import org.apache.streampipes.config.backend.MessagingSettings;
+import org.apache.streampipes.model.config.MessagingSettings;
 import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 import org.apache.streampipes.rest.security.AuthConstants;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
@@ -29,14 +28,23 @@ import org.apache.streampipes.svcdiscovery.api.ISpKvManagement;
 import org.apache.streampipes.svcdiscovery.api.model.ConfigItem;
 import org.apache.streampipes.svcdiscovery.api.model.PeConfig;
 import org.apache.streampipes.svcdiscovery.consul.ConsulSpConfig;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +54,7 @@ import java.util.Map;
 @Component
 public class ConsulConfig extends AbstractRestResource {
 
-  private static Logger LOG = LoggerFactory.getLogger(ConsulConfig.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ConsulConfig.class);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -101,7 +109,7 @@ public class ConsulConfig extends AbstractRestResource {
           if (!("true".equals(value) || "false".equals(value))) {
             LOG.error(value + " is not from the type: xs:boolean");
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(value + " is not from the type: xs:boolean").build();
+                .entity(value + " is not from the type: xs:boolean").build();
           }
           break;
         case "xs:integer":
@@ -110,7 +118,7 @@ public class ConsulConfig extends AbstractRestResource {
           } catch (java.lang.NumberFormatException e) {
             LOG.error(value + " is not from the type: xs:integer");
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(value + " is not from the type: xs:integer").build();
+                .entity(value + " is not from the type: xs:integer").build();
           }
           break;
         case "xs:double":
@@ -119,7 +127,7 @@ public class ConsulConfig extends AbstractRestResource {
           } catch (java.lang.NumberFormatException e) {
             LOG.error(value + " is not from the type: xs:double");
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(value + " is not from the type: xs:double").build();
+                .entity(value + " is not from the type: xs:double").build();
           }
           break;
         case "xs:string":
@@ -127,7 +135,7 @@ public class ConsulConfig extends AbstractRestResource {
         default:
           LOG.error(configItem.getValueType() + " is not a supported type");
           return Response.status(Response.Status.BAD_REQUEST)
-                  .entity(configItem.getValueType() + " is not a supported type").build();
+              .entity(configItem.getValueType() + " is not a supported type").build();
       }
     }
 
@@ -137,7 +145,7 @@ public class ConsulConfig extends AbstractRestResource {
       JsonObject jsonObj = new Gson().toJsonTree(configItem).getAsJsonObject();
       jsonObj.entrySet().removeIf(e -> e.getKey().equals("key"));
       keyValueStore.updateConfig(configItem.getKey(), jsonObj.toString(),
-              configItem.isPassword());
+          configItem.isPassword());
     }
     return Response.status(Response.Status.OK).build();
   }

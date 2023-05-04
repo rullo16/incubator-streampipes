@@ -93,14 +93,13 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
 
   @Override
   public void onEvent(Event event,SpOutputCollector out){
-    //recovery power value
+
     Double power = event.getFieldBySelector(this.input_power_value).getAsPrimitive().getAsDouble();
-    //recovery timestamp value
+
     Long timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsLong();
-    //recovery date value
+
     String date = getTheDate(timestamp);
 
-    // Day and Month extraction
     String[] ymd_hms = date.split(" ");
     String[] ymd = ymd_hms[0].split("-");
     int day_current = Integer.parseInt(ymd[2]);
@@ -110,19 +109,18 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
 
     if(day_current != this.day_precedent && this.day_precedent != -1){
 
-      // reset day for computations
       this.day_precedent = day_current;
-      // Add current events for the next computation
+
       this.powersList.add(power);
       this.timestampsList.add(timestamp);
-      //perform operations to obtain hourly power from instantaneous powers
+
       this.daily_consumption = instantToDailyConsumption(this.powersList, this.timestampsList);
       this.dailyConsumptionListForWeek.add(this.daily_consumption);
       this.dailyConsumptionListForMonth.add(this.daily_consumption);
-      // Remove all elements from the Lists
+
       this.powersList.clear();
       this.timestampsList.clear();
-      // Add current events for the next computation
+
       this.powersList.add(power);
       this.timestampsList.add(timestamp);
 
@@ -138,12 +136,10 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
       }
 
     }else {
-      // set the start time for computations
       if (this.day_precedent == -1){
         this.month_precedent = month_current;
         this.day_precedent = day_current;
       }
-      // add power to the lists
       this.powersList.add(power);
       this.timestampsList.add(timestamp);
     }
@@ -166,7 +162,7 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     try{
       Date myDate = date_format.parse(date);
       LocalDateTime localDateTime = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-      // convert LocalDateTime to date
+
       Date date_plus = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
       String[] s = date_plus.toString().split(" ");
       day = s[0];
@@ -191,9 +187,7 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     long height;
     DecimalFormat df = new DecimalFormat("#.#####");
     df.setRoundingMode(RoundingMode.CEILING);
-    //perform Riemann approximations by trapezoids which is an approximation of the area
-    // under the curve (which corresponds to the energy consumption) formed by the points
-    // with coordinate powers(ordinate) e timestamps(abscissa)
+
     for(int i = 0; i<powers.size()-1; i++){
       first_base = powers.get(i);
       second_base = powers.get(i+1);

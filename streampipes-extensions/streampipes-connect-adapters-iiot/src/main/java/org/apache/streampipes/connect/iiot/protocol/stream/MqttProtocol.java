@@ -17,13 +17,12 @@
  */
 package org.apache.streampipes.connect.iiot.protocol.stream;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.streampipes.connect.SendToPipeline;
-import org.apache.streampipes.connect.adapter.model.generic.Protocol;
-import org.apache.streampipes.connect.api.IAdapterPipeline;
-import org.apache.streampipes.connect.api.IFormat;
-import org.apache.streampipes.connect.api.IParser;
-import org.apache.streampipes.connect.api.exception.ParseException;
+import org.apache.streampipes.extensions.api.connect.IAdapterPipeline;
+import org.apache.streampipes.extensions.api.connect.IFormat;
+import org.apache.streampipes.extensions.api.connect.IParser;
+import org.apache.streampipes.extensions.api.connect.exception.ParseException;
+import org.apache.streampipes.extensions.management.connect.SendToPipeline;
+import org.apache.streampipes.extensions.management.connect.adapter.model.generic.Protocol;
 import org.apache.streampipes.messaging.InternalEventProcessor;
 import org.apache.streampipes.model.AdapterType;
 import org.apache.streampipes.model.connect.grounding.ProtocolDescription;
@@ -59,7 +58,7 @@ public class MqttProtocol extends BrokerProtocol {
   public Protocol getInstance(ProtocolDescription protocolDescription, IParser parser, IFormat format) {
     MqttConfig mqttConfig;
     StaticPropertyExtractor extractor =
-            StaticPropertyExtractor.from(protocolDescription.getConfig(), new ArrayList<>());
+        StaticPropertyExtractor.from(protocolDescription.getConfig(), new ArrayList<>());
 
     mqttConfig = MqttConnectUtils.getMqttConfig(extractor);
 
@@ -69,14 +68,15 @@ public class MqttProtocol extends BrokerProtocol {
   @Override
   public ProtocolDescription declareModel() {
     return ProtocolDescriptionBuilder.create(ID)
-            .withLocales(Locales.EN)
-            .withAssets(Assets.DOCUMENTATION, Assets.ICON)
-            .category(AdapterType.Generic, AdapterType.Manufacturing)
-            .sourceType(AdapterSourceType.STREAM)
-            .requiredTextParameter(MqttConnectUtils.getBrokerUrlLabel())
-            .requiredAlternatives(MqttConnectUtils.getAccessModeLabel(), MqttConnectUtils.getAlternativesOne(), MqttConnectUtils.getAlternativesTwo())
-            .requiredTextParameter(MqttConnectUtils.getTopicLabel())
-            .build();
+        .withLocales(Locales.EN)
+        .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+        .category(AdapterType.Generic, AdapterType.Manufacturing)
+        .sourceType(AdapterSourceType.STREAM)
+        .requiredTextParameter(MqttConnectUtils.getBrokerUrlLabel())
+        .requiredAlternatives(MqttConnectUtils.getAccessModeLabel(), MqttConnectUtils.getAlternativesOne(),
+            MqttConnectUtils.getAlternativesTwo())
+        .requiredTextParameter(MqttConnectUtils.getTopicLabel())
+        .build();
   }
 
   @Override
@@ -102,7 +102,7 @@ public class MqttProtocol extends BrokerProtocol {
   @Override
   public void run(IAdapterPipeline adapterPipeline) {
     SendToPipeline stk = new SendToPipeline(format, adapterPipeline);
-    this.mqttConsumer = new MqttConsumer(this.mqttConfig, new MqttProtocol.EventProcessor(stk));
+    this.mqttConsumer = new MqttConsumer(this.mqttConfig, new BrokerEventProcessor(stk, parser));
 
     thread = new Thread(this.mqttConsumer);
     thread.start();
@@ -118,21 +118,4 @@ public class MqttProtocol extends BrokerProtocol {
     return ID;
   }
 
-  private class EventProcessor implements InternalEventProcessor<byte[]> {
-    private SendToPipeline stk;
-
-    public EventProcessor(SendToPipeline stk) {
-      this.stk = stk;
-    }
-
-    @Override
-    public void onEvent(byte[] payload) {
-      try {
-        parser.parse(IOUtils.toInputStream(new String(payload), "UTF-8"), stk);
-      } catch (ParseException e) {
-        e.printStackTrace();
-        //logger.error("Adapter " + ID + " could not read value!",e);
-      }
-    }
-  }
 }

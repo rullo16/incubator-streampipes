@@ -18,36 +18,37 @@
 
 package org.apache.streampipes.rest.impl.connect;
 
-import org.apache.streampipes.connect.container.master.management.WorkerAdministrationManagement;
+import org.apache.streampipes.connect.management.management.WorkerAdministrationManagement;
 import org.apache.streampipes.model.connect.adapter.AdapterDescription;
 import org.apache.streampipes.model.message.Notifications;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 import org.apache.streampipes.rest.shared.impl.AbstractSharedRestInterface;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
 @Path("v2/connect/master/administration")
 public class WorkerAdministrationResource extends AbstractSharedRestInterface {
 
-    private WorkerAdministrationManagement workerAdministrationManagement;
+  private WorkerAdministrationManagement workerAdministrationManagement;
 
-    public WorkerAdministrationResource() {
-        this.workerAdministrationManagement = new WorkerAdministrationManagement();
-    }
+  public WorkerAdministrationResource() {
+    this.workerAdministrationManagement = new WorkerAdministrationManagement();
+  }
 
-    @POST
-    @JacksonSerialized
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addWorkerContainer(List<AdapterDescription> availableAdapterDescription) {
+  @POST
+  @JacksonSerialized
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response addWorkerContainer(List<AdapterDescription> availableAdapterDescription) {
 
-        this.workerAdministrationManagement.register(availableAdapterDescription);
+    this.workerAdministrationManagement.register(availableAdapterDescription);
 
-        return ok(Notifications.success("Worker Container successfully added"));
-    }
+    return ok(Notifications.success("Worker Container successfully added"));
+  }
 
 }

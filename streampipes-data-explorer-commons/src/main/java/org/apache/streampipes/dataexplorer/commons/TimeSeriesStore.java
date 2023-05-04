@@ -19,12 +19,13 @@
 package org.apache.streampipes.dataexplorer.commons;
 
 import org.apache.streampipes.client.StreamPipesClient;
+import org.apache.streampipes.commons.environment.Environment;
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.dataexplorer.commons.image.ImageStore;
 import org.apache.streampipes.dataexplorer.commons.influx.InfluxStore;
 import org.apache.streampipes.model.datalake.DataLakeMeasure;
 import org.apache.streampipes.model.runtime.Event;
-import org.apache.streampipes.svcdiscovery.api.SpConfig;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,55 +33,54 @@ import java.io.IOException;
 
 public class TimeSeriesStore {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TimeSeriesStore.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TimeSeriesStore.class);
+  private final InfluxStore influxStore;
+  private ImageStore imageStore;
 
-    private ImageStore imageStore;
-    private final InfluxStore influxStore;
 
+  public TimeSeriesStore(Environment environment,
+                         StreamPipesClient client,
+                         DataLakeMeasure measure,
+                         boolean enableImageStore) {
 
-    public TimeSeriesStore(SpConfig config,
-                           StreamPipesClient client,
-                           DataLakeMeasure measure,
-                           boolean enableImageStore) {
+    measure = DataExplorerUtils.sanitizeAndRegisterAtDataLake(client, measure);
 
-        measure = DataExplorerUtils.sanitizeAndRegisterAtDataLake(client, measure);
-
-        if (enableImageStore) {
-            // TODO check if event properties are replaces correctly
-            this.imageStore = new ImageStore(measure, config);
-        }
-
-        this.influxStore = new InfluxStore(measure, config);
-
+    if (enableImageStore) {
+      // TODO check if event properties are replaces correctly
+      this.imageStore = new ImageStore(measure, environment);
     }
 
-    public boolean onEvent(Event event) throws SpRuntimeException {
-        // Store all images in image store and replace image with internal id
-        if (imageStore != null) {
-            this.imageStore.onEvent(event);
-        }
+    this.influxStore = new InfluxStore(measure, environment);
 
-        // Store event in time series database
-        this.influxStore.onEvent(event);
+  }
 
-        return true;
+  public boolean onEvent(Event event) throws SpRuntimeException {
+    // Store all images in image store and replace image with internal id
+    if (imageStore != null) {
+      this.imageStore.onEvent(event);
     }
 
+    // Store event in time series database
+    this.influxStore.onEvent(event);
 
-    public boolean alterRetentionTime(DataLakeMeasure dataLakeMeasure) {
-        return true;
+    return true;
+  }
+
+
+  public boolean alterRetentionTime(DataLakeMeasure dataLakeMeasure) {
+    return true;
+  }
+
+  public void close() throws SpRuntimeException {
+    if (imageStore != null) {
+      try {
+        this.imageStore.close();
+      } catch (IOException e) {
+        LOG.error("Could not close couchDB connection");
+        throw new SpRuntimeException(e);
+      }
     }
 
-    public void close() throws SpRuntimeException  {
-        if (imageStore != null) {
-            try {
-                this.imageStore.close();
-            } catch (IOException e) {
-                LOG.error("Could not close couchDB connection");
-                throw new SpRuntimeException(e);
-            }
-        }
-
-        this.influxStore.close();
-    }
+    this.influxStore.close();
+  }
 }

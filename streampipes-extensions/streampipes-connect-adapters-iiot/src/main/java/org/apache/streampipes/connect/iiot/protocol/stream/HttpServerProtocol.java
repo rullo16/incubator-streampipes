@@ -17,13 +17,13 @@
  */
 package org.apache.streampipes.connect.iiot.protocol.stream;
 
-import org.apache.streampipes.connect.SendToPipeline;
-import org.apache.streampipes.connect.adapter.model.generic.Protocol;
-import org.apache.streampipes.connect.api.IAdapterPipeline;
-import org.apache.streampipes.connect.api.IFormat;
-import org.apache.streampipes.connect.api.IParser;
-import org.apache.streampipes.connect.api.exception.ParseException;
-import org.apache.streampipes.connect.container.worker.management.HttpServerAdapterManagement;
+import org.apache.streampipes.extensions.api.connect.IAdapterPipeline;
+import org.apache.streampipes.extensions.api.connect.IFormat;
+import org.apache.streampipes.extensions.api.connect.IParser;
+import org.apache.streampipes.extensions.api.connect.exception.ParseException;
+import org.apache.streampipes.extensions.management.connect.HttpServerAdapterManagement;
+import org.apache.streampipes.extensions.management.connect.SendToPipeline;
+import org.apache.streampipes.extensions.management.connect.adapter.model.generic.Protocol;
 import org.apache.streampipes.messaging.InternalEventProcessor;
 import org.apache.streampipes.model.AdapterType;
 import org.apache.streampipes.model.connect.grounding.ProtocolDescription;
@@ -37,15 +37,18 @@ import org.apache.streampipes.sdk.StaticProperties;
 import org.apache.streampipes.sdk.builder.adapter.GuessSchemaBuilder;
 import org.apache.streampipes.sdk.builder.adapter.ProtocolDescriptionBuilder;
 import org.apache.streampipes.sdk.extractor.StaticPropertyExtractor;
-import org.apache.streampipes.sdk.helpers.*;
+import org.apache.streampipes.sdk.helpers.AdapterSourceType;
+import org.apache.streampipes.sdk.helpers.Alternatives;
+import org.apache.streampipes.sdk.helpers.Filetypes;
+import org.apache.streampipes.sdk.helpers.Labels;
+import org.apache.streampipes.sdk.helpers.Locales;
+import org.apache.streampipes.sdk.helpers.Options;
 import org.apache.streampipes.sdk.utils.Assets;
 import org.apache.streampipes.sdk.utils.Datatypes;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 public class HttpServerProtocol extends Protocol {
 
@@ -74,7 +77,7 @@ public class HttpServerProtocol extends Protocol {
   public HttpServerProtocol(ProtocolDescription adapterDescription, IParser parser, IFormat format) {
     super(parser, format);
     StaticPropertyExtractor extractor =
-            StaticPropertyExtractor.from(adapterDescription.getConfig(), new ArrayList<>());
+        StaticPropertyExtractor.from(adapterDescription.getConfig(), new ArrayList<>());
     this.adapterDescription = adapterDescription;
     this.endpointId = extractor.singleValueParameter(ENDPOINT_NAME, String.class);
   }
@@ -87,27 +90,27 @@ public class HttpServerProtocol extends Protocol {
   @Override
   public ProtocolDescription declareModel() {
     return ProtocolDescriptionBuilder.create(ID)
-            .withLocales(Locales.EN)
-            .sourceType(AdapterSourceType.STREAM)
-            .withAssets(Assets.DOCUMENTATION, Assets.ICON)
-            .category(AdapterType.Generic)
-            .requiredTextParameter(Labels.withId(ENDPOINT_NAME))
-            .requiredAlternatives(Labels.withId(CONFIGURE),
-                    Alternatives.from(Labels.withId(MANUALLY),
-                            StaticProperties.collection(Labels.withId(EP_CONFIG),
-                                    StaticProperties.stringFreeTextProperty(Labels.withId(EP_RUNTIME_NAME)),
-                                    StaticProperties.singleValueSelection(Labels.withId(EP_RUNTIME_TYPE),
-                                            Options.from("String", "Integer", "Double", "Boolean")),
-                                    StaticProperties.stringFreeTextProperty(Labels.withId(EP_DOMAIN_PROPERTY)))),
-                    Alternatives.from(Labels.withId(FILE_IMPORT),
-                            StaticProperties.fileProperty(Labels.withId(FILE), Filetypes.CSV, Filetypes.JSON, Filetypes.XML)))
-            .build();
+        .withLocales(Locales.EN)
+        .sourceType(AdapterSourceType.STREAM)
+        .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+        .category(AdapterType.Generic)
+        .requiredTextParameter(Labels.withId(ENDPOINT_NAME))
+        .requiredAlternatives(Labels.withId(CONFIGURE),
+            Alternatives.from(Labels.withId(MANUALLY),
+                StaticProperties.collection(Labels.withId(EP_CONFIG),
+                    StaticProperties.stringFreeTextProperty(Labels.withId(EP_RUNTIME_NAME)),
+                    StaticProperties.singleValueSelection(Labels.withId(EP_RUNTIME_TYPE),
+                        Options.from("String", "Integer", "Double", "Boolean")),
+                    StaticProperties.stringFreeTextProperty(Labels.withId(EP_DOMAIN_PROPERTY)))),
+            Alternatives.from(Labels.withId(FILE_IMPORT),
+                StaticProperties.fileProperty(Labels.withId(FILE), Filetypes.CSV, Filetypes.JSON, Filetypes.XML)))
+        .build();
   }
 
   @Override
   public GuessSchema getGuessSchema() throws ParseException {
     StaticPropertyExtractor extractor =
-            StaticPropertyExtractor.from(adapterDescription.getConfig(), new ArrayList<>());
+        StaticPropertyExtractor.from(adapterDescription.getConfig(), new ArrayList<>());
     GuessSchemaBuilder schemaBuilder = GuessSchemaBuilder.create();
 
     String selectedImportMode = extractor.selectedAlternativeInternalId(CONFIGURE);
@@ -117,7 +120,7 @@ public class HttpServerProtocol extends Protocol {
 
       for (StaticProperty member : sp.getMembers()) {
         StaticPropertyExtractor memberExtractor =
-                StaticPropertyExtractor.from(((StaticPropertyGroup) member).getStaticProperties(), new ArrayList<>());
+            StaticPropertyExtractor.from(((StaticPropertyGroup) member).getStaticProperties(), new ArrayList<>());
         schemaBuilder.property(makeProperty(memberExtractor));
       }
     }
@@ -130,8 +133,8 @@ public class HttpServerProtocol extends Protocol {
     primitive.setRuntimeName(memberExtractor.singleValueParameter(EP_RUNTIME_NAME, String.class));
     primitive.setRuntimeType(extractRuntimeType(memberExtractor.selectedSingleValue(EP_RUNTIME_TYPE, String.class)));
     primitive
-            .setDomainProperties(Collections
-                    .singletonList(URI.create(memberExtractor.singleValueParameter(EP_DOMAIN_PROPERTY, String.class))));
+        .setDomainProperties(Collections
+            .singletonList(URI.create(memberExtractor.singleValueParameter(EP_DOMAIN_PROPERTY, String.class))));
     return primitive;
   }
 
@@ -146,11 +149,6 @@ public class HttpServerProtocol extends Protocol {
       default:
         return Datatypes.Double.toString();
     }
-  }
-
-  @Override
-  public List<Map<String, Object>> getNElements(int n) throws ParseException {
-    return null;
   }
 
   @Override

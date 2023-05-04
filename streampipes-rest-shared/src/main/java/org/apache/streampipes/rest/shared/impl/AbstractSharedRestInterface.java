@@ -17,14 +17,14 @@
  */
 package org.apache.streampipes.rest.shared.impl;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 public abstract class AbstractSharedRestInterface {
 
   protected <T> Response ok(T entity) {
     return Response
-            .ok(entity)
-            .build();
+        .ok(entity)
+        .build();
   }
 
   protected <T> Response badRequest(T entity) {
@@ -38,9 +38,9 @@ public abstract class AbstractSharedRestInterface {
   protected <T> Response error(T entity,
                                Integer statusCode) {
     return Response
-            .status(statusCode)
-            .entity(entity)
-            .build();
+        .status(statusCode)
+        .entity(entity)
+        .build();
   }
 
   protected Response badRequest() {

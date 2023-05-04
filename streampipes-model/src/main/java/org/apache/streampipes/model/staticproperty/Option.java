@@ -18,71 +18,74 @@
 
 package org.apache.streampipes.model.staticproperty;
 
-import org.apache.streampipes.model.base.UnnamedStreamPipesEntity;
+import org.apache.streampipes.model.util.ElementIdGenerator;
 
-public class Option extends UnnamedStreamPipesEntity {
-	
-	private static final long serialVersionUID = 8536995294188662931L;
+public class Option {
 
-	private String name;
+  private String elementId;
 
-	private boolean selected;
+  private String name;
 
-	private String internalName;
-	
-	public Option()
-	{
-		super();
-	}
-	
-	public Option(String name)
-	{
-		super();
-		this.name = name;
-	}
+  private boolean selected;
 
-	public Option(String name, String internalName) {
-		super();
-		this.name = name;
-		this.internalName = internalName;
-	}
-	
-	public Option(String name, boolean selected)
-	{
-		super();
-		this.name = name;
-		this.selected = selected;
-	}
+  private String internalName;
 
-	public Option(Option o) {
-		super(o);
-		this.name = o.getName();
-		this.selected = o.isSelected();
-		this.internalName = o.getInternalName();
-		
-	}
+  public Option() {
+    this.elementId = ElementIdGenerator.makeElementId(Option.class);
+  }
 
-	public String getName() {
-		return name;
-	}
+  public Option(String name) {
+    this();
+    this.name = name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public Option(String name, String internalName) {
+    this(name);
+    this.internalName = internalName;
+  }
 
-	public boolean isSelected() {
-		return selected;
-	}
+  public Option(String name, boolean selected) {
+    this(name);
+    this.selected = selected;
+  }
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
+  public Option(Option o) {
+    this.elementId = o.getElementId();
+    this.name = o.getName();
+    this.selected = o.isSelected();
+    this.internalName = o.getInternalName();
 
-	public String getInternalName() {
-		return internalName;
-	}
+  }
 
-	public void setInternalName(String internalName) {
-		this.internalName = internalName;
-	}
+  public String getElementId() {
+    return elementId;
+  }
+
+  public void setElementId(String elementId) {
+    this.elementId = elementId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public boolean isSelected() {
+    return selected;
+  }
+
+  public void setSelected(boolean selected) {
+    this.selected = selected;
+  }
+
+  public String getInternalName() {
+    return internalName;
+  }
+
+  public void setInternalName(String internalName) {
+    this.internalName = internalName;
+  }
 }

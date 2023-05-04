@@ -151,12 +151,11 @@ public class BackendHttpConfig {
 
         assert myDate != null;
         LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        local_date_time = local_date_time.plusDays(5); //5 days
+        local_date_time = local_date_time.plusDays(2); //5 days
 
         Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
         this.second_date = date_format.format(date_plus);
 
-        //return the last date (highest_date: required as parameter) in the visualisation date interval, in order to not go out range.
         if(this.second_date.compareToIgnoreCase(this.highest_date) >= 0 && !this.highest_date.equals("CurrentDateTime")){
             return this.highest_date;
         }
@@ -180,7 +179,7 @@ public class BackendHttpConfig {
 
         assert myDate != null;
         LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        local_date_time = local_date_time.plusDays(5); // 5 days
+        local_date_time = local_date_time.plusDays(2); // 5 days
         Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
 
         first_date = date_format.format(date_plus);

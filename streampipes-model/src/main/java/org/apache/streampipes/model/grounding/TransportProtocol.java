@@ -18,56 +18,69 @@
 
 package org.apache.streampipes.model.grounding;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import org.apache.streampipes.model.base.UnnamedStreamPipesEntity;
 import org.apache.streampipes.model.util.Cloner;
+import org.apache.streampipes.model.util.ElementIdGenerator;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonSubTypes({
-				@JsonSubTypes.Type(JmsTransportProtocol.class),
-				@JsonSubTypes.Type(KafkaTransportProtocol.class),
-				@JsonSubTypes.Type(MqttTransportProtocol.class),
+    @JsonSubTypes.Type(JmsTransportProtocol.class),
+    @JsonSubTypes.Type(KafkaTransportProtocol.class),
+    @JsonSubTypes.Type(MqttTransportProtocol.class),
+    @JsonSubTypes.Type(NatsTransportProtocol.class)
 })
-public abstract class TransportProtocol extends UnnamedStreamPipesEntity {
-	
-	private static final long serialVersionUID = 7625791395504335184L;
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
+public abstract class TransportProtocol {
 
-	private String brokerHostname;
+  private static final long serialVersionUID = 7625791395504335184L;
 
-	private TopicDefinition topicDefinition;
-	
-	public TransportProtocol() {
-		super();
-	}
-	
-	public TransportProtocol(String hostname, TopicDefinition topicDefinition)
-	{
-		super();
-		this.brokerHostname = hostname;
-		this.topicDefinition = topicDefinition;
-	}
+  private String elementId;
 
-	public TransportProtocol(TransportProtocol other) {
-		super(other);
-		this.brokerHostname = other.getBrokerHostname();
-		if (other.getTopicDefinition() != null) {
-			this.topicDefinition = new Cloner().topicDefinition(other.getTopicDefinition());
-		}
-	}
+  private String brokerHostname;
 
-	public String getBrokerHostname() {
-		return brokerHostname;
-	}
+  private TopicDefinition topicDefinition;
 
-	public void setBrokerHostname(String uri) {
-		this.brokerHostname = uri;
-	}
-	
-	public TopicDefinition getTopicDefinition() {
-		return topicDefinition;
-	}
+  public TransportProtocol() {
+    super();
+    this.elementId = ElementIdGenerator.makeElementId(TransportProtocol.class);
+  }
 
-	public void setTopicDefinition(TopicDefinition topicDefinition) {
-		this.topicDefinition = topicDefinition;
-	}
+  public TransportProtocol(String hostname, TopicDefinition topicDefinition) {
+    super();
+    this.brokerHostname = hostname;
+    this.topicDefinition = topicDefinition;
+  }
 
+  public TransportProtocol(TransportProtocol other) {
+    this.elementId = other.getElementId();
+    this.brokerHostname = other.getBrokerHostname();
+    if (other.getTopicDefinition() != null) {
+      this.topicDefinition = new Cloner().topicDefinition(other.getTopicDefinition());
+    }
+  }
+
+  public String getBrokerHostname() {
+    return brokerHostname;
+  }
+
+  public void setBrokerHostname(String uri) {
+    this.brokerHostname = uri;
+  }
+
+  public TopicDefinition getTopicDefinition() {
+    return topicDefinition;
+  }
+
+  public void setTopicDefinition(TopicDefinition topicDefinition) {
+    this.topicDefinition = topicDefinition;
+  }
+
+  public String getElementId() {
+    return elementId;
+  }
+
+  public void setElementId(String elementId) {
+    this.elementId = elementId;
+  }
 }

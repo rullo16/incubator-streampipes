@@ -21,7 +21,7 @@
     <parent>
         <artifactId>streampipes-extensions</artifactId>
         <groupId>org.apache.streampipes</groupId>
-        <version>0.70.0</version>
+        <version>0.91.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -76,7 +76,13 @@
         </dependency>
     </dependencies>
 
-  <scm>
-    <tag>release/0.70.0</tag>
-  </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

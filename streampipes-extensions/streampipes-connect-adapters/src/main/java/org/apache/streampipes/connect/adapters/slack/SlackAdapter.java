@@ -17,11 +17,11 @@
  */
 package org.apache.streampipes.connect.adapters.slack;
 
-import org.apache.streampipes.connect.adapter.Adapter;
-import org.apache.streampipes.connect.api.exception.AdapterException;
-import org.apache.streampipes.connect.api.exception.ParseException;
-import org.apache.streampipes.connect.adapter.model.specific.SpecificDataStreamAdapter;
-import org.apache.streampipes.connect.adapter.sdk.ParameterExtractor;
+import org.apache.streampipes.extensions.api.connect.exception.AdapterException;
+import org.apache.streampipes.extensions.api.connect.exception.ParseException;
+import org.apache.streampipes.extensions.management.connect.adapter.Adapter;
+import org.apache.streampipes.extensions.management.connect.adapter.model.specific.SpecificDataStreamAdapter;
+import org.apache.streampipes.extensions.management.connect.adapter.sdk.ParameterExtractor;
 import org.apache.streampipes.model.AdapterType;
 import org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription;
 import org.apache.streampipes.model.connect.guess.GuessSchema;
@@ -62,11 +62,11 @@ public class SlackAdapter extends SpecificDataStreamAdapter {
   @Override
   public SpecificAdapterStreamDescription declareModel() {
     return SpecificDataStreamAdapterBuilder.create(ID)
-            .withAssets(Assets.DOCUMENTATION, Assets.ICON)
-            .withLocales(Locales.EN)
-            .category(AdapterType.SocialMedia)
-            .requiredTextParameter(Labels.withId(SlackToken))
-            .build();
+        .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+        .withLocales(Locales.EN)
+        .category(AdapterType.SocialMedia)
+        .requiredTextParameter(Labels.withId(SlackToken))
+        .build();
   }
 
   @Override
@@ -88,17 +88,18 @@ public class SlackAdapter extends SpecificDataStreamAdapter {
   }
 
   @Override
-  public GuessSchema getSchema(SpecificAdapterStreamDescription adapterDescription) throws AdapterException, ParseException {
+  public GuessSchema getSchema(SpecificAdapterStreamDescription adapterDescription)
+      throws AdapterException, ParseException {
     return GuessSchemaBuilder.create()
-            .property(timestampProperty(Timestamp))
-            .property(stringEp(Labels.from(Author, "Author", "The username of the sender of the " +
-                            "Slack message"),
-                    Author, SO.Text))
-            .property(stringEp(Labels.from(Channel, "Channel", "The Slack channel"), Channel,
-                    SO.Text))
-            .property(stringEp(Labels.from(Message, "Message", "The Slack message"),
-                    Message, SO.Text))
-            .build();
+        .property(timestampProperty(Timestamp))
+        .property(stringEp(Labels.from(Author, "Author", "The username of the sender of the "
+                + "Slack message"),
+            Author, SO.TEXT))
+        .property(stringEp(Labels.from(Channel, "Channel", "The Slack channel"), Channel,
+            SO.TEXT))
+        .property(stringEp(Labels.from(Message, "Message", "The Slack message"),
+            Message, SO.TEXT))
+        .build();
   }
 
   @Override

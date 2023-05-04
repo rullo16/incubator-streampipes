@@ -17,35 +17,36 @@
  */
 package org.apache.streampipes.connect.adapters.generic;
 
-import org.apache.streampipes.connect.adapter.preprocessing.Util;
+import org.apache.streampipes.extensions.management.connect.adapter.preprocessing.Util;
 import org.apache.streampipes.model.SpDataSet;
 import org.apache.streampipes.model.SpDataStream;
 import org.apache.streampipes.model.connect.adapter.GenericAdapterDescription;
 import org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription;
 import org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription;
 import org.apache.streampipes.model.schema.EventSchema;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
 public class UtilTest {
 
-    @Test
-    public void getEventSchemaStreamDescription() {
-        GenericAdapterStreamDescription adapter = new GenericAdapterStreamDescription();
-        adapter.setDataStream(new SpDataStream());
-        adapter.getDataStream().setEventSchema(new EventSchema());
+  @Test
+  public void getEventSchemaStreamDescription() {
+    GenericAdapterStreamDescription adapter = new GenericAdapterStreamDescription();
+    adapter.setDataStream(new SpDataStream());
+    adapter.getDataStream().setEventSchema(new EventSchema());
 
-        assertTrue(Util.getEventSchema((GenericAdapterDescription) adapter) instanceof EventSchema);
-    }
+    assertTrue(Util.getEventSchema((GenericAdapterDescription) adapter) instanceof EventSchema);
+  }
 
-    @Test
-    public void getEventSchemaSetDescription() {
-        GenericAdapterSetDescription adapter = new GenericAdapterSetDescription();
-        adapter.setDataSet(new SpDataSet());
-        adapter.getDataSet().setEventSchema(new EventSchema());
+  @Test
+  public void getEventSchemaSetDescription() {
+    GenericAdapterSetDescription adapter = new GenericAdapterSetDescription();
+    adapter.setDataSet(new SpDataSet());
+    adapter.getDataSet().setEventSchema(new EventSchema());
 
-        assertTrue(Util.getEventSchema((GenericAdapterDescription) adapter) instanceof EventSchema);
-    }
+    assertTrue(Util.getEventSchema((GenericAdapterDescription) adapter) instanceof EventSchema);
+  }
 
 }

@@ -17,35 +17,54 @@
  */
 package org.apache.streampipes.client.http;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.fluent.Request;
 import org.apache.streampipes.client.model.StreamPipesClientConfig;
 import org.apache.streampipes.client.serializer.Serializer;
 import org.apache.streampipes.client.util.StreamPipesApiPath;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.entity.ContentType;
+
 import java.io.IOException;
 
-public class DeleteRequest<DSO, DT> extends HttpRequest<Void, DSO, DT> {
+public class DeleteRequest<K, V, T> extends HttpRequest<K, V, T> {
 
-  private Class<DSO> responseClass;
+  private final Class<V> responseClass;
+  private K body;
 
   public DeleteRequest(StreamPipesClientConfig clientConfig,
                        StreamPipesApiPath apiPath,
-                       Class<DSO> responseClass,
-                       Serializer<Void, DSO, DT> serializer) {
+                       Class<V> responseClass,
+                       Serializer<K, V, T> serializer) {
     super(clientConfig, apiPath, serializer);
     this.responseClass = responseClass;
   }
 
-  @Override
-  protected Request makeRequest(Serializer<Void, DSO, DT> serializer) {
-    return Request
-            .Delete(makeUrl())
-            .setHeaders(standardJsonHeaders());
+  public DeleteRequest(StreamPipesClientConfig clientConfig,
+                       StreamPipesApiPath apiPath,
+                       Class<V> responseClass,
+                       Serializer<K, V, T> serializer,
+                       K body) {
+    super(clientConfig, apiPath, serializer);
+    this.responseClass = responseClass;
+    this.body = body;
   }
 
   @Override
-  protected DT afterRequest(Serializer<Void, DSO, DT> serializer, HttpEntity entity) throws IOException {
+  protected Request makeRequest(Serializer<K, V, T> serializer) {
+    var req = Request
+        .Delete(makeUrl())
+        .setHeaders(standardJsonHeaders());
+
+    if (this.body != null) {
+      req.bodyString(serializer.serialize(body), ContentType.APPLICATION_JSON);
+    }
+
+    return req;
+  }
+
+  @Override
+  protected T afterRequest(Serializer<K, V, T> serializer, HttpEntity entity) throws IOException {
     return serializer.deserialize(entityAsString(entity), responseClass);
   }
 }

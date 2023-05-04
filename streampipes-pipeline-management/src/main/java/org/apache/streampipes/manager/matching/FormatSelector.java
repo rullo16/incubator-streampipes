@@ -19,10 +19,10 @@
 package org.apache.streampipes.manager.matching;
 
 import org.apache.streampipes.config.backend.BackendConfig;
-import org.apache.streampipes.config.backend.SpDataFormat;
 import org.apache.streampipes.model.SpDataStream;
 import org.apache.streampipes.model.base.InvocableStreamPipesEntity;
 import org.apache.streampipes.model.base.NamedStreamPipesEntity;
+import org.apache.streampipes.model.config.SpDataFormat;
 import org.apache.streampipes.model.grounding.TransportFormat;
 import org.apache.streampipes.vocabulary.MessageFormat;
 
@@ -33,45 +33,45 @@ import java.util.stream.Collectors;
 
 public class FormatSelector extends GroundingSelector {
 
-    public FormatSelector(NamedStreamPipesEntity source, Set<InvocableStreamPipesEntity> targets) {
-        super(source, targets);
+  public FormatSelector(NamedStreamPipesEntity source, Set<InvocableStreamPipesEntity> targets) {
+    super(source, targets);
+  }
+
+  public TransportFormat getTransportFormat() {
+
+    if (source instanceof SpDataStream) {
+      return ((SpDataStream) source)
+          .getEventGrounding()
+          .getTransportFormats()
+          .get(0);
+    } else {
+      List<SpDataFormat> prioritizedFormats =
+          BackendConfig.INSTANCE.getMessagingSettings().getPrioritizedFormats();
+
+      List<SpDataFormat> supportedFormats = prioritizedFormats
+          .stream()
+          .filter(pf -> supportsFormat(pf.getMessageFormat())).collect(Collectors.toList());
+
+      if (supportedFormats.size() > 0) {
+        return new TransportFormat(supportedFormats.get(0).getMessageFormat());
+      } else {
+        return new TransportFormat(MessageFormat.JSON);
+      }
     }
+  }
 
-    public TransportFormat getTransportFormat() {
+  public <T extends TransportFormat> boolean supportsFormat(String format) {
+    List<InvocableStreamPipesEntity> elements = buildInvocables();
+    return elements
+        .stream()
+        .allMatch(e -> e
+            .getSupportedGrounding()
+            .getTransportFormats()
+            .stream()
+            .anyMatch(s -> rdfTypesAsString(s.getRdfType()).contains(format)));
+  }
 
-        if (source instanceof SpDataStream) {
-            return ((SpDataStream) source)
-                    .getEventGrounding()
-                    .getTransportFormats()
-                    .get(0);
-        } else {
-            List<SpDataFormat> prioritizedFormats =
-                    BackendConfig.INSTANCE.getMessagingSettings().getPrioritizedFormats();
-
-            List<SpDataFormat> supportedFormats = prioritizedFormats
-                    .stream()
-                    .filter(pf -> supportsFormat(pf.getMessageFormat())).collect(Collectors.toList());
-
-            if (supportedFormats.size() > 0) {
-                return new TransportFormat(supportedFormats.get(0).getMessageFormat());
-            } else {
-                return new TransportFormat(MessageFormat.Json);
-            }
-        }
-    }
-
-    public <T extends TransportFormat> boolean supportsFormat(String format) {
-        List<InvocableStreamPipesEntity> elements = buildInvocables();
-        return elements
-                .stream()
-                .allMatch(e -> e
-                        .getSupportedGrounding()
-                        .getTransportFormats()
-                        .stream()
-                        .anyMatch(s -> rdfTypesAsString(s.getRdfType()).contains(format)));
-    }
-
-    private List<String> rdfTypesAsString(List<URI> uri) {
-        return uri.stream().map(URI::toString).collect(Collectors.toList());
-    }
+  private List<String> rdfTypesAsString(List<URI> uri) {
+    return uri.stream().map(URI::toString).collect(Collectors.toList());
+  }
 }

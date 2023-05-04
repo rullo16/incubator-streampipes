@@ -19,40 +19,44 @@
 package org.apache.streampipes.processors.changedetection.jvm;
 
 
-import org.apache.streampipes.container.model.SpServiceDefinition;
-import org.apache.streampipes.container.model.SpServiceDefinitionBuilder;
-import org.apache.streampipes.container.standalone.init.StandaloneModelSubmitter;
 import org.apache.streampipes.dataformat.cbor.CborDataFormatFactory;
 import org.apache.streampipes.dataformat.fst.FstDataFormatFactory;
 import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
 import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinition;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinitionBuilder;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.processors.changedetection.jvm.cusum.CusumController;
+import org.apache.streampipes.processors.changedetection.jvm.welford.WelfordChangeDetection;
+import org.apache.streampipes.service.extensions.ExtensionsModelSubmitter;
 
-public class ChangeDetectionJvmInit extends StandaloneModelSubmitter {
+public class ChangeDetectionJvmInit extends ExtensionsModelSubmitter {
 
-    public static void main(String[] args) {
-        new ChangeDetectionJvmInit().init();
-    }
+  public static void main(String[] args) {
+    new ChangeDetectionJvmInit().init();
+  }
 
-    @Override
-    public SpServiceDefinition provideServiceDefinition() {
-        return SpServiceDefinitionBuilder.create("org.apache.streampipes.processors.changedetection.jvm",
-                "Processors Change Detection JVM",
-                "",
-                8090)
-                .registerPipelineElements(new CusumController())
-                .registerMessagingFormats(
-                        new JsonDataFormatFactory(),
-                        new CborDataFormatFactory(),
-                        new SmileDataFormatFactory(),
-                        new FstDataFormatFactory())
-                .registerMessagingProtocols(
-                        new SpKafkaProtocolFactory(),
-                        new SpJmsProtocolFactory(),
-                        new SpMqttProtocolFactory())
-                .build();
-    }
+  @Override
+  public SpServiceDefinition provideServiceDefinition() {
+    return SpServiceDefinitionBuilder.create("org.apache.streampipes.processors.changedetection.jvm",
+            "Processors Change Detection JVM",
+            "",
+            8090)
+        .registerPipelineElements(
+            new CusumController(),
+            new WelfordChangeDetection()
+        )
+        .registerMessagingFormats(
+            new JsonDataFormatFactory(),
+            new CborDataFormatFactory(),
+            new SmileDataFormatFactory(),
+            new FstDataFormatFactory())
+        .registerMessagingProtocols(
+            new SpKafkaProtocolFactory(),
+            new SpJmsProtocolFactory(),
+            new SpMqttProtocolFactory())
+        .build();
+  }
 }

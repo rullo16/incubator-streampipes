@@ -21,19 +21,15 @@ package org.apache.streampipes.model.connect.adapter;
 import org.apache.streampipes.model.connect.grounding.FormatDescription;
 import org.apache.streampipes.model.connect.grounding.ProtocolDescription;
 import org.apache.streampipes.model.connect.rules.TransformationRuleDescription;
-import org.apache.streampipes.model.schema.EventSchema;
 
 import java.util.List;
 
 public interface GenericAdapterDescription {
 
-    ProtocolDescription getProtocolDescription();
+  ProtocolDescription getProtocolDescription();
 
-    FormatDescription getFormatDescription();
+  FormatDescription getFormatDescription();
 
-    List<TransformationRuleDescription> getRules();
-
-    EventSchema getEventSchema();
-
+  List<TransformationRuleDescription> getRules();
 }
 

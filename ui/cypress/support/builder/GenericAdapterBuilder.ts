@@ -21,67 +21,82 @@ import { GenericAdapterInput } from '../model/GenericAdapterInput';
 import { UserInputType } from '../model/UserInputType';
 
 export class GenericAdapterBuilder {
-  genericAdapterInput: GenericAdapterInput;
+    genericAdapterInput: GenericAdapterInput;
 
-  constructor(type: string) {
-    this.genericAdapterInput = new GenericAdapterInput();
-    this.genericAdapterInput.adapterType = type;
-    this.genericAdapterInput.protocolConfiguration = [];
-    this.genericAdapterInput.formatConfiguration = [];
-  }
+    constructor(type: string) {
+        this.genericAdapterInput = new GenericAdapterInput();
+        this.genericAdapterInput.adapterType = type;
+        this.genericAdapterInput.protocolConfiguration = [];
+        this.genericAdapterInput.formatConfiguration = [];
+    }
 
-  public static create(name: string) {
-    return new GenericAdapterBuilder(name);
-  }
+    public static create(name: string) {
+        return new GenericAdapterBuilder(name);
+    }
 
-  public setName(name: string) {
-    this.genericAdapterInput.adapterName = name;
-    return this;
-  }
+    public setName(name: string) {
+        this.genericAdapterInput.adapterName = name;
+        return this;
+    }
 
-  public setTimestampProperty(timestsmpProperty: string) {
-    this.genericAdapterInput.timestampProperty = timestsmpProperty;
-    return this;
-  }
+    public setTimestampProperty(timestsmpProperty: string) {
+        this.genericAdapterInput.timestampProperty = timestsmpProperty;
+        return this;
+    }
 
-  public addDimensionProperty(dimensionPropertyName: string) {
-    this.genericAdapterInput.dimensionProperties.push(dimensionPropertyName);
-    return this;
-  }
+    public addDimensionProperty(dimensionPropertyName: string) {
+        this.genericAdapterInput.dimensionProperties.push(
+            dimensionPropertyName,
+        );
+        return this;
+    }
 
-  public setStoreInDataLake() {
-    this.genericAdapterInput.storeInDataLake = true;
-    return this;
-  }
+    public setStoreInDataLake() {
+        this.genericAdapterInput.storeInDataLake = true;
+        return this;
+    }
 
-  public addProtocolInput(type: UserInputType, selector: string, value: string) {
-    const userInput = new UserInput();
-    userInput.type = type;
-    userInput.selector = selector;
-    userInput.value = value;
+    public setStartAdapter(startAdapter: boolean) {
+        this.genericAdapterInput.startAdapter = startAdapter;
+        return this;
+    }
 
-    this.genericAdapterInput.protocolConfiguration.push(userInput);
+    public addProtocolInput(
+        type: UserInputType,
+        selector: string,
+        value: string,
+    ) {
+        const userInput = new UserInput();
+        userInput.type = type;
+        userInput.selector = selector;
+        userInput.value = value;
 
-    return this;
-  }
+        this.genericAdapterInput.protocolConfiguration.push(userInput);
 
-  public setFormat(format: string) {
-    this.genericAdapterInput.format = format;
-    return this;
-  }
+        return this;
+    }
 
-  public addFormatInput(type: UserInputType, selector: string, value: string) {
-    const userInput = new UserInput();
-    userInput.type = type;
-    userInput.selector = selector;
-    userInput.value = value;
+    public setFormat(format: 'csv' | 'json_array' | 'json_object') {
+        this.genericAdapterInput.format = format;
+        return this;
+    }
 
-    this.genericAdapterInput.formatConfiguration.push(userInput);
+    public addFormatInput(
+        type: UserInputType,
+        selector: string,
+        value: string,
+    ) {
+        const userInput = new UserInput();
+        userInput.type = type;
+        userInput.selector = selector;
+        userInput.value = value;
 
-    return this;
-  }
+        this.genericAdapterInput.formatConfiguration.push(userInput);
 
-  build() {
-    return this.genericAdapterInput;
-  }
+        return this;
+    }
+
+    build() {
+        return this.genericAdapterInput;
+    }
 }

@@ -17,31 +17,17 @@
  */
 package org.apache.streampipes.dataexplorer.utils;
 
-import okhttp3.OkHttpClient;
-import org.apache.streampipes.config.backend.BackendConfig;
 import org.apache.streampipes.model.datalake.DataLakeMeasure;
 import org.apache.streampipes.storage.management.StorageDispatcher;
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class DataExplorerUtils {
 
   public static List<DataLakeMeasure> getInfos() {
     return StorageDispatcher.INSTANCE
-            .getNoSqlStore()
-            .getDataLakeStorage()
-            .getAllDataLakeMeasures();
-  }
-
-  public static InfluxDB getInfluxDBClient() {
-    OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient().newBuilder()
-            .connectTimeout(120, TimeUnit.SECONDS)
-            .readTimeout(120, TimeUnit.SECONDS)
-            .writeTimeout(120, TimeUnit.SECONDS);
-
-    return InfluxDBFactory.connect(BackendConfig.INSTANCE.getInfluxUrl(), okHttpClientBuilder);
+        .getNoSqlStore()
+        .getDataLakeStorage()
+        .getAllDataLakeMeasures();
   }
 }

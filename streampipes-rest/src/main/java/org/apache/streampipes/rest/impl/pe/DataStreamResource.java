@@ -25,60 +25,103 @@ import org.apache.streampipes.rest.core.base.impl.AbstractAuthGuardedRestResourc
 import org.apache.streampipes.rest.security.AuthConstants;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 import org.apache.streampipes.rest.shared.util.SpMediaType;
+
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 
 @Component
 @Path("/v2/streams")
 public class DataStreamResource extends AbstractAuthGuardedRestResource {
 
-	@GET
-	@Path("/available")
-	@Produces(MediaType.APPLICATION_JSON)
-	@JacksonSerialized
-	@PreAuthorize(AuthConstants.HAS_READ_PIPELINE_ELEMENT_PRIVILEGE)
-	@PostFilter("hasPermission(filterObject.elementId, 'READ')")
-	public List<SpDataStream> getAvailable() {
-		return getDataStreamResourceManager().findAll();
-	}
+  @GET
+  @Path("/available")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  @PreAuthorize(AuthConstants.HAS_READ_PIPELINE_ELEMENT_PRIVILEGE)
+  @PostFilter("hasPermission(filterObject.elementId, 'READ')")
+  public List<SpDataStream> getAvailable() {
+    return getDataStreamResourceManager().findAll();
+  }
 
-	@GET
-	@Path("/own")
-	@Produces({MediaType.APPLICATION_JSON, SpMediaType.JSONLD})
-	@JacksonSerialized
-	@PreAuthorize(AuthConstants.HAS_READ_PIPELINE_ELEMENT_PRIVILEGE)
-	@PostFilter("hasPermission(filterObject.elementId, 'READ')")
-	public List<SpDataStream> getOwn() {
-		return getDataStreamResourceManager().findAllAsInvocation();
-	}
+  @GET
+  @Produces({MediaType.APPLICATION_JSON, SpMediaType.JSONLD})
+  @JacksonSerialized
+  @PreAuthorize(AuthConstants.HAS_READ_PIPELINE_ELEMENT_PRIVILEGE)
+  @PostFilter("hasPermission(filterObject.elementId, 'READ')")
+  public List<SpDataStream> get() {
+    return getDataStreamResourceManager().findAllAsInvocation();
+  }
 
-	@DELETE
-	@Path("/own/{elementId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@JacksonSerialized
-	@PreAuthorize(AuthConstants.HAS_DELETE_PIPELINE_ELEMENT_PRIVILEGE)
-	public Response removeOwn(@PathParam("elementId") String elementId) {
-		getDataStreamResourceManager().delete(elementId);
-		return constructSuccessMessage(NotificationType.STORAGE_SUCCESS.uiNotification());
-	}
-	
-	@Path("/{elementId}")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@JacksonSerialized
-	@PreAuthorize(AuthConstants.HAS_READ_PIPELINE_ELEMENT_PRIVILEGE)
-	public SpDataStream getElement(@PathParam("elementId") String elementId) {
-		return getDataStreamResourceManager().findAsInvocation(elementId);
-	}
+  @GET
+  @Path("/own")
+  @Produces({MediaType.APPLICATION_JSON, SpMediaType.JSONLD})
+  @JacksonSerialized
+  @PreAuthorize(AuthConstants.HAS_READ_PIPELINE_ELEMENT_PRIVILEGE)
+  @PostFilter("hasPermission(filterObject.elementId, 'READ')")
+  @Deprecated(since = "0.71.0", forRemoval = true)
+  public List<SpDataStream> getOwn() {
+    return getDataStreamResourceManager().findAllAsInvocation();
+  }
 
-	private DataStreamResourceManager getDataStreamResourceManager() {
-		return getSpResourceManager().manageDataStreams();
-	}
+  @DELETE
+  @Path("/own/{elementId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  @PreAuthorize(AuthConstants.HAS_DELETE_PIPELINE_ELEMENT_PRIVILEGE)
+  @Deprecated(since = "0.71.0", forRemoval = true)
+  public Response removeOwn(@PathParam("elementId") String elementId) {
+    getDataStreamResourceManager().delete(elementId);
+    return constructSuccessMessage(NotificationType.STORAGE_SUCCESS.uiNotification());
+  }
+
+  @DELETE
+  @Path("/{elementId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  @PreAuthorize(AuthConstants.HAS_DELETE_PIPELINE_ELEMENT_PRIVILEGE)
+  public Response delete(@PathParam("elementId") String elementId) {
+    getDataStreamResourceManager().delete(elementId);
+    return constructSuccessMessage(NotificationType.STORAGE_SUCCESS.uiNotification());
+  }
+
+  @Path("/{elementId}")
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  @PreAuthorize(AuthConstants.HAS_READ_PIPELINE_ELEMENT_PRIVILEGE)
+  public SpDataStream getElement(@PathParam("elementId") String elementId) {
+    return getDataStreamResourceManager().findAsInvocation(elementId);
+  }
+
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  @PreAuthorize(AuthConstants.HAS_WRITE_PIPELINE_ELEMENT_PRIVILEGE)
+  public Response addDataStream(SpDataStream dataStream) {
+    try {
+      getDataStreamResourceManager().add(dataStream, getAuthenticatedUserSid());
+      return ok();
+    } catch (IllegalArgumentException e) {
+      return badRequest(e.getMessage());
+    }
+  }
+
+  private DataStreamResourceManager getDataStreamResourceManager() {
+    return getSpResourceManager().manageDataStreams();
+  }
 
 }

@@ -45,20 +45,20 @@ public class CustomOutputSchemaGenerator extends OutputSchemaGenerator<CustomOut
   @Override
   public Tuple2<EventSchema, CustomOutputStrategy> buildFromOneStream(SpDataStream stream) {
     return new Tuple2<>(new EventSchema(new PropertySelector(stream.getEventSchema())
-            .createPropertyList(selectedPropertyKeys)), outputStrategy);
+        .createPropertyList(selectedPropertyKeys)), outputStrategy);
   }
 
   @Override
   public Tuple2<EventSchema, CustomOutputStrategy> buildFromTwoStreams(SpDataStream stream1,
-                                         SpDataStream stream2) {
+                                                                       SpDataStream stream2) {
 
     Tuple2<List<EventProperty>, List<PropertyRenameRule>> generatedOutputProperties = new
-            PropertySelector(stream1.getEventSchema(),
-            stream2.getEventSchema()).createRenamedPropertyList(selectedPropertyKeys);
+        PropertySelector(stream1.getEventSchema(),
+        stream2.getEventSchema()).createRenamedPropertyList(selectedPropertyKeys);
 
-    EventSchema outputSchema = new EventSchema(generatedOutputProperties.a);
+    EventSchema outputSchema = new EventSchema(generatedOutputProperties.k);
 
-    return new Tuple2<>(outputSchema, getModifiedOutputStrategy(generatedOutputProperties.b));
+    return new Tuple2<>(outputSchema, getModifiedOutputStrategy(generatedOutputProperties.v));
   }
 
   private CustomOutputStrategy getModifiedOutputStrategy(List<PropertyRenameRule> propertyRenameRules) {

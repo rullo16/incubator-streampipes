@@ -22,83 +22,108 @@ import { map } from 'rxjs/operators';
 
 import { Observable } from 'rxjs';
 import { PlatformServicesCommons } from './commons.service';
-import { AdapterDescription, AdapterDescriptionUnion, Message } from '../model/gen/streampipes-model';
+import {
+    AdapterDescription,
+    AdapterDescriptionUnion,
+    Message,
+} from '../model/gen/streampipes-model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AdapterService {
+    constructor(
+        private http: HttpClient,
+        private platformServicesCommons: PlatformServicesCommons,
+    ) {}
 
-  constructor(
-      private http: HttpClient,
-      private platformServicesCommons: PlatformServicesCommons) {
-  }
+    get connectPath() {
+        return `${this.platformServicesCommons.apiBasePath}/connect`;
+    }
 
-  get connectPath() {
-    return `${this.platformServicesCommons.apiBasePath}/connect`;
-  }
+    getAdapterDescriptions(): Observable<AdapterDescriptionUnion[]> {
+        return this.requestAdapterDescriptions('/master/description/adapters');
+    }
 
-  getAdapterDescriptions(): Observable<AdapterDescriptionUnion[]> {
-    return this.requestAdapterDescriptions('/master/description/adapters');
-  }
+    getAdapters(): Observable<AdapterDescriptionUnion[]> {
+        return this.requestAdapterDescriptions('/master/adapters');
+    }
 
-  getAdapters(): Observable<AdapterDescriptionUnion[]> {
-    return this.requestAdapterDescriptions('/master/adapters');
-  }
+    getAdapter(id: string): Observable<AdapterDescriptionUnion> {
+        return this.http
+            .get(this.connectPath + `/master/adapters/${id}`)
+            .pipe(
+                map(response =>
+                    AdapterDescription.fromDataUnion(response as any),
+                ),
+            );
+    }
 
-  deleteAdapterDescription(adapterId: string): Observable<any> {
-    return this.http.delete(`${this.connectPath}/master/description/${adapterId}`);
-  }
+    deleteAdapterDescription(adapterId: string): Observable<any> {
+        return this.http.delete(
+            `${this.connectPath}/master/description/${adapterId}`,
+        );
+    }
 
-  requestAdapterDescriptions(path: string): Observable<AdapterDescriptionUnion[]> {
-    return this.http
-      .get(
-        this.connectPath +
-        path
-      )
-      .pipe(map(response => {
-        return (response as any[]).map(p => AdapterDescription.fromDataUnion(p));
-      }));
-  }
+    requestAdapterDescriptions(
+        path: string,
+    ): Observable<AdapterDescriptionUnion[]> {
+        return this.http.get(this.connectPath + path).pipe(
+            map(response => {
+                return (response as any[]).map(p =>
+                    AdapterDescription.fromDataUnion(p),
+                );
+            }),
+        );
+    }
 
-  stopAdapter(adapter: AdapterDescriptionUnion): Observable<Message> {
-    return this.http.post(this.adapterMasterUrl
-      + adapter.elementId
-      + '/stop', {})
-      .pipe(map(response => Message.fromData(response as any)));
-  }
+    stopAdapter(adapter: AdapterDescriptionUnion): Observable<Message> {
+        return this.http
+            .post(this.adapterMasterUrl + adapter.elementId + '/stop', {})
+            .pipe(map(response => Message.fromData(response as any)));
+    }
 
-  startAdapter(adapter: AdapterDescriptionUnion): Observable<Message> {
-    return this.http.post(this.adapterMasterUrl
-      + adapter.elementId
-      + '/start', {})
-      .pipe(map(response => Message.fromData(response as any)));
-  }
+    startAdapter(adapter: AdapterDescriptionUnion): Observable<Message> {
+        return this.startAdapterByElementId(adapter.elementId);
+    }
 
-  get adapterMasterUrl() {
-    return `${this.connectPath}/master/adapters/`;
-  }
+    startAdapterByElementId(elementId: string): Observable<Message> {
+        return this.http
+            .post(this.adapterMasterUrl + elementId + '/start', {})
+            .pipe(map(response => Message.fromData(response as any)));
+    }
 
-  deleteAdapter(adapter: AdapterDescription): Observable<any> {
-    return this.deleteRequest(adapter, '/master/adapters/');
-  }
+    addAdapter(adapter: AdapterDescription): Observable<Message> {
+        return this.http
+            .post(`${this.connectPath}/master/adapters`, adapter)
+            .pipe(map(response => Message.fromData(response as any)));
+    }
 
-  getAdapterCategories(): Observable<any> {
-    return this.http.get(
-      `${this.baseUrl}/api/v2/categories/adapter`);
-  }
+    updateAdapter(adapter: AdapterDescription): Observable<Message> {
+        return this.http
+            .put(`${this.connectPath}/master/adapters`, adapter)
+            .pipe(map(response => Message.fromData(response as any)));
+    }
 
-  private deleteRequest(adapter: AdapterDescription, url: string) {
-    return this.http.delete(
-      this.connectPath +
-      url +
-      adapter.elementId
-    );
-  }
+    get adapterMasterUrl() {
+        return `${this.connectPath}/master/adapters/`;
+    }
 
-  getAssetUrl(appId) {
-    return `${this.connectPath}/master/description/${appId}/assets`;
-  }
+    deleteAdapter(adapter: AdapterDescription): Observable<any> {
+        return this.deleteRequest(adapter, '/master/adapters/');
+    }
 
-  private get baseUrl() {
-    return '/streampipes-backend';
-  }
+    getAdapterCategories(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/api/v2/categories/adapter`);
+    }
+
+    private deleteRequest(adapter: AdapterDescription, url: string) {
+        return this.http.delete(this.connectPath + url + adapter.elementId);
+    }
+
+    getAssetUrl(appId) {
+        return `${this.connectPath}/master/description/${appId}/assets`;
+    }
+
+    private get baseUrl() {
+        return '/streampipes-backend';
+    }
 }

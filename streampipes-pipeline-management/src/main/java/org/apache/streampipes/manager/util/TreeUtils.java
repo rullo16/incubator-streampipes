@@ -35,14 +35,15 @@ public class TreeUtils {
    * @return a SEPA-client element
    */
 
-  public static NamedStreamPipesEntity findSEPAElement(String id, List<DataProcessorInvocation> sepas, List<SpDataStream>
-          streams) {
+  public static NamedStreamPipesEntity findSEPAElement(String id, List<DataProcessorInvocation> sepas,
+                                                       List<SpDataStream>
+                                                           streams) {
     List<NamedStreamPipesEntity> allElements = new ArrayList<>();
     allElements.addAll(sepas);
     allElements.addAll(streams);
 
     for (NamedStreamPipesEntity element : allElements) {
-      if (id.equals(element.getDOM())) {
+      if (id.equals(element.getDom())) {
         return element;
       }
     }
@@ -57,7 +58,7 @@ public class TreeUtils {
    */
   public static InvocableStreamPipesEntity findByDomId(String id, List<InvocableStreamPipesEntity> graphs) {
     for (InvocableStreamPipesEntity graph : graphs) {
-      if (graph.getDOM().equals(id)) {
+      if (graph.getDom().equals(id)) {
         return graph;
       }
     }

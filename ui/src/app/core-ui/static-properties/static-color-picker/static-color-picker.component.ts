@@ -19,42 +19,60 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigurationInfo } from '../../../connect/model/ConfigurationInfo';
 import { StaticPropertyUtilService } from '../static-property-util.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { ColorPickerStaticProperty } from '@streampipes/platform-services';
 import { AbstractValidatedStaticPropertyRenderer } from '../base/abstract-validated-static-property';
 
 @Component({
-    selector: 'app-static-color-picker',
+    selector: 'sp-app-static-color-picker',
     templateUrl: './static-color-picker.component.html',
-    styleUrls: ['./static-color-picker.component.css']
+    styleUrls: ['./static-color-picker.component.css'],
 })
 export class StaticColorPickerComponent
-    extends AbstractValidatedStaticPropertyRenderer<ColorPickerStaticProperty> implements OnInit {
-
+    extends AbstractValidatedStaticPropertyRenderer<ColorPickerStaticProperty>
+    implements OnInit
+{
     constructor(public staticPropertyUtil: StaticPropertyUtilService) {
         super();
     }
 
     inputValue: String;
     hasInput: Boolean;
-    colorPickerForm: FormGroup;
+    colorPickerForm: UntypedFormGroup;
 
-    presetColors: any[] = ['#39B54A', '#1B1464', '#f44336', '#4CAF50', '#FFEB3B', '#FFFFFF', '#000000'];
+    presetColors: any[] = [
+        '#39B54A',
+        '#1B1464',
+        '#f44336',
+        '#4CAF50',
+        '#FFEB3B',
+        '#FFFFFF',
+        '#000000',
+    ];
 
     ngOnInit() {
-        this.addValidator(this.staticProperty.selectedColor, Validators.required);
+        this.addValidator(
+            this.staticProperty.selectedColor,
+            Validators.required,
+        );
         this.enableValidators();
     }
 
     emitUpdate() {
-        this.updateEmitter.emit(new ConfigurationInfo(this.staticProperty.internalName, this.staticPropertyUtil.asColorPickerStaticProperty(this.staticProperty).selectedColor && this.staticPropertyUtil.asColorPickerStaticProperty(this.staticProperty).selectedColor !== ''));
+        this.updateEmitter.emit(
+            new ConfigurationInfo(
+                this.staticProperty.internalName,
+                this.staticPropertyUtil.asColorPickerStaticProperty(
+                    this.staticProperty,
+                ).selectedColor &&
+                    this.staticPropertyUtil.asColorPickerStaticProperty(
+                        this.staticProperty,
+                    ).selectedColor !== '',
+            ),
+        );
     }
 
-    onStatusChange(status: any) {
-    }
+    onStatusChange(status: any) {}
 
-    onValueChange(value: any) {
-
-    }
-
+    onValueChange(value: any) {}
 }

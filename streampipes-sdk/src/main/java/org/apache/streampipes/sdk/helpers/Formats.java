@@ -25,41 +25,46 @@ public class Formats {
 
   /**
    * Defines the transport format JSON used by a data stream at runtime.
+   *
    * @return The {@link org.apache.streampipes.model.grounding.TransportFormat} of type JSON.
    */
   public static TransportFormat jsonFormat() {
-    return new TransportFormat(MessageFormat.Json);
+    return new TransportFormat(MessageFormat.JSON);
   }
 
   /**
    * Defines the transport format CBOR used by a data stream at runtime.
+   *
    * @return The {@link org.apache.streampipes.model.grounding.TransportFormat} of type CBOR.
    */
   public static TransportFormat cborFormat() {
-    return new TransportFormat(MessageFormat.Cbor);
+    return new TransportFormat(MessageFormat.CBOR);
   }
 
   /**
    * Defines the transport format Fast-Serializer used by a data stream at runtime.
+   *
    * @return The {@link org.apache.streampipes.model.grounding.TransportFormat} of type FST.
    */
   public static TransportFormat fstFormat() {
-    return new TransportFormat(MessageFormat.Fst);
+    return new TransportFormat(MessageFormat.FST);
   }
 
   /**
    * Defines the transport format SMILE used by a data stream at runtime.
+   *
    * @return The {@link org.apache.streampipes.model.grounding.TransportFormat} of type SMILE.
    */
   public static TransportFormat smileFormat() {
-    return new TransportFormat(MessageFormat.Smile);
+    return new TransportFormat(MessageFormat.SMILE);
   }
 
   /**
    * Defines the transport format Apache Thrift used by a data stream at runtime.
+   *
    * @return The {@link org.apache.streampipes.model.grounding.TransportFormat} of type Thrift.
    */
   public static TransportFormat thriftFormat() {
-    return new TransportFormat(MessageFormat.Thrift);
+    return new TransportFormat(MessageFormat.THRIFT);
   }
 }

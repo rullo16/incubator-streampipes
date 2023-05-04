@@ -27,53 +27,54 @@ import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 import org.apache.streampipes.storage.management.StorageManager;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("/v2/categories")
 public class PipelineElementCategory extends AbstractRestResource {
 
-	@GET
-	@Path("/ep")
-	@Produces(MediaType.APPLICATION_JSON)
-	@JacksonSerialized
-	public Response getEps() {
-		return ok(makeCategories(StorageManager.INSTANCE.getPipelineElementStorage().getAllDataStreams()));
-	}
+  @GET
+  @Path("/ep")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response getEps() {
+    return ok(makeCategories(StorageManager.INSTANCE.getPipelineElementStorage().getAllDataStreams()));
+  }
 
-	@GET
-	@Path("/epa")
-	@Produces(MediaType.APPLICATION_JSON)
-	@JacksonSerialized
-	public Response getEpaCategories() {
-		return ok(DataProcessorType.values());
-	}
+  @GET
+  @Path("/epa")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response getEpaCategories() {
+    return ok(DataProcessorType.values());
+  }
 
-	@GET
-	@Path("/adapter")
-	@Produces(MediaType.APPLICATION_JSON)
-	@JacksonSerialized
-	public Response getAdapterCategories() {
-		return ok(AdapterType.values());
-	}
+  @GET
+  @Path("/adapter")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response getAdapterCategories() {
+    return ok(AdapterType.values());
+  }
 
-	@GET
-	@Path("/ec")
-	@Produces(MediaType.APPLICATION_JSON)
-	@JacksonSerialized
-	public Response getEcCategories() {
-		return ok(DataSinkType.values());
-	}
-	
-	private List<Category> makeCategories(List<SpDataStream> streams) {
-		return streams
-				.stream()
-				.map(p -> new Category(p.getElementId(), p.getName(), p.getDescription()))
-				.collect(Collectors.toList());
-	}
+  @GET
+  @Path("/ec")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response getEcCategories() {
+    return ok(DataSinkType.values());
+  }
+
+  private List<Category> makeCategories(List<SpDataStream> streams) {
+    return streams
+        .stream()
+        .map(p -> new Category(p.getElementId(), p.getName(), p.getDescription()))
+        .collect(Collectors.toList());
+  }
 }

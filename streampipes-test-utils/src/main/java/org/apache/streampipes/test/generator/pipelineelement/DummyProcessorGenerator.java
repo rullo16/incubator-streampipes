@@ -19,13 +19,15 @@
 package org.apache.streampipes.test.generator.pipelineelement;
 
 import org.apache.streampipes.model.graph.DataProcessorInvocation;
+import org.apache.streampipes.model.util.ElementIdGenerator;
 
 public class DummyProcessorGenerator {
 
-    public static DataProcessorInvocation makeDummyProcessor() {
+  public static DataProcessorInvocation makeDummyProcessor() {
 
-        DataProcessorInvocation dataProcessorInvocation = new DataProcessorInvocation();
+    DataProcessorInvocation dataProcessorInvocation = new DataProcessorInvocation();
+    dataProcessorInvocation.setElementId(ElementIdGenerator.makeElementId(DataProcessorInvocation.class));
 
-        return dataProcessorInvocation;
-    }
+    return dataProcessorInvocation;
+  }
 }

@@ -19,133 +19,130 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import {
-  DataProcessorInvocation, DataSinkInvocation,
-  Pipeline,
-  PipelineElementMonitoringInfo, SpDataSet, SpDataStream,
+    DataProcessorInvocation,
+    DataSinkInvocation,
+    SpDataSet,
+    SpDataStream,
+    SpMetricsEntry,
 } from '@streampipes/platform-services';
-import { HistoricalMonitoringData } from '../../model/pipeline-details.model';
+import {
+    HistoricalMonitoringData,
+    ObservedMetricsStream,
+} from '../../model/pipeline-details.model';
 
 @Component({
-  selector: 'pipeline-element-statistics',
-  templateUrl: './pipeline-element-statistics.component.html',
-  styleUrls: ['./pipeline-element-statistics.component.scss']
+    selector: 'sp-pipeline-element-statistics',
+    templateUrl: './pipeline-element-statistics.component.html',
+    styleUrls: ['./pipeline-element-statistics.component.scss'],
 })
 export class PipelineElementStatisticsComponent implements OnInit {
+    @Input()
+    allElements: (
+        | SpDataSet
+        | SpDataStream
+        | DataProcessorInvocation
+        | DataSinkInvocation
+    )[];
 
-  @Input()
-  pipeline: Pipeline;
+    @Input()
+    pipelineElement:
+        | SpDataSet
+        | SpDataStream
+        | DataProcessorInvocation
+        | DataSinkInvocation;
 
-  @Input()
-  pipelineElement:  (SpDataSet | SpDataStream | DataProcessorInvocation | DataSinkInvocation);
+    _metricsInfo: SpMetricsEntry;
 
-  _pipelineElementMonitoringInfo: PipelineElementMonitoringInfo;
+    currentPipelineElement:
+        | SpDataSet
+        | SpDataStream
+        | DataProcessorInvocation
+        | DataSinkInvocation;
+    consumedMessagesFirstInputStream = '';
+    consumedMessagesSecondInputStream = '';
 
-  currentPipelineElement: SpDataSet | SpDataStream | DataProcessorInvocation | DataSinkInvocation;
-  consumedMessagesFirstInputStream = '';
-  consumedMessagesSecondInputStream = '';
+    producedMessages: string | number = '';
 
-  producedMessages: string | number = '';
+    cardColor = 'rgb(27, 20, 100)';
+    deactivatedCardColor = 'rgb(241,241,241)';
 
-  cardColor = 'rgb(27, 20, 100)';
-  deactivatedCardColor = 'rgb(241,241,241)';
+    textColor = 'rgb(208,208,208)';
+    deactivatedTextColor = 'rgb(205,205,205)';
 
-  textColor = 'rgb(208,208,208)';
-  deactivatedTextColor = 'rgb(205,205,205)';
+    bandColor = 'rgb(27, 20, 100)';
+    deactivatedBandColor = 'rgb(241,241,241)';
+    okBandColor = 'rgb(11,186,0)';
+    warningBandColor = 'rgb(253,144,0)';
 
-  bandColor = 'rgb(27, 20, 100)';
-  deactivatedBandColor = 'rgb(241,241,241)';
-  okBandColor = 'rgb(11,186,0)';
-  warningBandColor = 'rgb(253,144,0)';
+    chartBackgroundColor = 'rgb(27, 20, 100)';
+    chartTextColor = 'rgb(208,208,208)';
 
-  chartBackgroundColor = 'rgb(27, 20, 100)';
-  chartTextColor = 'rgb(208,208,208)';
+    consumedMessagesFirstStreamBandColor: string;
+    consumedMessagesSecondStreamBandColor: string;
 
-  consumedMessagesFirstStreamBandColor: string;
-  consumedMessagesSecondStreamBandColor: string;
+    notAvailable = '-';
 
-  notAvailable = '-';
+    historicFirstConsumedInputValues: HistoricalMonitoringData[] = [];
+    historicSecondConsumedInputValues: HistoricalMonitoringData[] = [];
+    historicProducedOutputValues: HistoricalMonitoringData[] = [];
 
-  historicFirstConsumedInputValues: HistoricalMonitoringData[] = [];
-  historicSecondConsumedInputValues: HistoricalMonitoringData[] = [];
-  historicProducedOutputValues: HistoricalMonitoringData[] = [];
+    consumedMessagesFirstStreamLastValue = -1;
+    consumedMessagesSecondStreamLastValue = -1;
+    producedMessageOutputLastValue = -1;
 
-  consumedMessagesFirstStreamLastValue = -1;
-  consumedMessagesSecondStreamLastValue = -1;
-  producedMessageOutputLastValue = -1;
+    consumedMessagesFirstStreamAvailable = false;
+    consumedMessagesSecondStreamAvailable = false;
+    producedMessagesAvailable = false;
 
-  consumedMessagesFirstStreamAvailable = false;
-  consumedMessagesSecondStreamAvailable = false;
-  producedMessagesAvailable = false;
+    observedInputStreams: ObservedMetricsStream[] = [];
+    dataSink = false;
 
-  ngOnInit(): void {
-    this.producedMessagesAvailable = this.pipelineElementMonitoringInfo.producedMessageInfoExists;
-    this.consumedMessagesFirstStreamAvailable = this.pipelineElementMonitoringInfo.consumedMessageInfoExists;
-    this.consumedMessagesSecondStreamAvailable =
-        this.pipelineElementMonitoringInfo.consumedMessageInfoExists && this.pipelineElementMonitoringInfo.consumedMessagesInfos.length > 1;
-  }
-
-  updateMonitoringInfo() {
-    if (this.pipelineElementMonitoringInfo.consumedMessageInfoExists) {
-      const consumedMessages = this.pipelineElementMonitoringInfo.consumedMessagesInfos;
-      this.consumedMessagesFirstInputStream = consumedMessages[0].consumedMessagesSincePipelineStart + ' / ' + consumedMessages[0].lag;
-      this.consumedMessagesSecondInputStream =
-          consumedMessages.length > 1 ? consumedMessages[1].consumedMessagesSincePipelineStart +
-              ' / ' + consumedMessages[1].lag : this.notAvailable;
-      this.consumedMessagesFirstStreamBandColor = consumedMessages[0].lag > 10 ? this.warningBandColor : this.okBandColor;
-      this.consumedMessagesSecondStreamBandColor =
-          (consumedMessages.length > 1 ? (consumedMessages[1].lag > 10 ? this.warningBandColor : this.okBandColor) :
-              this.deactivatedBandColor);
-
-      const consumedMessage = {'count': consumedMessages[0].consumedMessagesSincePipelineStart};
-      this.makeHistoricData(consumedMessage, this.consumedMessagesFirstStreamLastValue, this.historicFirstConsumedInputValues);
-      this.consumedMessagesFirstStreamLastValue = consumedMessages[0].consumedMessagesSincePipelineStart;
-      this.historicFirstConsumedInputValues = [].concat(this.historicFirstConsumedInputValues);
-
-      if (consumedMessages.length > 1) {
-        this.makeHistoricData(consumedMessages[1], this.consumedMessagesSecondStreamLastValue, this.historicSecondConsumedInputValues);
-        this.consumedMessagesSecondStreamLastValue = consumedMessages[1].consumedMessagesSincePipelineStart;
-        this.historicSecondConsumedInputValues = [].concat(this.historicSecondConsumedInputValues);
-      }
-    } else {
-      this.consumedMessagesFirstInputStream = this.notAvailable;
-      this.consumedMessagesFirstStreamBandColor = this.deactivatedBandColor;
-      this.consumedMessagesSecondInputStream = this.notAvailable;
-      this.consumedMessagesSecondStreamBandColor = this.deactivatedBandColor;
+    ngOnInit(): void {
+        this.dataSink = this.pipelineElement instanceof DataSinkInvocation;
+        if (
+            this.pipelineElement instanceof DataSinkInvocation ||
+            this.pipelineElement instanceof DataProcessorInvocation
+        ) {
+            this.pipelineElement.inputStreams.forEach(is => {
+                const identifier =
+                    is.eventGrounding.transportProtocols[0].topicDefinition
+                        .actualTopicName;
+                this.observedInputStreams.push({
+                    pipelineElementName: this.extractName(identifier),
+                    identifier,
+                });
+            });
+        }
     }
-    if (this.pipelineElementMonitoringInfo.producedMessageInfoExists) {
-      this.producedMessages = this.pipelineElementMonitoringInfo.producedMessagesInfo.totalProducedMessagesSincePipelineStart;
-      const producedMessage = {'count': this.producedMessages};
-      this.makeHistoricData(producedMessage, this.producedMessageOutputLastValue, this.historicProducedOutputValues);
-      this.producedMessageOutputLastValue = producedMessage.count;
-      this.historicProducedOutputValues = [].concat(this.historicProducedOutputValues);
-    } else {
-      this.producedMessages = this.notAvailable;
+
+    extractName(outputTopic: string): string {
+        return this.allElements
+            .filter(el => !(el instanceof DataSinkInvocation))
+            .find(el => {
+                if (el instanceof DataProcessorInvocation) {
+                    return (
+                        el.outputStream.eventGrounding.transportProtocols[0]
+                            .topicDefinition.actualTopicName === outputTopic
+                    );
+                } else {
+                    return (
+                        (el as SpDataStream).eventGrounding
+                            .transportProtocols[0].topicDefinition
+                            .actualTopicName === outputTopic
+                    );
+                }
+            }).name;
     }
-  }
 
-  makeHistoricData(consumedMessage: any, lastValue: number, historicData: HistoricalMonitoringData[]) {
-    if (lastValue > -1) {
-      const entry: HistoricalMonitoringData = {'name': new Date().toLocaleTimeString(), value: (consumedMessage.count - lastValue)};
-      historicData.push(entry);
+    updateMonitoringInfo() {}
+
+    get metricsInfo() {
+        return this._metricsInfo;
     }
-    if (historicData.length > 10) {
-      historicData.shift();
-    } else {
-      for (let i = 0; i < (10 - historicData.length); i++) {
-        historicData.unshift({'name': i.toString(), 'value': 0});
-      }
+
+    @Input()
+    set metricsInfo(metricsInfo: SpMetricsEntry) {
+        this._metricsInfo = metricsInfo;
+        this.updateMonitoringInfo();
     }
-  }
-
-  get pipelineElementMonitoringInfo() {
-    return this._pipelineElementMonitoringInfo;
-  }
-
-  @Input()
-  set pipelineElementMonitoringInfo(pipelineElementMonitoringInfo: PipelineElementMonitoringInfo) {
-    this._pipelineElementMonitoringInfo = pipelineElementMonitoringInfo;
-    this.updateMonitoringInfo();
-  }
-
-
 }

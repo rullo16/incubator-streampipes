@@ -1,0 +1,10 @@
+org.gft.processors.hoursmonitoring.title=Hours Monitoring
+org.gft.processors.hoursmonitoring.description=Measures how long a boolean measure does not change and cumulates it by calculating daily, weekly and monthly minutes/hours
+
+field.title=Boolean Field
+field.description=The boolean field (status of the operation) that is monitored
+
+timerField.title=Value to observe
+timerField.description=Define whether the time for true or false should be measured
+
+

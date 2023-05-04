@@ -18,11 +18,10 @@
 package org.apache.streampipes.manager.pipeline;
 
 import org.apache.streampipes.manager.operations.Operations;
-import org.apache.streampipes.resource.management.UserResourceManager;
 import org.apache.streampipes.model.pipeline.Pipeline;
 import org.apache.streampipes.model.pipeline.PipelineOperationStatus;
 import org.apache.streampipes.test.generator.pipeline.DummyPipelineGenerator;
-import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -36,23 +35,18 @@ import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({
-        UserResourceManager.class,
-        PipelineManager.class,
-        Operations.class})
+    PipelineManager.class,
+    Operations.class})
 public class TestPipelineManager {
-
-  @Before
-  public void before() {
-    PowerMockito.mockStatic(
-            UserResourceManager.class);
-  }
 
   @Test
   public void testStartPipeline() {
     // Prepare
     PipelineOperationStatus expectedPipelineOperationStatus = getPipelineOperationStatus();
-    PowerMockito.stub(PowerMockito.method(PipelineManager.class, "getPipeline", String.class)).toReturn(DummyPipelineGenerator.makePipelineWithPipelineName());
-    PowerMockito.stub(PowerMockito.method(Operations.class, "startPipeline", Pipeline.class)).toReturn(expectedPipelineOperationStatus);
+    PowerMockito.stub(PowerMockito.method(PipelineManager.class, "getPipeline", String.class))
+        .toReturn(DummyPipelineGenerator.makePipelineWithPipelineName());
+    PowerMockito.stub(PowerMockito.method(Operations.class, "startPipeline", Pipeline.class))
+        .toReturn(expectedPipelineOperationStatus);
 
     // Test
     PipelineOperationStatus result = PipelineManager.startPipeline("pipelineId");
@@ -66,8 +60,10 @@ public class TestPipelineManager {
   public void testStopPipeline() {
     // Prepare
     PipelineOperationStatus expectedPipelineOperationStatus = getPipelineOperationStatus();
-    PowerMockito.stub(PowerMockito.method(PipelineManager.class, "getPipeline", String.class)).toReturn(DummyPipelineGenerator.makePipelineWithPipelineName());
-    PowerMockito.stub(PowerMockito.method(Operations.class, "stopPipeline", Pipeline.class, boolean.class)).toReturn(expectedPipelineOperationStatus);
+    PowerMockito.stub(PowerMockito.method(PipelineManager.class, "getPipeline", String.class))
+        .toReturn(DummyPipelineGenerator.makePipelineWithPipelineName());
+    PowerMockito.stub(PowerMockito.method(Operations.class, "stopPipeline", Pipeline.class, boolean.class))
+        .toReturn(expectedPipelineOperationStatus);
 
     // Test
     PipelineOperationStatus result = PipelineManager.stopPipeline("pipelineId", true);
@@ -76,6 +72,7 @@ public class TestPipelineManager {
     assertNotNull(result);
     assertEquals(expectedPipelineOperationStatus.getPipelineName(), result.getPipelineName());
   }
+
 
   private PipelineOperationStatus getPipelineOperationStatus() {
     return new PipelineOperationStatus("", DummyPipelineGenerator.PIPELINE_NAME, "", new ArrayList<>());

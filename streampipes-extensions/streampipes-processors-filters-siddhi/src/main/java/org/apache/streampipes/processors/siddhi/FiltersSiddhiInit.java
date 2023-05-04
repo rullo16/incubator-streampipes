@@ -18,13 +18,12 @@
 
 package org.apache.streampipes.processors.siddhi;
 
-import org.apache.streampipes.container.model.SpServiceDefinition;
-import org.apache.streampipes.container.model.SpServiceDefinitionBuilder;
-import org.apache.streampipes.container.standalone.init.StandaloneModelSubmitter;
 import org.apache.streampipes.dataformat.cbor.CborDataFormatFactory;
 import org.apache.streampipes.dataformat.fst.FstDataFormatFactory;
 import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
 import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinition;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinitionBuilder;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
@@ -34,8 +33,9 @@ import org.apache.streampipes.processors.siddhi.listcollector.ListCollector;
 import org.apache.streampipes.processors.siddhi.listfilter.ListFilter;
 import org.apache.streampipes.processors.siddhi.topk.TopK;
 import org.apache.streampipes.processors.siddhi.trend.TrendController;
+import org.apache.streampipes.service.extensions.ExtensionsModelSubmitter;
 
-public class FiltersSiddhiInit extends StandaloneModelSubmitter {
+public class FiltersSiddhiInit extends ExtensionsModelSubmitter {
 
   public static void main(String[] args) {
     new FiltersSiddhiInit().init();
@@ -47,23 +47,23 @@ public class FiltersSiddhiInit extends StandaloneModelSubmitter {
             "Processors Filters Siddhi",
             "",
             8090)
-            .registerPipelineElements(
-                    new TrendController(),
-                    new NumericalFilterController(),
-                    new ListFilter(),
-                    new ListCollector(),
-                    new CountAggregation(),
-                    new TopK())
-            // Currently not working: StreamStopController, FrequencyChangeController, FrequencyController
-            .registerMessagingFormats(
-                    new JsonDataFormatFactory(),
-                    new CborDataFormatFactory(),
-                    new SmileDataFormatFactory(),
-                    new FstDataFormatFactory())
-            .registerMessagingProtocols(
-                    new SpKafkaProtocolFactory(),
-                    new SpJmsProtocolFactory(),
-                    new SpMqttProtocolFactory())
-            .build();
+        .registerPipelineElements(
+            new TrendController(),
+            new NumericalFilterController(),
+            new ListFilter(),
+            new ListCollector(),
+            new CountAggregation(),
+            new TopK())
+        // Currently not working: StreamStopController, FrequencyChangeController, FrequencyController
+        .registerMessagingFormats(
+            new JsonDataFormatFactory(),
+            new CborDataFormatFactory(),
+            new SmileDataFormatFactory(),
+            new FstDataFormatFactory())
+        .registerMessagingProtocols(
+            new SpKafkaProtocolFactory(),
+            new SpJmsProtocolFactory(),
+            new SpMqttProtocolFactory())
+        .build();
   }
 }

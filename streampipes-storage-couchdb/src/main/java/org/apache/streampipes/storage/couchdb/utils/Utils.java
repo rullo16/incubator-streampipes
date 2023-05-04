@@ -18,9 +18,14 @@
 
 package org.apache.streampipes.storage.couchdb.utils;
 
+import org.apache.streampipes.commons.environment.Environment;
+import org.apache.streampipes.commons.environment.Environments;
+import org.apache.streampipes.storage.couchdb.serializer.GsonSerializer;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
-import org.apache.streampipes.storage.couchdb.serializer.GsonSerializer;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
 
@@ -58,16 +63,8 @@ public class Utils {
     return getCouchDbGsonClient("label");
   }
 
-  public static CouchDbClient getCouchDbConnectWorkerContainerClient() {
-    return getCouchDbGsonClient("connectworkercontainer");
-  }
-
   public static CouchDbClient getCouchDbFileMetadataClient() {
     return getCouchDbGsonClient("filemetadata");
-  }
-
-  public static CouchDbClient getCouchDbAdapterTemplateClient() {
-    return getCouchDbAdapterClient("adaptertemplate");
   }
 
   public static CouchDbClient getCouchDbAssetDashboardClient() {
@@ -84,14 +81,6 @@ public class Utils {
 
   public static CouchDbClient getCouchDbPipelineClient() {
     return getCouchDbGsonClient("pipeline");
-  }
-
-  public static CouchDbClient getCouchDbUserGroupStorage() {
-    return getCouchDbGsonClient("usergroup");
-  }
-
-  public static CouchDbClient getCouchDbSepaInvocationClient() {
-    return getCouchDbGsonClient("invocation");
   }
 
   public static CouchDbClient getCouchDbConnectionClient() {
@@ -152,10 +141,6 @@ public class Utils {
     return getCouchDbStandardSerializerClient("pipelinecategories");
   }
 
-  public static CouchDbClient getCouchDbElasticsearchFilesEndppointClient() {
-    return getCouchDbStandardSerializerClient("file-export-endpoints-elasticsearch");
-  }
-
   public static CouchDbClient getCouchDbDataLakeClient() {
     return getCouchDbGsonClient("data-lake");
   }
@@ -187,14 +172,15 @@ public class Utils {
   }
 
   private static CouchDbProperties props(String dbname) {
+    var env = getEnvironment();
     return new CouchDbProperties(
-      dbname,
-      true,
-      CouchDbConfig.INSTANCE.getProtocol(),
-      CouchDbConfig.INSTANCE.getHost(),
-      CouchDbConfig.INSTANCE.getPort(),
-      null,
-      null);
+        dbname,
+        true,
+        env.getCouchDbProtocol().getValueOrDefault(),
+        env.getCouchDbHost().getValueOrDefault(),
+        env.getCouchDbPort().getValueOrDefault(),
+        env.getCouchDbUsername().getValueOrDefault(),
+        env.getCouchDbPassword().getValueOrDefault());
   }
 
   public static String getDatabaseRoute(String databaseName) {
@@ -202,9 +188,10 @@ public class Utils {
   }
 
   private static String toUrl() {
-    return CouchDbConfig.INSTANCE.getProtocol()
-      + "://" + CouchDbConfig.INSTANCE.getHost()
-      + ":" + CouchDbConfig.INSTANCE.getPort();
+    var env = getEnvironment();
+    return env.getCouchDbProtocol().getValueOrDefault()
+        + "://" + env.getCouchDbHost().getValueOrDefault()
+        + ":" + env.getCouchDbPort().getValueOrDefault();
   }
 
   public static Request getRequest(String route) {
@@ -225,10 +212,30 @@ public class Utils {
     return append(Request.Put(route).bodyString(payload, ContentType.APPLICATION_JSON));
   }
 
-  private static Request append(Request req) {
-    req.connectTimeout(1000)
-      .socketTimeout(100000);
+  private static Environment getEnvironment() {
+    return Environments.getEnvironment();
+  }
+
+  public static Request append(Request req) {
+    String encodedAuth = getAuthHeaderValue();
+    req
+        .setHeader(HttpHeaders.AUTHORIZATION, "Basic " + encodedAuth)
+        .connectTimeout(1000)
+        .socketTimeout(100000);
 
     return req;
+  }
+
+  private static String getAuthHeaderValue() {
+    var env = getEnvironment();
+    var auth = getUserAndPassword(env);
+    var encoded = Base64.encodeBase64(auth.getBytes());
+    return new String(encoded);
+  }
+
+  private static String getUserAndPassword(Environment env) {
+    return env.getCouchDbUsername().getValueOrDefault()
+        + ":"
+        + env.getCouchDbPassword().getValueOrDefault();
   }
 }

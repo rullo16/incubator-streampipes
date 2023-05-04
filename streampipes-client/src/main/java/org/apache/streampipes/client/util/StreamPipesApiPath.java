@@ -17,12 +17,26 @@
  */
 package org.apache.streampipes.client.util;
 
-import java.util.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 public class StreamPipesApiPath {
 
-  private List<String> pathItems;
   private static final List<String> BaseApiPathV2 = Arrays.asList("streampipes-backend", "api", "v2");
+  private final List<String> pathItems;
+  private final Map<String, String> queryParameters;
+
+  private StreamPipesApiPath(List<String> initialPathItems) {
+    this.pathItems = initialPathItems;
+    this.queryParameters = new HashMap<>();
+  }
 
   public static StreamPipesApiPath fromStreamPipesBasePath() {
     List<String> path = new ArrayList<>(Collections.singletonList("streampipes-backend"));
@@ -38,12 +52,13 @@ public class StreamPipesApiPath {
     return fromStreamPipesBasePath().addToPath(allSubPaths);
   }
 
-  private StreamPipesApiPath(List<String> initialPathItems) {
-    this.pathItems = initialPathItems;
-  }
-
   public StreamPipesApiPath addToPath(String pathItem) {
     this.pathItems.add(pathItem);
+    return this;
+  }
+
+  public StreamPipesApiPath withQueryParameters(Map<String, String> queryParameters) {
+    this.queryParameters.putAll(queryParameters);
     return this;
   }
 
@@ -51,6 +66,24 @@ public class StreamPipesApiPath {
   public String toString() {
     StringJoiner joiner = new StringJoiner("/");
     pathItems.forEach(joiner::add);
-    return joiner.toString();
+    return appendQueryParameters(joiner.toString());
+  }
+
+  private String appendQueryParameters(String input) {
+
+    StringJoiner joiner = new StringJoiner("&");
+    for (Map.Entry<String, String> parameter : queryParameters.entrySet()) {
+      joiner.add(applyEncoding(parameter.getKey()) + "=" + applyEncoding(parameter.getValue()));
+    }
+
+    if (joiner.length() > 0) {
+      return input + "?" + joiner;
+    } else {
+      return input;
+    }
+  }
+
+  private String applyEncoding(String value) {
+    return URLEncoder.encode(value, StandardCharsets.UTF_8);
   }
 }

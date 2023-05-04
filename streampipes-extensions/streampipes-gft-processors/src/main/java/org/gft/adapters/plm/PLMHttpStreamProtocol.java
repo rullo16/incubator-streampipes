@@ -22,11 +22,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.http.client.fluent.Request;
-import org.apache.streampipes.connect.adapter.guess.SchemaGuesser;
-import org.apache.streampipes.connect.adapter.model.generic.Protocol;
-import org.apache.streampipes.connect.api.IFormat;
-import org.apache.streampipes.connect.api.IParser;
-import org.apache.streampipes.connect.api.exception.ParseException;
+import org.apache.streampipes.extensions.api.connect.IFormat;
+import org.apache.streampipes.extensions.api.connect.IParser;
+import org.apache.streampipes.extensions.api.connect.exception.ParseException;
+import org.apache.streampipes.extensions.management.connect.adapter.guess.SchemaGuesser;
+import org.apache.streampipes.extensions.management.connect.adapter.model.generic.Protocol;
 import org.apache.streampipes.model.AdapterType;
 import org.apache.streampipes.model.connect.grounding.ProtocolDescription;
 import org.apache.streampipes.model.connect.guess.GuessSchema;
@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PLMHttpStreamProtocol extends PLMPullProtocol {
-    private static final long interval = 300;
+    private static final long interval = 120;
     Logger logger = LoggerFactory.getLogger(PLMHttpStreamProtocol.class);
     public static final String ID = "org.gft.adapters.plm";
     PLMHttpConfig config;
@@ -108,28 +108,6 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
     }
 
     @Override
-    public List<Map<String, Object>> getNElements(int n) throws ParseException {
-        List<Map<String, Object>> result = new ArrayList<>();
-
-        InputStream dataInputStream;
-        dataInputStream = getDataFromEndpoint();
-
-        List<byte[]> dataByte = parser.parseNEvents(dataInputStream, n);
-
-        // Check that result size is n. Currently just an error is logged. Maybe change to an exception
-        if (dataByte.size() < n) {
-            logger.error("Error in PLMHttpStreamProtocol! User required: " + n + " elements but the resource just had: " +
-                    dataByte.size());
-        }
-
-        for (byte[] b : dataByte) {
-            result.add(format.parse(b));
-        }
-
-        return result;
-    }
-
-    @Override
     public String getId() {
         return ID;
     }
@@ -149,20 +127,15 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         }
 
         try {
-            // Set the URL of the API endpoint
             URL url = new URL(urlString);
-            // Open a connection to the API endpoint
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("content-type", "application/json");
-            // Set the token in the HTTP header of the request
             connection.setRequestProperty("Authorization", "Bearer " + this.accessToken);
             connection.setRequestProperty("transfer-encoding", "chunked");
             connection.setRequestProperty("connection", "keep-alive");
-            //connection.setDoOutput(true);
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(60000);
-            // Send the GET request to the API endpoint
             connection.connect();
 
             if (this.accessToken != null) {
@@ -172,7 +145,6 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
             result = connection.getInputStream();
 
         } catch (Exception e) {
-            // Handle any exceptions that occur
             e.printStackTrace();
         }
         return result;
@@ -194,9 +166,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                     .execute().returnContent().toString();
             if (response == null)
                 throw new ParseException("Could not receive Data from file: " + urlString);
-            // Parse the JSON string as a JSON object
+
             JsonObject json_object = new Gson().fromJson(response, JsonObject.class);
-            // Access the data in the JSON object
             token = json_object.get("token").getAsString();
 
         } catch (Exception e) {
@@ -209,7 +180,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
 
     private JsonArray sensorsList() throws ParseException {
         String response, urlString;
-        // Set the URL of the API endpoint
+
         urlString = config.getBaseUrl() + "bkd/q_search/" + config.getRepository() + "/" + config.getModel() + "/" + this.accessToken + "?case_sens=false&domains=PROPERTY&folder_only=false&pattern=*";
         if (urlString.contains(" "))
             urlString = urlString.replace(" ", "%20");
@@ -296,7 +267,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                     String second_date = config.secondDateTime();
                     urlString = config.getBaseUrl() + "bkd/aggr_exp_dt/" + config.getRepository() + "/" + config.getModel() + "/" + sensor.get("id") + "/" + urn + "/"
                             + this.accessToken + "/" + "?format=json" + "&from=" + first_date + "&to=" + second_date;
-                    //replace spaces by "%20" and the two points by %3A to avoid 400 Bad Request
+
                     if (urlString.contains(" "))
                         urlString = urlString.replace(" ", "%20");
 

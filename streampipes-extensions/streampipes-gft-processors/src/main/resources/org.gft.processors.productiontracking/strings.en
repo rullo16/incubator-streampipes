@@ -1,0 +1,17 @@
+org.gft.processors.productiontracking.title=Production Tracking
+org.gft.processors.productiontracking.description=Keeps events with the selected value
+
+value.title=Input Value to Filter
+value.description=Specifies the field name of the value to be filtered.
+
+boolean-mapping.title=Boolean Field
+boolean-mapping.description=Specifies the boolean field name to be monitored.
+
+timestamp-first.title=First Timestamp
+timestamp-first.description= Time at which the Power was taken.
+
+timestamp-second.title=Second Timestamp
+timestamp-second.description= Time related to the Manufacturing In Progress.
+
+threshold.title = Threshold
+threshold.description = Threshold value to apply to filtering

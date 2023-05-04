@@ -78,7 +78,7 @@ public class PipelineGenerator {
     } else {
       stream = new SpDataStream(stream);
     }
-    stream.setDOM(getDom());
+    stream.setDom(getDom());
     return stream;
   }
 
@@ -87,11 +87,11 @@ public class PipelineGenerator {
     for (BoundPipelineElement pipelineElement : boundPipelineElements) {
       InvocableStreamPipesEntity entity = clonePe(pipelineElement.getPipelineElementTemplate());
       entity.setConnectedTo(Collections.singletonList(currentDomId));
-      entity.setDOM(getDom());
+      entity.setDom(getDom());
       if (entity instanceof DataProcessorInvocation) {
         pipeline.getSepas().add((DataProcessorInvocation) entity);
         if (pipelineElement.getConnectedTo().size() > 0) {
-          collectInvocations(entity.getDOM(), pipelineElement.getConnectedTo());
+          collectInvocations(entity.getDom(), pipelineElement.getConnectedTo());
         }
       } else {
         pipeline.getActions().add((DataSinkInvocation) entity);
@@ -103,7 +103,7 @@ public class PipelineGenerator {
 
   private void handleModifications(PipelineModificationMessage message) {
     pipeline.getSepas().forEach(processor -> {
-      PipelineModification modification = getModification(message, processor.getDOM());
+      PipelineModification modification = getModification(message, processor.getDom());
       processor.setOutputStream(modification.getOutputStream());
       processor.setOutputStrategies(modification.getOutputStrategies());
       processor.setStaticProperties(modification.getStaticProperties());
@@ -111,7 +111,7 @@ public class PipelineGenerator {
       processor.setElementId(modification.getElementId());
     });
     pipeline.getActions().forEach(sink -> {
-      PipelineModification modification = getModification(message, sink.getDOM());
+      PipelineModification modification = getModification(message, sink.getDom());
       sink.setStaticProperties(modification.getStaticProperties());
       sink.setInputStreams(modification.getInputStreams());
       sink.setElementId(modification.getElementId());
@@ -120,11 +120,11 @@ public class PipelineGenerator {
 
   private PipelineModification getModification(PipelineModificationMessage message,
                                                String domId) {
-   return message.getPipelineModifications()
-           .stream()
-           .filter(pm -> pm.getDomId().equals(domId))
-           .findFirst()
-           .orElseThrow(IllegalArgumentException::new);
+    return message.getPipelineModifications()
+        .stream()
+        .filter(pm -> pm.getDomId().equals(domId))
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
   }
 
   private InvocableStreamPipesEntity clonePe(InvocableStreamPipesEntity pipelineElementTemplate) {
@@ -137,9 +137,9 @@ public class PipelineGenerator {
 
   private SpDataStream getStream(String datasetId) {
     return StorageManager
-            .INSTANCE
-            .getPipelineElementStorage()
-            .getEventStreamById(datasetId);
+        .INSTANCE
+        .getPipelineElementStorage()
+        .getEventStreamById(datasetId);
   }
 
 
