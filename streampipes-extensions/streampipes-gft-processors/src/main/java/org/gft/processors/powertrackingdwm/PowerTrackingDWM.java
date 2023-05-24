@@ -67,6 +67,8 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
   List<Double> dailyConsumptionListForMonth = new ArrayList<>();
   List<Double> dailyConsumptionListForWeek = new ArrayList<>();
 
+  //Define abstract stream requirements such as event properties that must be present
+  // in any input stream that is later connected to the element using the StreamPipes UI
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create(ID)
@@ -79,27 +81,32 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
                     .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                             Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
                     .build())
-            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthlyConsumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "dailyConsumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weeklyConsumption", SO.Number)))
+            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthlyConsumption", SO.NUMBER),
+                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "dailyConsumption", SO.NUMBER),
+                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weeklyConsumption", SO.NUMBER)))
             .build();
   }
 
+  //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+  // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
   @Override
   public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException {
     this.input_power_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
     this.input_timestamp_value = parameters.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
   }
 
+  // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+  // Then use the if conditional statements to define the output value
   @Override
   public void onEvent(Event event,SpOutputCollector out){
-
+    //recovery power value
     Double power = event.getFieldBySelector(this.input_power_value).getAsPrimitive().getAsDouble();
-
+    //recovery timestamp value
     Long timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsLong();
-
+    //recovery date value
     String date = getTheDate(timestamp);
 
+    // Day and Month extraction
     String[] ymd_hms = date.split(" ");
     String[] ymd = ymd_hms[0].split("-");
     int day_current = Integer.parseInt(ymd[2]);
@@ -107,28 +114,32 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
 
     String day = getCurrentDay(date);
 
+    //if true compute first the consumption of the day that has just passed
     if(day_current != this.day_precedent && this.day_precedent != -1){
 
+      // reset day for computations
       this.day_precedent = day_current;
-
+      // Add current events for the next computation
       this.powersList.add(power);
       this.timestampsList.add(timestamp);
-
+      //perform operations to obtain hourly power from instantaneous powers
       this.daily_consumption = instantToDailyConsumption(this.powersList, this.timestampsList);
       this.dailyConsumptionListForWeek.add(this.daily_consumption);
       this.dailyConsumptionListForMonth.add(this.daily_consumption);
-
+      // Remove all elements from the Lists
       this.powersList.clear();
       this.timestampsList.clear();
-
+      // Add current events for the next computation
       this.powersList.add(power);
       this.timestampsList.add(timestamp);
 
+      //if the day coincide with monday compute the consumption of the week that has just passed
       if(day.equals("Mon")){
         this.weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(this.dailyConsumptionListForWeek);
         this.dailyConsumptionListForWeek.clear();
       }
 
+      //if true compute consumption of the month that has just passed
       if(month_current != this.month_precedent){
         this.month_precedent = month_current;
         this.monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(this.dailyConsumptionListForMonth);
@@ -136,10 +147,12 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
       }
 
     }else {
+      // set the start time for computations
       if (this.day_precedent == -1){
         this.month_precedent = month_current;
         this.day_precedent = day_current;
       }
+      // add power to the lists
       this.powersList.add(power);
       this.timestampsList.add(timestamp);
     }
@@ -151,18 +164,20 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     out.collect(event);
   }
 
+  //from timestamp (millis second) to date format
   private String getTheDate(Long timestamp) {
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(timestamp);
     return  date_format.format(cal.getTime());
   }
 
+  // return the day of the current date
   private String getCurrentDay(String date){
     String day = null;
     try{
       Date myDate = date_format.parse(date);
       LocalDateTime localDateTime = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
+      // convert LocalDateTime to date
       Date date_plus = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
       String[] s = date_plus.toString().split(" ");
       day = s[0];
@@ -172,6 +187,7 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     return day;
   }
 
+  // return the sum of daily consumption as weekly or monthly consumption
   private double dailyConsumptionsToWeeklyOrMonthlyConsumption(List<Double> dailyConsumptionList) {
     double sum = 0.0;
     DecimalFormat df = new DecimalFormat("#.#####");
@@ -187,7 +203,9 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     long height;
     DecimalFormat df = new DecimalFormat("#.#####");
     df.setRoundingMode(RoundingMode.CEILING);
-
+    //perform Riemann approximations by trapezoids which is an approximation of the area
+    // under the curve (which corresponds to the energy consumption) formed by the points
+    // with coordinate powers(ordinate) e timestamps(abscissa)
     for(int i = 0; i<powers.size()-1; i++){
       first_base = powers.get(i);
       second_base = powers.get(i+1);

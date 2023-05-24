@@ -44,6 +44,8 @@ public class MultiFieldRename extends StreamPipesDataProcessor {
     private String first_newPropertyName;
     private String second_newPropertyName;
 
+    //Define abstract stream requirements such as event properties that must be present
+    // in any input stream that is later connected to the element using the StreamPipes UI
     @Override
     public DataProcessorDescription declareModel() {
         return ProcessingElementBuilder.create("org.gft.processors.multifieldrename")
@@ -65,6 +67,8 @@ public class MultiFieldRename extends StreamPipesDataProcessor {
                 .build();
     }
 
+    //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+    // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
     @Override
     public void onInvocation(ProcessorParams processorParams, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext eventProcessorRuntimeContext) throws SpRuntimeException {
 
@@ -74,9 +78,12 @@ public class MultiFieldRename extends StreamPipesDataProcessor {
         this.second_newPropertyName = processorParams.extractor().singleValueParameter(SECOND_FIELD_NAME, String.class);
     }
 
+    // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+    // Then use the if conditional statements to define the output value
     @Override
     public void onEvent(Event event, SpOutputCollector spOutputCollector) throws SpRuntimeException {
 
+        //Replaces the runtime names with the input custom defined names.
         AbstractField<?> first_propertyValue = event.getFieldBySelector(first_oldPropertyName);
         AbstractField<?> second_propertyValue = event.getFieldBySelector(second_oldPropertyName);
         event.removeFieldBySelector(first_oldPropertyName);

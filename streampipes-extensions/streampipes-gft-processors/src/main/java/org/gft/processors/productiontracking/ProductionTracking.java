@@ -34,7 +34,6 @@ import org.apache.streampipes.wrapper.standalone.StreamPipesDataProcessor;
 
 
 public class ProductionTracking extends StreamPipesDataProcessor {
-
     public static final String VALUE = "value";
     public static final String OUT_VALUE = "out-value";
     private static final String BOOLEAN_MAPPING = "boolean-mapping";
@@ -50,30 +49,33 @@ public class ProductionTracking extends StreamPipesDataProcessor {
     private String value;
 
 
+    //Define abstract stream requirements such as event properties that must be present in any input stream that is later connected to the element using the StreamPipes UI
     @Override
     public DataProcessorDescription declareModel() {
         return ProcessingElementBuilder.create("org.gft.processors.productiontracking")
-                .category(DataProcessorType.FILTER, DataProcessorType.BOOLEAN_OPERATOR)
+                .category(DataProcessorType.AGGREGATE)
                 .withAssets(Assets.DOCUMENTATION, Assets.ICON)
                 .withLocales(Locales.EN)
                 .requiredStream(StreamRequirementsBuilder.create()
                         .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
-                                Labels.withId(VALUE), PropertyScope.MEASUREMENT_PROPERTY)
-                        .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                                 Labels.withId(FIRST_TIMESTAMP), PropertyScope.NONE)
+                        .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
+                                Labels.withId(VALUE), PropertyScope.MEASUREMENT_PROPERTY)
                         .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                                 Labels.withId(SECOND_TIMESTAMP), PropertyScope.NONE)
                         .requiredPropertyWithUnaryMapping(EpRequirements.booleanReq(),
                                 Labels.withId(BOOLEAN_MAPPING), PropertyScope.NONE)
                         .build())
-                .requiredFloatParameter(Labels.withId(THRESHOLD))
+                .requiredFloatParameter(Labels.withId(THRESHOLD), 0.0F)
                 .outputStrategy(OutputStrategies.fixed(EpProperties.timestampProperty("timestamp"),
-                        EpProperties.booleanEp(Labels.withId(OUT_VALUE), "value", SO.Number),
-                        EpProperties.booleanEp(Labels.withId(PRODUCTION), "production", SO.Boolean),
-                        EpProperties.booleanEp(Labels.withId(TASK), "task", SO.Boolean)))
+                        EpProperties.doubleEp(Labels.withId(OUT_VALUE), "value", SO.NUMBER),
+                        EpProperties.booleanEp(Labels.withId(PRODUCTION), "production", SO.BOOLEAN),
+                        EpProperties.booleanEp(Labels.withId(TASK), "task", SO.BOOLEAN)))
                 .build();
     }
 
+    //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+    // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
     @Override
     public void onInvocation(ProcessorParams processorParams, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext eventProcessorRuntimeContext) throws SpRuntimeException {
         this.value = processorParams.extractor().mappingPropertyValue(VALUE);
@@ -83,6 +85,8 @@ public class ProductionTracking extends StreamPipesDataProcessor {
         this.threshold = processorParams.extractor().singleValueParameter(THRESHOLD ,Double.class);
     }
 
+    // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+    // Then use the if conditional statements to define the output value
     @Override
     public void onEvent(Event event, SpOutputCollector spOutputCollector) throws SpRuntimeException {
         Double value = event.getFieldBySelector(this.value).getAsPrimitive().getAsDouble();
@@ -100,7 +104,6 @@ public class ProductionTracking extends StreamPipesDataProcessor {
             }else{
                 event.addField("production", false);
             }
-
         }else{
             event.addField("task", false);
             event.addField("production", false);

@@ -81,8 +81,8 @@ public class DataInterpolationProcessor extends StreamPipesDataProcessor {
                 // "Loess"  temporarily removed because to be reviewed */
 
                 .requiredFloatParameter(Labels.withId(THRESHOLD))
-                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(CHOSEN_TIMESTAMP), "chosen_timestamp", SO.Number),
-                        EpProperties.doubleEp(Labels.withId(INTERPOLATION_VALUE), "interpolation_value", SO.Number)))
+                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(CHOSEN_TIMESTAMP), "chosen_timestamp", SO.NUMBER),
+                        EpProperties.doubleEp(Labels.withId(INTERPOLATION_VALUE), "interpolation_value", SO.NUMBER)))
                 .build();
     }
 

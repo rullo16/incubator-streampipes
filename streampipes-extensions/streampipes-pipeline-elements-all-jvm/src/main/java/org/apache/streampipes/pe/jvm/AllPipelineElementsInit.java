@@ -40,6 +40,7 @@ import org.apache.streampipes.sinks.brokers.jvm.BrokersJvmInit;
 import org.apache.streampipes.sinks.databases.jvm.DatabasesJvmInit;
 import org.apache.streampipes.sinks.internal.jvm.SinksInternalJvmInit;
 import org.apache.streampipes.sinks.notifications.jvm.SinksNotificationsJvmInit;
+
 import org.gft.ProcessorsGFTInit;
 
 public class AllPipelineElementsInit extends ExtensionsModelSubmitter {
@@ -68,15 +69,15 @@ public class AllPipelineElementsInit extends ExtensionsModelSubmitter {
         .merge(new SinksNotificationsJvmInit().provideServiceDefinition())
         .merge(new InfluxConnectorsInit().provideServiceDefinition())
         .merge(new ProcessorsGFTInit().provideServiceDefinition())
-            .registerMessagingFormats(
-                    new JsonDataFormatFactory(),
-                    new CborDataFormatFactory(),
-                    new SmileDataFormatFactory(),
-                    new FstDataFormatFactory())
-            .registerMessagingProtocols(
-                    new SpKafkaProtocolFactory(),
-                    new SpJmsProtocolFactory(),
-                    new SpMqttProtocolFactory())
-            .build();
+          .registerMessagingFormats(
+                  new JsonDataFormatFactory(),
+                  new CborDataFormatFactory(),
+                  new SmileDataFormatFactory(),
+                  new FstDataFormatFactory())
+          .registerMessagingProtocols(
+                  new SpKafkaProtocolFactory(),
+                  new SpJmsProtocolFactory(),
+                  new SpMqttProtocolFactory())
+          .build();
   }
 }

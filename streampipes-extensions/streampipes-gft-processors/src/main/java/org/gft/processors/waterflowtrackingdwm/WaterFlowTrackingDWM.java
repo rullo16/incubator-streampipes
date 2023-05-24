@@ -70,6 +70,8 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
   List<Double> dailyConsumptionListForWeek = new ArrayList<>();
 
 
+  //Define abstract stream requirements such as event properties that must be present
+  // in any input stream that is later connected to the element using the StreamPipes UI
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create(ID)
@@ -84,12 +86,14 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
                     .build())
             .requiredSingleValueSelection(Labels.withId(CHOICE),
                 Options.from("No", "Yes"))
-            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthlyConsumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "dailyConsumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weeklyConsumption", SO.Number)))
+            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthlyConsumption", SO.NUMBER),
+                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "dailyConsumption", SO.NUMBER),
+                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weeklyConsumption", SO.NUMBER)))
             .build();
   }
 
+  //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+  // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
   @Override
   public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
     this.input_WaterFlow_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
@@ -97,16 +101,18 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     this.input_choice  = parameters.extractor().selectedSingleValue(CHOICE, String.class);
   }
 
+  // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+  // Then use the if conditional statements to define the output value
   @Override
   public void onEvent(Event event,SpOutputCollector out){
-
+    //recovery water flow value
     Double water_flow = event.getFieldBySelector(this.input_WaterFlow_value).getAsPrimitive().getAsDouble();
-
+    //recovery timestamp value
     Long timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsLong();
-
+    //recovery date value
     String date = getTheDate(timestamp);
 
-
+    // Day and Month extraction
     String[] ymd_hms = date.split(" ");
     String[] ymd = ymd_hms[0].split("-");
     int day_current = Integer.parseInt(ymd[2]);
@@ -114,46 +120,52 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
 
     String day = getCurrentDay(date);
 
+    //if true compute first the consumption of the day that has just passed
     if(day_current != this.day_precedent && this.day_precedent != -1){
 
-      this.day_precedent = day_current;
+        // reset day for computations
+        this.day_precedent = day_current;
+        // Add current events for the next computation
+        this.waterFlowList.add(water_flow );
+        this.timestampsList.add(timestamp);
+        //perform operations to obtain hourly consumption from instantaneous water flows
+        if(this.input_choice.equals("Yes")){
+          this.daily_consumption = this.waterFlowList.get(this.waterFlowList.size()-1) - this.waterFlowList.get(0);
+        }else{
+          this.daily_consumption = instantToDailyConsumption(this.waterFlowList, this.timestampsList);
+        }
 
-      this.waterFlowList.add(water_flow );
-      this.timestampsList.add(timestamp);
+        this.dailyConsumptionListForWeek.add(this.daily_consumption);
+        this.dailyConsumptionListForMonth.add(this.daily_consumption);
+        // Remove all elements from the Lists
+        this.waterFlowList.clear();
+        this.timestampsList.clear();
+        // Add current events for the next computation
+        this.waterFlowList.add(water_flow );
+        this.timestampsList.add(timestamp);
 
-      if(this.input_choice.equals("Yes")){
-        this.daily_consumption = this.waterFlowList.get(this.waterFlowList.size()-1) - this.waterFlowList.get(0);
-      }else{
-        this.daily_consumption = instantToDailyConsumption(this.waterFlowList, this.timestampsList);
-      }
+        //if the day coincide with monday compute the consumption of the week that has just passed
+        if(day.equals("Mon")){
+          this.weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
+          this.dailyConsumptionListForWeek.clear();
+        }
 
-      this.dailyConsumptionListForWeek.add(this.daily_consumption);
-      this.dailyConsumptionListForMonth.add(this.daily_consumption);
-
-      this.waterFlowList.clear();
-      this.timestampsList.clear();
-
-      this.waterFlowList.add(water_flow );
-      this.timestampsList.add(timestamp);
-
-      if(day.equals("Mon")){
-        this.weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForWeek);
-        this.dailyConsumptionListForWeek.clear();
-      }
-
-      if(month_current != this.month_precedent){
-        this.month_precedent = month_current;
-        this.monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
-        this.dailyConsumptionListForMonth.clear();
-      }
+        //if true compute consumption of the month that has just passed
+        if(month_current != this.month_precedent){
+          this.month_precedent = month_current;
+          this.monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(dailyConsumptionListForMonth);
+          this.dailyConsumptionListForMonth.clear();
+        }
 
     }else {
-      if (this.day_precedent == -1){
-        this.month_precedent = month_current;
-        this.day_precedent = day_current;
-      }
-      this.waterFlowList.add(water_flow);
-      this.timestampsList.add(timestamp);
+        // set the start time for computations
+        if (this.day_precedent == -1){
+          this.month_precedent = month_current;
+          this.day_precedent = day_current;
+        }
+        // add water flow to the lists
+        this.waterFlowList.add(water_flow);
+        this.timestampsList.add(timestamp);
     }
 
     event.addField("dailyConsumption", this.daily_consumption);
@@ -163,18 +175,20 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     out.collect(event);
   }
 
+  //from timestamp to date format
   private String getTheDate(Long timestamp) {
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(timestamp);
     return  date_format.format(cal.getTime());
   }
 
+  // return the day of the current date
   private String getCurrentDay(String date){
     String day = null;
     try{
       Date myDate = date_format.parse(date);
       LocalDateTime localDateTime = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
+      // convert LocalDateTime to date
       Date date_plus = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
       String[] s = date_plus.toString().split(" ");
       day = s[0];
@@ -184,6 +198,7 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     return day;
   }
 
+  // return the sum of daily consumption as weekly or monthly consumption
   private double dailyConsumptionsToWeeklyOrMonthlyConsumption(List<Double> dailyConsumptionList) {
     double sum = 0.0;
     DecimalFormat df = new DecimalFormat("#.#####");
@@ -191,6 +206,7 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     for (Double value : dailyConsumptionList) sum = sum + value;
     return Double.parseDouble(df.format(sum));
   }
+
 
   public double instantToDailyConsumption(List<Double> water_flows, List<Long> timestamps) {
     double sum = 0.0;
@@ -200,6 +216,9 @@ public class WaterFlowTrackingDWM extends StreamPipesDataProcessor {
     DecimalFormat df = new DecimalFormat("#.#####");
     df.setRoundingMode(RoundingMode.CEILING);
 
+    // perform Riemann approximations by trapezoids which is an approximation of the area
+    // under the curve (which corresponds to the water consumption) formed by the points
+    // with coordinate water flows(ordinate) e timestamps(abscissa)
     for(int i = 0; i<water_flows.size()-1; i++){
       first_base = water_flows.get(i);
       second_base = water_flows.get(i+1);

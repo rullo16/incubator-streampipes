@@ -26,12 +26,12 @@
 
 ## Description
 
-Enables the selection the value to send in output. Any time, a new input event arrives, it allows to select , 
-between the inputs value,the desired outputs to forward.
+Enables the selection one or more values to send in output. Any time, a new input event arrives, it allows to select , 
+between the input values,the desired outputs to forward.
 
 ***
 
-## Required input
+## Required inputs
 The Fields Selector processor does not have any specific input requirements.
 
 ***

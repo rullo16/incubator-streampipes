@@ -16,7 +16,7 @@
   ~
   -->
 
-## Boolean Timer
+## Operating Time Monitoring
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -26,26 +26,34 @@
 
 ## Description
 
-This processor measures how long a boolean value (status of the operation) does not change. Once the value is changes the event with the measured time is emitted and
-cumulated by calculating and emitted daily, weekly and monthly minutes/hours .
-
+This processor measures how long a boolean value (status of the operation) does not change. 
+Once the value is changes the event with the measured time is emitted and
+cumulated to calculate and emit the daily, weekly and monthly minutes/hours of operating.
 
 ***
 
-## Required input
-
-A Boolean-like signal (value) on the status of the operation is required in the data stream.
-
-### Field
-
-The boolean field which is monitored for state changes.
+## Required inputs
+The Operating Time processor requires to work with a boolean-like signal   
+event that has at least two fields containing a timestamp and a boolean value.
 
 ***
 
 ## Configuration
+### Timestamp
+The boolean-like signal related timestamp.
 
-### Timer value
+### Boolean Value Field
+The boolean field which is monitored for state changes.
+
+### Value to Observe
 Define whether it should be measured how long the value is true or how long the value is false.
 
+### Unit
+Unit that will be use in the calculations for the outputs. it will be applied as unit of measure.
+
 ## Output
-Appends a field with the time how long the value did not change. Is emitted on the change of the boolean value. Runtime name: measured_time 
+Outputs the incoming event while appending:
+ - a field with the time how long the value did not change (``measure_time``). 
+ - the fields with the daily, weekly and monthly minutes/hours of operating 
+(``operating_time_daily``, ``operating_time_weekly``, ``operating_time_monthly``)  
+

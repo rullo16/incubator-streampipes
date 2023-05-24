@@ -16,7 +16,7 @@
   ~
   -->
 
-## Logical Operator (Time Series)
+## Logical Operation
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -31,11 +31,23 @@ A user can select the type of operation and set of properties.
 
 ***
 
-## Required input
+## Required inputs
 
-Type of logical boolean operator and set of properties on which operator needs to perform.
+The logical operation processor requires to work with any event that has two
+field containing boolean values.
 
 ***
+
+## Configurations
+
+### First Property
+The field from the input event that should be used as the first boolean.
+
+### First Property
+The field from the input event that should be used as the second boolean.
+
+### Boolean Operator
+The multi option field that enable to select only one of the operator for the logical operation
 
 ## Output
 

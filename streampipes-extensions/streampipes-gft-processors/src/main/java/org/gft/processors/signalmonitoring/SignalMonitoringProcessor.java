@@ -36,12 +36,11 @@ import org.apache.streampipes.wrapper.standalone.StreamPipesDataProcessor;
 public class SignalMonitoringProcessor extends StreamPipesDataProcessor {
 
   private static final String VALUE = "number-mapping";
-    private static final String VALUE_OUT = "value";
   private static final String THRESHOLD = "threshold";
   private static final String OPERATION = "operation";
   private static final String INCREASE_DECREASE = "increase-decrease";
-  private static final String MONITORED_SIGNAL = "monitored-signal";
   private static final String TIMESTAMP = "timestamp-in";
+  private static final String DURATION = "window";
   private double threshold;
   private String value;
   private Double precedent_value = 0.0;
@@ -49,11 +48,14 @@ public class SignalMonitoringProcessor extends StreamPipesDataProcessor {
   private Integer variation;
   private String timestamp;
 
-  /* TODO make it fixed output
-            delete signal field
-   */
+  private Long time_window;
+  private Long dynamic_time = 0L;
+  private Long time_true = 0L;
 
-  @Override
+
+    //Define abstract stream requirements such as event properties that must be present in any input stream
+    // that is later connected to the element using the StreamPipes UI
+    @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("org.gft.processors.signalmonitoring")
             .category(DataProcessorType.AGGREGATE)
@@ -66,39 +68,57 @@ public class SignalMonitoringProcessor extends StreamPipesDataProcessor {
                     .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                             Labels.withId(VALUE),
                             PropertyScope.NONE).build())
-            .requiredSingleValueSelection(Labels.withId(OPERATION), Options.from("< and/or >", "<= and/or >="))
+            .requiredSingleValueSelection(Labels.withId(OPERATION), Options.from("< / >", "<= / >="))
             .requiredFloatParameter(Labels.withId(THRESHOLD))
             .requiredIntegerParameter(Labels.withId(INCREASE_DECREASE), 0, 100, 1)
-            .outputStrategy(OutputStrategies.fixed(EpProperties.timestampProperty("timestamp"),
-                    EpProperties.booleanEp(Labels.withId(VALUE_OUT), "value", SO.Number),
-                    EpProperties.booleanEp(Labels.withId(MONITORED_SIGNAL), "monitored_signal", SO.Boolean)))
+            .requiredIntegerParameter(Labels.withId(DURATION), 0, 100, 1)
+           .outputStrategy(OutputStrategies.fixed(EpProperties.timestampProperty("timestamp"),
+                    EpProperties.doubleEp(Labels.empty(), "value", SO.NUMBER),
+                    EpProperties.booleanEp(Labels.empty(), "monitored_signal", SO.BOOLEAN)))
             .build();
   }
 
-  @Override
+    //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+    // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
+    @Override
   public void onInvocation(ProcessorParams processorParams, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext eventProcessorRuntimeContext) throws SpRuntimeException {
     this.timestamp = processorParams.extractor().mappingPropertyValue(TIMESTAMP);
-    this.threshold = processorParams.extractor().singleValueParameter(THRESHOLD,Double.class);
+    this.threshold = processorParams.extractor().singleValueParameter(THRESHOLD, Double.class);
     this.variation = processorParams.extractor().singleValueParameter(INCREASE_DECREASE, Integer.class);
-    this.operations = processorParams.extractor().selectedSingleValue(OPERATION,String.class);
+    this.operations = processorParams.extractor().selectedSingleValue(OPERATION, String.class);
     this.value = processorParams.extractor().mappingPropertyValue(VALUE);
+    Integer window = processorParams.extractor().singleValueParameter(DURATION, Integer.class);
+    this.time_window = (long) (window * 60 * 1000);
   }
 
+    // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+    // Then use the if conditional statements to define the output value
   @Override
   public void onEvent(Event event, SpOutputCollector spOutputCollector) throws SpRuntimeException {
-    Boolean satisfies_monitoring = false;
+    Boolean satisfies_monitoring = null;
 
     Long timestamp = event.getFieldBySelector(this.timestamp).getAsPrimitive().getAsLong();
     Double current_value = event.getFieldBySelector(this.value).getAsPrimitive().getAsDouble();
 
-    if(this.operations.equals("< and/or >") && (current_value < -Math.abs(this.threshold) || current_value > Math.abs(this.threshold))){
-      satisfies_monitoring = isSatisfiesMonitoring(current_value);
+    // filter the input value and select which are useful based on a given threshold.
+    if(this.operations.equals("< / >") && (current_value < -Math.abs(this.threshold) || current_value > Math.abs(this.threshold))){
+      satisfies_monitoring = isSatisfiesMonitoring(current_value, timestamp);
     }
 
-    if(this.operations.equals("<= and/or >=") && (current_value <= -Math.abs(this.threshold) || current_value >= Math.abs(this.threshold))){
-      satisfies_monitoring = isSatisfiesMonitoring(current_value);
+    if(this.operations.equals("<= / >=") && (current_value <= -Math.abs(this.threshold) || current_value >= Math.abs(this.threshold))){
+      satisfies_monitoring = isSatisfiesMonitoring(current_value, timestamp);
     }
 
+    if(this.operations.equals("< / >") && Math.abs(current_value) <= Math.abs(this.threshold)){
+        satisfies_monitoring = checkOutOfRange(timestamp);
+    }
+
+    if(this.operations.equals("<= / >=") && Math.abs(current_value) < Math.abs(this.threshold)){
+       satisfies_monitoring = checkOutOfRange(timestamp);
+    }
+
+
+    // update precedent value to the current value for the next monitoring
     this.precedent_value = current_value;
 
     event.addField("timestamp", timestamp);
@@ -107,7 +127,18 @@ public class SignalMonitoringProcessor extends StreamPipesDataProcessor {
     spOutputCollector.collect(event);
   }
 
-  private boolean isSatisfiesMonitoring(Double current_value) {
+    private Boolean checkOutOfRange(Long timestamp) {
+        if (this.dynamic_time.equals(this.time_true) && (this.dynamic_time != 0L)) {
+            this.dynamic_time = timestamp;
+            return true;
+        }
+
+        return Math.abs(this.dynamic_time - timestamp) < this.time_window;
+    }
+
+    //  monitor and handle the numerical signal (negative and positive) to create the Boolean-like signal
+   // Detects the increase/decrease of a numerical field over two consecutive value and return true if the variation is satisfied.
+  private boolean isSatisfiesMonitoring(Double current_value, Long timestamp) {
       boolean satisfies_monitoring = false;
 
       if(this.precedent_value < 0.0 && current_value < 0.0){
@@ -132,12 +163,30 @@ public class SignalMonitoringProcessor extends StreamPipesDataProcessor {
           satisfies_monitoring = true;
       }
 
-      return satisfies_monitoring;
+      if (satisfies_monitoring) {
+          this.dynamic_time = timestamp;
+          this.time_true = timestamp;
+          return true;
+      }
+
+      if (this.dynamic_time.equals(this.time_true) && (this.dynamic_time != 0L)) {
+          this.dynamic_time = timestamp;
+          return true;
+      }
+
+      return Math.abs(this.dynamic_time - timestamp) < this.time_window;
+
   }
 
   @Override
   public void onDetach() throws SpRuntimeException {
 
   }
+
+
+      /*if(this.dynamic_time >= -1 && this.dynamic_time < this.time_window){
+          this.dynamic_time++;
+          return true;
+      }*/
 
 }

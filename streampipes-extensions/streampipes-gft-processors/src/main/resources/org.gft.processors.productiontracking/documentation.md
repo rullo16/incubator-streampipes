@@ -16,7 +16,7 @@
   ~
   -->
 
-## Boolean Filter
+## Production Tracking
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -25,22 +25,60 @@
 ***
 
 ## Description
-The Boolean Filter processor filters based on a boolean value field
+The Production Tracking processor maps two signal synchronising two timestamps (from two different data source) 
+filtering values based on a threshold value and on the input boolean values. 
 
 ***
 
-## Required Input
-The processor works with any input event that has one field containing a boolean value
+## Required Inputs
+The processor works with any input event that has at least four fields
+containing one timestamp and one numerical value from the first data source, 
+one timestamp and one boolean value from the second data source.
 
 ***
 
 ## Configuration
 
-### Field
-Specifies the field name where the filter operation should be applied on.
+### First Timestamp
+Time at which the value to observe was taken (from numerical signal).
 
-### Field Value
-Events with the selected field value are forwarded
+### Value to Observe
+Specifies the field name (from first data source(numerical signal)) that should be observed and
+where the filter operation should be applied on.
+
+### Second Timestamp
+Time at which the boolean value was taken (from boolean-like signal).
+
+### Boolean value to observe
+Specifies the boolean value field name from second data source (boolean-like signal).
+
+### Threshold value
+Specifies the threshold value that will be use for filtering.
+
 
 ## Output
-The processor outputs the input event if the event value is equals the selected field value
+The processor outputs the events with the following payload scheme:
+
+(``{
+
+    "time" : 154768794010791,
+    
+    "value": 1725.22,
+    
+    "task": true,
+    
+    "production": true
+
+}``)
+
+
+where:
+
+- ``time``variable is a timestamp in milliseconds resolution.
+
+- ``value`` variable represents the value to observe input.
+
+- ``task`` variable is the Boolean value which, when defined as true, means that the machine is plugged in for the project (project task).
+
+- ``production`` variable is the Boolean value which, when defined as true, means that we are in the production phase of the project task (with false -> idle state and true -> active state){
+

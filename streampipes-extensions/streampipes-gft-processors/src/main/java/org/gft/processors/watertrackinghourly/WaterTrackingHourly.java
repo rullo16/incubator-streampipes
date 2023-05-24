@@ -40,7 +40,7 @@ import java.util.List;
 
 
 public class WaterTrackingHourly extends StreamPipesDataProcessor {
-    private String input_power_value;
+    private String input_flow_value;
     private String input_timestamp_value;
     private String input_choice;
     private Double waiting_time;
@@ -62,6 +62,7 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
     List<Double> timestampsListForWaitingTimeBasedComputation = new ArrayList<>();
 
 
+    //Define abstract stream requirements such as event properties that must be present in any input stream that is later connected to the element using the StreamPipes UI
     @Override
     public DataProcessorDescription declareModel() {
         return ProcessingElementBuilder.create(ID)
@@ -78,79 +79,91 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
                         Options.from("No", "Yes"))
                 .requiredIntegerParameter(Labels.withId(WAITING_TIME))
 
-                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtimeConsumption", SO.Number),
-                        EpProperties.doubleEp(Labels.withId(HOURLY_CONSUMPTION), "hourlyConsumption", SO.Number)))
+                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtimeConsumption", SO.NUMBER),
+                        EpProperties.doubleEp(Labels.withId(HOURLY_CONSUMPTION), "hourlyConsumption", SO.NUMBER)))
                 .build();
     }
 
+    //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+    // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
     @Override
     public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
-        this.input_power_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
+        this.input_flow_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
         this.input_timestamp_value = parameters.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
         this.waiting_time = parameters.extractor().singleValueParameter(WAITING_TIME, Double.class);
         this.input_choice  = parameters.extractor().selectedSingleValue(CHOICE, String.class);
     }
 
+    // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+    // Then use the if conditional statements to define the output value
     @Override
     public void onEvent(Event event,SpOutputCollector out){
         double waiting_time = this.waiting_time*60*1000;
 
-        Double power = event.getFieldBySelector(this.input_power_value).getAsPrimitive().getAsDouble();
-
+        //recovery input value
+        Double water_flow = event.getFieldBySelector(this.input_flow_value).getAsPrimitive().getAsDouble();
+        //recovery timestamp value
         Double timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsDouble();
+
 
        if(((timestamp - this.waitingtime_start >= waiting_time) || (timestamp - this.hourlytime_start >= 3600000)) && this.waitingtime_start != 0.0){
 
+           //if true compute the consumption of the time that has just passed
             if(timestamp - this.waitingtime_start >= waiting_time){
-
+                // reset the start time for computations
                 this.waitingtime_start = timestamp;
-
-                this.waterFlowListForWaitingTimeBasedComputation.add(power);
+                // Add newly current events for the next computation
+                this.waterFlowListForWaitingTimeBasedComputation.add(water_flow);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
-
+                //perform operations to obtain waiting time water_flow from instantaneous water flows
                 if(this.input_choice.equals("Yes")){
                     this.waitingtime_consumption = this.waterFlowListForWaitingTimeBasedComputation.get(this.waterFlowListForWaitingTimeBasedComputation.size()-1)
                             - this.waterFlowListForWaitingTimeBasedComputation.get(0);
                 }else{
-                    this.waitingtime_consumption = powerToEnergy(this.waterFlowListForWaitingTimeBasedComputation, this.timestampsListForWaitingTimeBasedComputation);
+                    this.waitingtime_consumption = flowToConsumption(this.waterFlowListForWaitingTimeBasedComputation, this.timestampsListForWaitingTimeBasedComputation);
                 }
 
+                // Remove all elements from the Lists
                 this.waterFlowListForWaitingTimeBasedComputation.clear();
                 this.timestampsListForWaitingTimeBasedComputation.clear();
-
-                this.waterFlowListForWaitingTimeBasedComputation.add(power);
+                // Add newly current events for the next computation
+                this.waterFlowListForWaitingTimeBasedComputation.add(water_flow);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
             }
 
+            //if true compute the consumption of the hour that has just passed
             if (timestamp - this.hourlytime_start >= 3600000) {
-
+                // reset the start time for computations
                 this.hourlytime_start  = timestamp;
-
-                this.waterFlowListForHourlyBasedComputation.add(power);
+                // Add newly current events for the next computation
+                this.waterFlowListForHourlyBasedComputation.add(water_flow);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
-
+                //perform operations to obtain hourly water_flow from instantaneous water flows
                 if(this.input_choice.equals("Yes")){
                     this.hourly_consumption = this.waterFlowListForHourlyBasedComputation.get(this.waterFlowListForHourlyBasedComputation.size()-1)
                             - this.waterFlowListForHourlyBasedComputation.get(0);
                 }else{
-                    this.hourly_consumption = powerToEnergy(this.waterFlowListForHourlyBasedComputation, this.timestampsListForHourlyBasedComputation);
+                    this.hourly_consumption = flowToConsumption(this.waterFlowListForHourlyBasedComputation, this.timestampsListForHourlyBasedComputation);
                 }
 
+                // Remove all elements from the Lists
                 this.waterFlowListForHourlyBasedComputation.clear();
                 this.timestampsListForHourlyBasedComputation.clear();
-
-                this.waterFlowListForHourlyBasedComputation.add(power);
+                // Add newly current events for the next computation
+                this.waterFlowListForHourlyBasedComputation.add(water_flow);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
             }
 
         }else {
+           // set the start time for computations
            if (this.waitingtime_start == 0.0){
                this.hourlytime_start = timestamp;
                this.waitingtime_start = timestamp;
            }
-           this.waterFlowListForWaitingTimeBasedComputation.add(power);
+           // add water flow to the lists
+           this.waterFlowListForWaitingTimeBasedComputation.add(water_flow);
            this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
-           this.waterFlowListForHourlyBasedComputation.add(power);
+           this.waterFlowListForHourlyBasedComputation.add(water_flow);
            this.timestampsListForHourlyBasedComputation.add(timestamp);
         }
 
@@ -160,7 +173,11 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
        out.collect(event);
     }
 
-    public double powerToEnergy(List<Double> powers, List<Double> timestamps) {
+
+    //perform Riemann approximations by trapezoids which is an approximation of the area
+    // under the curve (which corresponds to the water consumption) formed by the points
+    // with coordinate water flows(ordinate) e timestamps(abscissa)
+    public double flowToConsumption(List<Double> flow, List<Double> timestamps) {
         double sum = 0.0;
         double first_base;
         double second_base;
@@ -168,9 +185,9 @@ public class WaterTrackingHourly extends StreamPipesDataProcessor {
         DecimalFormat df = new DecimalFormat("#.#####");
         df.setRoundingMode(RoundingMode.CEILING);
 
-        for(int i = 0; i<powers.size()-1; i++){
-            first_base = powers.get(i);
-            second_base = powers.get(i+1);
+        for(int i = 0; i<flow.size()-1; i++){
+            first_base = flow.get(i);
+            second_base = flow.get(i+1);
             height = (timestamps.get(i+1) - timestamps.get(i))/1000;
             sum += ((first_base + second_base) / 2) * height ;
         }

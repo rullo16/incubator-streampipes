@@ -30,14 +30,14 @@ Continuously fetched events from the HTTP REST endpoint.
 ***
 
 ## Configuration
-Configurations a user has to provide
+A user has to provide
 #### Username
 #### Password
-User dedicated password
-#### Signal
-The name of the sensor signal
+#### Signal ID
+The comp_signal_id of the sensor signal without quote.
 #### From - The Lowest Date of the Interval
 First value of the key for filtering - Example: 2022-07-21 00:00:00 (YYYY-MM-DD HH:mm:ss)
 #### To - The Highest Date of the Interval
 Last value of the key for filtering - Example: 2022-12-21 00:00:00 (YYYY-MM-DD HH:mm:ss).
-The default increasing value (CurrentDateTime that corresponds to the time of the polling.) can be replaced by a static one (past or future).
+The default increasing value (CurrentDateTime that corresponds to the time of the polling.)
+can be replaced by a static one (past or future).

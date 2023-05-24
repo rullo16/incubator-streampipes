@@ -36,23 +36,14 @@ import org.gft.processors.boologicoperator.enums.BoolOperatorType;
 import org.gft.processors.boologicoperator.operations.IBoolOperation;
 import org.gft.processors.boologicoperator.operations.factory.BoolOperationFactory;
 
-import static org.gft.processors.boologicoperator.enums.BoolOperatorType.NOT;
-
 
 public class BoolOperatorProcessor extends StreamPipesDataProcessor {
-    private static final String BOOLEAN_PROCESSOR_OUT_KEY = "boolean-operations-result";
     private static final String BOOLEAN_OPERATOR_TYPE = "operator-field";
     private static final String FIRST_PROPERTIES = "first-property";
-    private static final String FIRST= "first";
     private static final String SECOND_PROPERTIES = "second-property";
-    private static final String SECOND= "second";
-    private static final String FIRST_TIMESTAMP = "timestamp-first" ;
-    private static final String SECOND_TIMESTAMP = "timestamp-second" ;
     private BoolOperatorType operator_type;
-    private String firstTimestamp;
-    private String secondTimestamp;
-    private String firstProperty;
-    private String secondProperty;
+    private String first_property;
+    private String second_property;
 
     @Override
     public DataProcessorDescription declareModel() {
@@ -61,52 +52,39 @@ public class BoolOperatorProcessor extends StreamPipesDataProcessor {
                 .withLocales(Locales.EN)
                 .category(DataProcessorType.AGGREGATE, DataProcessorType.BOOLEAN_OPERATOR)
                 .requiredStream(StreamRequirementsBuilder.create()
-                        .requiredPropertyWithUnaryMapping(EpRequirements.timestampReq(),
-                                Labels.withId(FIRST_TIMESTAMP), PropertyScope.NONE)
                         .requiredPropertyWithUnaryMapping(EpRequirements.booleanReq(),
                                 Labels.withId(FIRST_PROPERTIES), PropertyScope.NONE)
-                        .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
-                                Labels.withId(SECOND_TIMESTAMP), PropertyScope.NONE)
                         .requiredPropertyWithUnaryMapping(EpRequirements.booleanReq(),
                                 Labels.withId(SECOND_PROPERTIES), PropertyScope.NONE)
                         .build())
                 .requiredSingleValueSelection(Labels.withId(BOOLEAN_OPERATOR_TYPE), Options.from(
                         BoolOperatorType.AND.operator(),
                         BoolOperatorType.OR.operator(),
-                        NOT.operator(),
+                        BoolOperatorType.NOT.operator(),
                         BoolOperatorType.XOR.operator(),
                         BoolOperatorType.X_NOR.operator(),
                         BoolOperatorType.NOR.operator()))
-                .outputStrategy(OutputStrategies.fixed(EpProperties.timestampProperty("timestamp"),
-                        EpProperties.booleanEp(Labels.withId(FIRST), "first_monitored_signal", SO.Boolean),
-                        EpProperties.booleanEp(Labels.withId(SECOND), "second_monitored_signal", SO.Boolean),
-                        EpProperties.booleanEp(Labels.withId(BOOLEAN_PROCESSOR_OUT_KEY), "boolean-operations-result", SO.Boolean)))
+                .outputStrategy(OutputStrategies.append(
+                        EpProperties.booleanEp(Labels.empty(), "boolean-operations-result", SO.BOOLEAN)))
                 .build();
     }
 
     @Override
     public void onInvocation(ProcessorParams processorParams, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext eventProcessorRuntimeContext) throws SpRuntimeException {
-        this.firstTimestamp = processorParams.extractor().mappingPropertyValue(FIRST_TIMESTAMP);
-        this.firstProperty = processorParams.extractor().mappingPropertyValue(FIRST_PROPERTIES);
-        this.secondTimestamp = processorParams.extractor().mappingPropertyValue(SECOND_TIMESTAMP);
-        this.secondProperty = processorParams.extractor().mappingPropertyValue(SECOND_PROPERTIES);
+        this.first_property = processorParams.extractor().mappingPropertyValue(FIRST_PROPERTIES);
+        this.second_property = processorParams.extractor().mappingPropertyValue(SECOND_PROPERTIES);
         String operator = processorParams.extractor().selectedSingleValue(BOOLEAN_OPERATOR_TYPE, String.class);
         this.operator_type = BoolOperatorType.getBooleanOperatorType(operator);
     }
 
     @Override
     public void onEvent(Event event, SpOutputCollector spOutputCollector) throws SpRuntimeException {
-        Long first_timestamp = event.getFieldBySelector(this.firstTimestamp).getAsPrimitive().getAsLong();
-        Boolean first_property = event.getFieldBySelector(this.firstProperty).getAsPrimitive().getAsBoolean();
-        Long second_timestamp = event.getFieldBySelector(this.secondTimestamp).getAsPrimitive().getAsLong();
-        Boolean second_property = event.getFieldBySelector(this.secondProperty).getAsPrimitive().getAsBoolean();
+        Boolean first_property = event.getFieldBySelector(this.first_property).getAsPrimitive().getAsBoolean();
+        Boolean second_property = event.getFieldBySelector(this.second_property).getAsPrimitive().getAsBoolean();
         IBoolOperation<Boolean> boolOperation = BoolOperationFactory.getBoolOperation(this.operator_type);
         Boolean result;
 
         result = boolOperation.evaluate(first_property, second_property);
-        event.addField("timestamp", first_timestamp);
-        event.addField("first_monitored_signal", first_property);
-        event.addField("second_monitored_signal", second_property);
         event.addField("boolean-operations-result", result);
         spOutputCollector.collect(event);
     }

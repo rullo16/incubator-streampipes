@@ -47,16 +47,18 @@ import java.util.List;
 import java.util.Map;
 
 public class PLMHttpStreamProtocol extends PLMPullProtocol {
-    private static final long interval = 120;
+    private static final long interval = 30; // interval between two consecutive polling: polling waiting time
     Logger logger = LoggerFactory.getLogger(PLMHttpStreamProtocol.class);
     public static final String ID = "org.gft.adapters.plm";
     PLMHttpConfig config;
     private String accessToken = null;
     List<JsonObject> selected_sensors = new ArrayList<>();
 
+    // Empty constructor
     public PLMHttpStreamProtocol() {
     }
 
+    // constructor with parameters
     public PLMHttpStreamProtocol(IParser parser, IFormat format, PLMHttpConfig config) {
         super(parser, format, interval);
         this.config = config;
@@ -64,6 +66,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         this.selected_sensors = getSelectedSensors();
     }
 
+    //Define abstract stream requirements such as event properties that must be present
+    // in any input stream that is later connected to the element using the StreamPipes UI
     @Override
     public ProtocolDescription declareModel() {
         return ProtocolDescriptionBuilder.create(ID)
@@ -81,6 +85,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
     }
 
 
+    // get constructor parameters
     @Override
     public Protocol getInstance(ProtocolDescription protocolDescription, IParser parser, IFormat format) {
         StaticPropertyExtractor extractor = StaticPropertyExtractor.from(protocolDescription.getConfig(), new ArrayList<>());
@@ -88,6 +93,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         return new PLMHttpStreamProtocol(parser, format, config);
     }
 
+    // retrieve the schema of the payload
     @Override
     public GuessSchema getGuessSchema() throws ParseException {
         int n = 2;
@@ -108,10 +114,33 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
     }
 
     @Override
+    public List<Map<String, Object>> getNElements(int n) throws ParseException {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        InputStream dataInputStream;
+        dataInputStream = getDataFromEndpoint();
+
+        List<byte[]> dataByte = parser.parseNEvents(dataInputStream, n);
+
+        // Check that result size is n. Currently just an error is logged. Maybe change to an exception
+        if (dataByte.size() < n) {
+            logger.error("Error in PLMHttpStreamProtocol! User required: " + n + " elements but the resource just had: " +
+                    dataByte.size());
+        }
+
+        for (byte[] b : dataByte) {
+            result.add(format.parse(b));
+        }
+
+        return result;
+    }
+
+    @Override
     public String getId() {
         return ID;
     }
 
+    // retrieve data from the endpoint
     @Override
     public InputStream getDataFromEndpoint() throws ParseException {
         InputStream result = null;
@@ -120,6 +149,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         }
         String urlString = getUrl(this.selected_sensors);
 
+        // stop adapter when it goes out of the whole polling time range as given on the SP UI during set up
         if (config.getLowestDate().compareToIgnoreCase(config.getHighestDate()) >= 0) {
             logger.warn("Adapter Stopped: there is not anymore data to retrieve in the time interval!!!");
             logger.warn("Stop Adapter on the User Interface!!!");
@@ -127,15 +157,20 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         }
 
         try {
+            // Set the URL of the API endpoint
             URL url = new URL(urlString);
+            // Open a connection to the API endpoint
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("content-type", "application/json");
+            // Set the token in the HTTP header of the request
             connection.setRequestProperty("Authorization", "Bearer " + this.accessToken);
             connection.setRequestProperty("transfer-encoding", "chunked");
             connection.setRequestProperty("connection", "keep-alive");
+            //connection.setDoOutput(true);
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(60000);
+            // Send the GET request to the API endpoint
             connection.connect();
 
             if (this.accessToken != null) {
@@ -145,11 +180,13 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
             result = connection.getInputStream();
 
         } catch (Exception e) {
+            // Handle any exceptions that occur
             e.printStackTrace();
         }
         return result;
     }
 
+    // connection to PLM and token retrieve
     private String login() throws ParseException {
         String urlString, response, token;
         urlString = config.getBaseUrl() + "admin/token?group=" + config.getGroup() + "&pass=" + config.getPassword() + "&user=" + config.getUsername();
@@ -166,8 +203,9 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                     .execute().returnContent().toString();
             if (response == null)
                 throw new ParseException("Could not receive Data from file: " + urlString);
-
+            // Parse the JSON string as a JSON object
             JsonObject json_object = new Gson().fromJson(response, JsonObject.class);
+            // Access the data in the JSON object
             token = json_object.get("token").getAsString();
 
         } catch (Exception e) {
@@ -177,10 +215,10 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         return token;
     }
 
-
+    // retrieve the list of sensors
     private JsonArray sensorsList() throws ParseException {
         String response, urlString;
-
+        // Set the URL of the API endpoint
         urlString = config.getBaseUrl() + "bkd/q_search/" + config.getRepository() + "/" + config.getModel() + "/" + this.accessToken + "?case_sens=false&domains=PROPERTY&folder_only=false&pattern=*";
         if (urlString.contains(" "))
             urlString = urlString.replace(" ", "%20");
@@ -218,6 +256,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         return isNumber;
     }
 
+    // retrieve the list of sensors that interests
     private List<JsonObject> getSelectedSensors() {
         JsonArray sensor_properties;
         JsonObject sensor, element_info, json_selected_sensor;
@@ -237,18 +276,24 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                     JsonObject property = sensor_properties.get(j).getAsJsonObject();
                     String[] val_parts = property.get("val").getAsString().split(" ");
                     boolean number_of_items = checkIfDigit(val_parts[0]);
+
                     if (val_parts.length == 2 && val_parts[1].equals("items") && number_of_items) {
+
                         String urn = property.get("name").getAsString();
                         if (urn.contains(":"))
                             urn = urn.replace(":", "%3A");
+
                         String json_string = "{\"urn\": \"" + urn + "\"," + "\"num\": " +
                                 Integer.parseInt(val_parts[0]) + "}";
+
                         JsonObject json_object = new Gson().fromJson(json_string , JsonObject.class);
                         selected_properties.add(json_object);
+
                     }
                 }
                 string_selected_sensor = "{\"name\": \"" + element_info.get("name").getAsString() + "\"," + "\"id\": " +
                         element_info.get("instance_id") + "," + "\"props\": " + selected_properties + "}";
+
                 json_selected_sensor = new Gson().fromJson(string_selected_sensor, JsonObject.class);
                 selected_sensors.add(json_selected_sensor);
             }
@@ -256,18 +301,22 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         return selected_sensors;
     }
 
+    // Build and return endpoint URL that will be used to get data
     private String getUrl(List<JsonObject> selected_sensors) {
         String urn, urlString = null;
         for (JsonObject sensor : selected_sensors) {
+
             if (sensor.get("name").getAsString().equals(config.getSignal())) {
                 urn = sensor.getAsJsonArray("props").get(0).getAsJsonObject().get("urn").getAsString();
 
                 try {
                     String first_date = config.firstDateTime();
                     String second_date = config.secondDateTime();
+
                     urlString = config.getBaseUrl() + "bkd/aggr_exp_dt/" + config.getRepository() + "/" + config.getModel() + "/" + sensor.get("id") + "/" + urn + "/"
                             + this.accessToken + "/" + "?format=json" + "&from=" + first_date + "&to=" + second_date;
 
+                    //replace spaces by "%20" and the two points by %3A to avoid 400 Bad Request
                     if (urlString.contains(" "))
                         urlString = urlString.replace(" ", "%20");
 

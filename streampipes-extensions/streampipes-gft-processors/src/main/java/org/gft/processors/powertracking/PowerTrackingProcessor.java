@@ -59,7 +59,8 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
     List<Double> powersListForWaitingTimeBasedComputation = new ArrayList<>();
     List<Double> timestampsListForWaitingTimeBasedComputation = new ArrayList<>();
 
-
+    //Define abstract stream requirements such as event properties that must be present
+    // in any input stream that is later connected to the element using the StreamPipes UI
     @Override
     public DataProcessorDescription declareModel() {
         return ProcessingElementBuilder.create(ID)
@@ -74,11 +75,13 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
                         .build())
                 .requiredIntegerParameter(Labels.withId(WAITING_TIME))
 
-                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtimeConsumption", SO.Number),
-                        EpProperties.doubleEp(Labels.withId(HOURLY_CONSUMPTION), "hourlyConsumption", SO.Number)))
+                .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(WAITINGTIME_CONSUMPTION), "waitingtimeConsumption", SO.NUMBER),
+                        EpProperties.doubleEp(Labels.withId(HOURLY_CONSUMPTION), "hourlyConsumption", SO.NUMBER)))
                 .build();
     }
 
+    //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+    // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
     @Override
     public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
         this.input_power_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
@@ -86,43 +89,60 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
         this.waiting_time = parameters.extractor().singleValueParameter(WAITING_TIME, Double.class);
     }
 
+    // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+    // Then use the if conditional statements to define the output value
     @Override
     public void onEvent(Event event,SpOutputCollector out){
         double waiting_time = this.waiting_time*60*1000;
 
+        //recovery input value
         Double power = event.getFieldBySelector(this.input_power_value).getAsPrimitive().getAsDouble();
-
+        //recovery timestamp value
         Double timestamp = event.getFieldBySelector(this.input_timestamp_value).getAsPrimitive().getAsDouble();
 
+        //if true compute the consumption of the time that has just passed
        if(((timestamp - this.waitingtime_start >= waiting_time) || (timestamp - this.hourlytime_start >= 3600000)) && this.waitingtime_start != 0.0){
 
             if(timestamp - this.waitingtime_start >= waiting_time){
+                // reset the start time for computations
                 this.waitingtime_start = timestamp;
+                // Add newly current events for the next computation
                 this.powersListForWaitingTimeBasedComputation.add(power);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
+                //perform operations to obtain waiting time power from instantaneous powers
                 this.waitingtime_consumption = powerToEnergy(this.powersListForWaitingTimeBasedComputation, this.timestampsListForWaitingTimeBasedComputation);
+                // Remove all elements from the Lists
                 this.powersListForWaitingTimeBasedComputation.clear();
                 this.timestampsListForWaitingTimeBasedComputation.clear();
+                // Add newly current events for the next computation
                 this.powersListForWaitingTimeBasedComputation.add(power);
                 this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
             }
 
+           //if true compute the consumption of the hour that has just passed
             if (timestamp - this.hourlytime_start >= 3600000) {
+                // reset the start time for computations
                 this.hourlytime_start  = timestamp;
+                // Add newly current events for the next computation
                 this.powersListForHourlyBasedComputation.add(power);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
+                //perform operations to obtain hourly power from instantaneous powers
                 this.hourly_consumption = powerToEnergy(this.powersListForHourlyBasedComputation, this.timestampsListForHourlyBasedComputation);
+                // Remove all elements from the Lists
                 this.powersListForHourlyBasedComputation.clear();
                 this.timestampsListForHourlyBasedComputation.clear();
+                // Add newly current events for the next computation
                 this.powersListForHourlyBasedComputation.add(power);
                 this.timestampsListForHourlyBasedComputation.add(timestamp);
             }
 
         }else {
+           // set the start time for computations
            if (this.waitingtime_start == 0.0){
                this.hourlytime_start = timestamp;
                this.waitingtime_start = timestamp;
            }
+           // add power to the lists
            this.powersListForWaitingTimeBasedComputation.add(power);
            this.timestampsListForWaitingTimeBasedComputation.add(timestamp);
            this.powersListForHourlyBasedComputation.add(power);
@@ -144,6 +164,9 @@ public class PowerTrackingProcessor extends StreamPipesDataProcessor {
         double height;
         DecimalFormat df = new DecimalFormat("#.#####");
         df.setRoundingMode(RoundingMode.CEILING);
+        //perform Riemann approximations by trapezoids which is an approximation of the area
+        // under the curve (which corresponds to the energy consumption) formed by the points
+        // with coordinate powers(ordinate) e timestamps(abscissa)
         for(int i = 0; i<powers.size()-1; i++){
             first_base = powers.get(i);
             second_base = powers.get(i+1);

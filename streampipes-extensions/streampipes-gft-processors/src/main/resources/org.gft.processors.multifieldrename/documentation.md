@@ -26,15 +26,17 @@
 
 ## Description
 
-Replaces the runtime names of an event property with a custom defined name. Useful for data ingestion purposes where a specific event schema is required.
+Replaces the runtime names of an event property with a custom defined name.
+Useful for data ingestion purposes where a specific event schema is required.
 
 
 ***
+## Configuration
 
-### Two OldFieldName   
+### Two Old Field Names  
 Specifies the fields to rename.
 
-### Two NewFieldName
+### Two New Field Names
 Specifies the new runtime names of the field.
 
 ## Output
