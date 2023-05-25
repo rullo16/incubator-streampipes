@@ -1,0 +1,23 @@
+org.gft.processors.signalmonitoring.title=Signal Monitoring
+org.gft.processors.signalmonitoring.description=Filter and handle the numerical signal (negative and positive) to create the Boolean-like signal.
+
+timestamp-in.title=Timestamp
+timestamp-in.description= Time of the input event.
+
+number-mapping.title=Input Value to Filter and Observe
+number-mapping.description=Specifies the field name of the value to be monitored.
+
+operation.title=Filter Operations
+operation.description=Specifies the filter operations that should be applied on the input value
+
+threshold.title=Threshold value
+threshold.description=Specifies a threshold value
+
+increase-decrease.title=Percentage of Increase/Decrease
+increase-decrease.description = Specifies the percentage of increase or decrease within the time specified window
+
+signal.title=Signal
+signal.description=Name of the monitored signal
+
+window.title=Time Window Length(Minutes)
+window.description=Specify the size of the time window in mintes.

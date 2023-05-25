@@ -23,18 +23,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 public class UnauthorizedRequestEntryPoint implements AuthenticationEntryPoint {
 
-	private static final Logger LOG = LoggerFactory.getLogger(UnauthorizedRequestEntryPoint.class);
+  private static final Logger LOG = LoggerFactory.getLogger(UnauthorizedRequestEntryPoint.class);
 
-	@Override
-	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
-		LOG.error("Unauthorized request to {}", httpServletRequest.getPathInfo());
+  @Override
+  public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                       AuthenticationException e) throws IOException {
+    LOG.error("Unauthorized request to {}", httpServletRequest.getPathInfo());
 
-		httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getLocalizedMessage());
-	}
+    httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getLocalizedMessage());
+  }
 }

@@ -17,6 +17,11 @@
  */
 
 export interface HistoricalMonitoringData {
-  name: string;
-  value: number;
+    name: string;
+    value: number;
+}
+
+export interface ObservedMetricsStream {
+    pipelineElementName: string;
+    identifier: string;
 }

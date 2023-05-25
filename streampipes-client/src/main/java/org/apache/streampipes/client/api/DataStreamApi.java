@@ -37,11 +37,13 @@ public class DataStreamApi extends AbstractTypedClientApi<SpDataStream> implemen
 
   @Override
   public SpDataStream get(String streamId) {
-    return getSingle(getBaseResourcePath().addToPath(streamId));
+    return getSingle(StreamPipesApiPath.fromBaseApiPath()
+        .addToPath("streams").addToPath(streamId));
   }
 
   /**
    * Get all available data streams
+   *
    * @return {@link org.apache.streampipes.model.SpDataStream} A list of all data streams owned by the user.
    */
   @Override
@@ -49,13 +51,19 @@ public class DataStreamApi extends AbstractTypedClientApi<SpDataStream> implemen
     return getAll(getBaseResourcePath());
   }
 
+  /**
+   * Directly install a new data stream
+   *
+   * @param stream   The data stream to add
+   */
   @Override
-  public void create(SpDataStream element) {
-
+  public void create(SpDataStream stream) {
+    post(StreamPipesApiPath.fromBaseApiPath().addToPath("streams"), stream);
   }
 
   /**
    * Delete a data stream
+   *
    * @param streamId The elementId of the stream
    */
   @Override
@@ -70,7 +78,8 @@ public class DataStreamApi extends AbstractTypedClientApi<SpDataStream> implemen
 
   /**
    * Subscribe to a data stream
-   * @param stream The data stream to subscribe to
+   *
+   * @param stream   The data stream to subscribe to
    * @param callback The callback where events will be received
    */
   public SpKafkaConsumer subscribe(SpDataStream stream,
@@ -80,9 +89,10 @@ public class DataStreamApi extends AbstractTypedClientApi<SpDataStream> implemen
 
   /**
    * Subscribe to a data stream
-   * @param stream The data stream to subscribe to
+   *
+   * @param stream      The data stream to subscribe to
    * @param kafkaConfig Additional kafka settings which will override the default value (see docs)
-   * @param callback The callback where events will be received
+   * @param callback    The callback where events will be received
    */
   public SpKafkaConsumer subscribe(SpDataStream stream,
                                    KafkaConfig kafkaConfig,
@@ -93,7 +103,7 @@ public class DataStreamApi extends AbstractTypedClientApi<SpDataStream> implemen
   @Override
   protected StreamPipesApiPath getBaseResourcePath() {
     return StreamPipesApiPath.fromBaseApiPath()
-            .addToPath("streams")
-            .addToPath("own");
+        .addToPath("streams")
+        .addToPath("own");
   }
 }

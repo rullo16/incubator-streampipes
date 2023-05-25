@@ -27,11 +27,12 @@ import org.apache.streampipes.wrapper.runtime.ExternalEventSink;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class StandaloneExternalEventSinkRuntime<B extends EventSinkBindingParams> extends
-        StandalonePipelineElementRuntime<B, DataSinkInvocation,
-                EventSinkRuntimeParams<B>, EventSinkRuntimeContext, ExternalEventSink<B>> {
+public class StandaloneExternalEventSinkRuntime<T extends EventSinkBindingParams> extends
+    StandalonePipelineElementRuntime<T, DataSinkInvocation,
+        EventSinkRuntimeParams<T>, EventSinkRuntimeContext, ExternalEventSink<T>> {
 
-  public StandaloneExternalEventSinkRuntime(Supplier<ExternalEventSink<B>> supplier, EventSinkRuntimeParams<B> runtimeParams) {
+  public StandaloneExternalEventSinkRuntime(Supplier<ExternalEventSink<T>> supplier,
+                                            EventSinkRuntimeParams<T> runtimeParams) {
     super(supplier, runtimeParams);
   }
 
@@ -41,7 +42,7 @@ public class StandaloneExternalEventSinkRuntime<B extends EventSinkBindingParams
   }
 
   @Override
-  public void process(Map<String, Object> rawEvent, String sourceInfo) throws SpRuntimeException {
+  public void process(Map<String, Object> rawEvent, String sourceInfo) {
 
   }
 

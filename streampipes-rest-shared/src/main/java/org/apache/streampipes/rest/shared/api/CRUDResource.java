@@ -17,17 +17,17 @@
  */
 package org.apache.streampipes.rest.shared.api;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
-public interface CRUDResource<ID, T> {
+public interface CRUDResource<K, V> {
 
-    Response getAll();
+  Response getAll();
 
-    Response getById(ID id);
+  Response getById(K k);
 
-    Response create(T entity);
+  Response create(V entity);
 
-    Response update(ID id, T entity);
+  Response update(K k, V entity);
 
-    Response delete(ID id);
+  Response delete(K k);
 }

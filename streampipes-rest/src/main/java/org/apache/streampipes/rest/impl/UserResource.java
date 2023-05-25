@@ -18,7 +18,13 @@
 package org.apache.streampipes.rest.impl;
 
 import org.apache.streampipes.mail.MailSender;
-import org.apache.streampipes.model.client.user.*;
+import org.apache.streampipes.model.client.user.ChangePasswordRequest;
+import org.apache.streampipes.model.client.user.Principal;
+import org.apache.streampipes.model.client.user.PrincipalType;
+import org.apache.streampipes.model.client.user.RawUserApiToken;
+import org.apache.streampipes.model.client.user.Role;
+import org.apache.streampipes.model.client.user.ServiceAccount;
+import org.apache.streampipes.model.client.user.UserAccount;
 import org.apache.streampipes.model.message.Notifications;
 import org.apache.streampipes.rest.core.base.impl.AbstractAuthGuardedRestResource;
 import org.apache.streampipes.rest.security.AuthConstants;
@@ -26,13 +32,23 @@ import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 import org.apache.streampipes.user.management.encryption.SecretEncryptionManager;
 import org.apache.streampipes.user.management.service.TokenService;
 import org.apache.streampipes.user.management.util.PasswordUtil;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -183,7 +199,7 @@ public class UserResource extends AbstractAuthGuardedRestResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response updateUserAccountDetails(@PathParam("principalId") String principalId,
-                                    UserAccount user) {
+                                           UserAccount user) {
     String authenticatedUserId = getAuthenticatedUsername();
     if (user != null && (authenticatedUserId.equals(principalId) || isAdmin())) {
       UserAccount existingUser = (UserAccount) getPrincipalById(principalId);
@@ -208,7 +224,11 @@ public class UserResource extends AbstractAuthGuardedRestResource {
       try {
         if (PasswordUtil.validatePassword(user.getPassword(), existingUser.getPassword())) {
           existingUser.setUsername(user.getUsername());
-          if (getUserStorage().getAllUserAccounts().stream().noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
+
+          if (getUserStorage()
+              .getAllUserAccounts()
+              .stream()
+              .noneMatch(u -> u.getUsername().equalsIgnoreCase(user.getUsername()))) {
             updateUser(existingUser, user, isAdmin(), existingUser.getPassword());
             getUserStorage().updateUser(existingUser);
             return ok();
@@ -234,7 +254,7 @@ public class UserResource extends AbstractAuthGuardedRestResource {
                                  ChangePasswordRequest passwordRequest) {
     String authenticatedUserId = getAuthenticatedUsername();
     UserAccount existingUser = (UserAccount) getPrincipalById(principalId);
-    if (principalId.equals(authenticatedUserId)  || isAdmin()) {
+    if (principalId.equals(authenticatedUserId) || isAdmin()) {
       try {
         String existingPw = passwordRequest.getExistingPassword();
         if (PasswordUtil.validatePassword(existingPw, existingUser.getPassword())) {
@@ -259,7 +279,7 @@ public class UserResource extends AbstractAuthGuardedRestResource {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response updateServiceAccountDetails(@PathParam("principalId") String principalId,
-                                           ServiceAccount user) {
+                                              ServiceAccount user) {
     String authenticatedUserId = getAuthenticatedUsername();
     if (user != null && (authenticatedUserId.equals(principalId) || isAdmin())) {
       Principal existingUser = getPrincipalById(principalId);
@@ -280,11 +300,11 @@ public class UserResource extends AbstractAuthGuardedRestResource {
 
   private boolean isAdmin() {
     return SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getAuthorities()
-            .stream()
-            .anyMatch(r -> r.getAuthority().equals(Role.ROLE_ADMIN.name()));
+        .getContext()
+        .getAuthentication()
+        .getAuthorities()
+        .stream()
+        .anyMatch(r -> r.getAuthority().equals(Role.ROLE_ADMIN.name()));
   }
 
   private void updateUser(UserAccount existingUser,
@@ -296,14 +316,14 @@ public class UserResource extends AbstractAuthGuardedRestResource {
       replacePermissions(user, existingUser);
     }
     user.setUserApiTokens(existingUser
-            .getUserApiTokens()
+        .getUserApiTokens()
+        .stream()
+        .filter(existingToken -> user.getUserApiTokens()
             .stream()
-            .filter(existingToken -> user.getUserApiTokens()
-                    .stream()
-                    .anyMatch(updatedToken -> existingToken
-                            .getTokenId()
-                            .equals(updatedToken.getTokenId())))
-            .collect(Collectors.toList()));
+            .anyMatch(updatedToken -> existingToken
+                .getTokenId()
+                .equals(updatedToken.getTokenId())))
+        .collect(Collectors.toList()));
   }
 
   private void encryptAndStore(UserAccount userAccount,

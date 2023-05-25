@@ -19,12 +19,14 @@
 package org.apache.streampipes.connect.iiot.adapters.opcua.utils;
 
 import org.apache.streampipes.commons.exceptions.SpConfigurationException;
-import org.apache.streampipes.connect.api.exception.AdapterException;
-import org.apache.streampipes.connect.api.exception.ParseException;
 import org.apache.streampipes.connect.iiot.adapters.opcua.OpcNode;
 import org.apache.streampipes.connect.iiot.adapters.opcua.OpcUaNodeBrowser;
 import org.apache.streampipes.connect.iiot.adapters.opcua.SpOpcUaClient;
 import org.apache.streampipes.connect.iiot.adapters.opcua.configuration.SpOpcUaConfigBuilder;
+import org.apache.streampipes.extensions.api.connect.exception.AdapterException;
+import org.apache.streampipes.extensions.api.connect.exception.ParseException;
+import org.apache.streampipes.extensions.api.runtime.ResolvesContainerProvidedOptions;
+import org.apache.streampipes.extensions.management.connect.adapter.Adapter;
 import org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription;
 import org.apache.streampipes.model.connect.guess.FieldStatusInfo;
 import org.apache.streampipes.model.connect.guess.GuessSchema;
@@ -34,6 +36,7 @@ import org.apache.streampipes.model.schema.EventSchema;
 import org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty;
 import org.apache.streampipes.sdk.builder.PrimitivePropertyBuilder;
 import org.apache.streampipes.sdk.extractor.StaticPropertyExtractor;
+
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.stack.core.UaException;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
@@ -71,14 +74,14 @@ public class OpcUaUtil {
   }
 
   /***
-   * OPC UA specific implementation of {@link org.apache.streampipes.connect.adapter.Adapter}
+   * OPC UA specific implementation of {@link Adapter}
    * @param adapterStreamDescription
    * @return guess schema
    * @throws AdapterException
    * @throws ParseException
    */
   public static GuessSchema getSchema(SpecificAdapterStreamDescription adapterStreamDescription)
-    throws AdapterException, ParseException {
+      throws AdapterException, ParseException {
     GuessSchema guessSchema = new GuessSchema();
     EventSchema eventSchema = new EventSchema();
     List<Map<String, GuessTypeInfo>> eventPreview = new ArrayList<>();
@@ -90,22 +93,22 @@ public class OpcUaUtil {
     try {
       spOpcUaClient.connect();
       OpcUaNodeBrowser nodeBrowser =
-        new OpcUaNodeBrowser(spOpcUaClient.getClient(), spOpcUaClient.getSpOpcConfig());
+          new OpcUaNodeBrowser(spOpcUaClient.getClient(), spOpcUaClient.getSpOpcConfig());
       List<OpcNode> selectedNodes = nodeBrowser.findNodes();
 
       if (!selectedNodes.isEmpty()) {
         for (OpcNode opcNode : selectedNodes) {
           if (opcNode.hasUnitId()) {
             allProperties.add(PrimitivePropertyBuilder
-              .create(opcNode.getType(), opcNode.getLabel())
-              .label(opcNode.getLabel())
-              .measurementUnit(new URI(opcNode.getQudtURI()))
-              .build());
+                .create(opcNode.getType(), opcNode.getLabel())
+                .label(opcNode.getLabel())
+                .measurementUnit(new URI(opcNode.getQudtURI()))
+                .build());
           } else {
             allProperties.add(PrimitivePropertyBuilder
-              .create(opcNode.getType(), opcNode.getLabel())
-              .label(opcNode.getLabel())
-              .build());
+                .create(opcNode.getType(), opcNode.getLabel())
+                .label(opcNode.getLabel())
+                .build());
           }
         }
       }
@@ -157,17 +160,19 @@ public class OpcUaUtil {
 
   /***
    * OPC UA specific implementation of {@link
-   * org.apache.streampipes.container.api.ResolvesContainerProvidedOptions#
+   * ResolvesContainerProvidedOptions
    * resolveOptions(String, StaticPropertyExtractor)}.
    * @param internalName The internal name of the Static Property
    * @param parameterExtractor to extract parameters from the OPC UA config
    * @return {@code List<Option>} with available node names for the given OPC UA configuration
    */
-  public static RuntimeResolvableTreeInputStaticProperty resolveConfiguration(String internalName,
-                                                                              StaticPropertyExtractor parameterExtractor) throws SpConfigurationException {
+  public static RuntimeResolvableTreeInputStaticProperty
+      resolveConfiguration(String internalName,
+                           StaticPropertyExtractor parameterExtractor)
+      throws SpConfigurationException {
 
     RuntimeResolvableTreeInputStaticProperty config = parameterExtractor
-      .getStaticPropertyByName(internalName, RuntimeResolvableTreeInputStaticProperty.class);
+        .getStaticPropertyByName(internalName, RuntimeResolvableTreeInputStaticProperty.class);
     // access mode and host/url have to be selected
     try {
       parameterExtractor.selectedAlternativeInternalId(OpcUaLabels.OPC_HOST_OR_URL.name());
@@ -181,7 +186,7 @@ public class OpcUaUtil {
     try {
       spOpcUaClient.connect();
       OpcUaNodeBrowser nodeBrowser =
-        new OpcUaNodeBrowser(spOpcUaClient.getClient(), spOpcUaClient.getSpOpcConfig());
+          new OpcUaNodeBrowser(spOpcUaClient.getClient(), spOpcUaClient.getSpOpcConfig());
       config.setNodes(nodeBrowser.buildNodeTreeFromOrigin());
 
       return config;
@@ -190,7 +195,9 @@ public class OpcUaUtil {
     } catch (ExecutionException | InterruptedException | URISyntaxException e) {
       throw new SpConfigurationException("Could not connect to the OPC UA server with the provided settings", e);
     } finally {
-      spOpcUaClient.disconnect();
+      if (spOpcUaClient.getClient() != null) {
+        spOpcUaClient.disconnect();
+      }
     }
   }
 
@@ -217,8 +224,8 @@ public class OpcUaUtil {
     for (OpcNode opcNode : opcNodes) {
       try {
         UInteger dataTypeId =
-          (UInteger) client.getAddressSpace().getVariableNode(opcNode.getNodeId()).getDataType()
-            .getIdentifier();
+            (UInteger) client.getAddressSpace().getVariableNode(opcNode.getNodeId()).getDataType()
+                .getIdentifier();
         OpcUaTypes.getType(dataTypeId);
         opcNode.setType(OpcUaTypes.getType(dataTypeId));
       } catch (UaException e) {

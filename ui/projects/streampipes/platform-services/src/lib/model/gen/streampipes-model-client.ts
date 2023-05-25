@@ -1,24 +1,25 @@
 /*
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements.  See the NOTICE file distributed with
- *   this work for additional information regarding copyright ownership.
- *   The ASF licenses this file to You under the Apache License, Version 2.0
- *   (the "License"); you may not use this file except in compliance with
- *   the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
-// Generated using typescript-generator version 2.27.744 on 2022-04-25 13:56:53.
+// Generated using typescript-generator version 2.27.744 on 2022-10-19 14:23:28.
 
 export class ExtensionsServiceEndpointItem {
     appId: string;
@@ -34,7 +35,10 @@ export class ExtensionsServiceEndpointItem {
     type: string;
     uri: string;
 
-    static fromData(data: ExtensionsServiceEndpointItem, target?: ExtensionsServiceEndpointItem): ExtensionsServiceEndpointItem {
+    static fromData(
+        data: ExtensionsServiceEndpointItem,
+        target?: ExtensionsServiceEndpointItem,
+    ): ExtensionsServiceEndpointItem {
         if (!data) {
             return data;
         }
@@ -50,7 +54,9 @@ export class ExtensionsServiceEndpointItem {
         instance.installed = data.installed;
         instance.editable = data.editable;
         instance.available = data.available;
-        instance.streams = __getCopyArrayFn(ExtensionsServiceEndpointItem.fromData)(data.streams);
+        instance.streams = __getCopyArrayFn(
+            ExtensionsServiceEndpointItem.fromData,
+        )(data.streams);
         return instance;
     }
 }
@@ -82,7 +88,10 @@ export class MatchingResultMessage {
     requirementSubject: string;
     title: string;
 
-    static fromData(data: MatchingResultMessage, target?: MatchingResultMessage): MatchingResultMessage {
+    static fromData(
+        data: MatchingResultMessage,
+        target?: MatchingResultMessage,
+    ): MatchingResultMessage {
         if (!data) {
             return data;
         }
@@ -117,7 +126,9 @@ export class Permission {
         instance.objectClassName = data.objectClassName;
         instance.publicElement = data.publicElement;
         instance.ownerSid = data.ownerSid;
-        instance.grantedAuthorities = __getCopyArrayFn(PermissionEntry.fromData)(data.grantedAuthorities);
+        instance.grantedAuthorities = __getCopyArrayFn(
+            PermissionEntry.fromData,
+        )(data.grantedAuthorities);
         return instance;
     }
 }
@@ -126,7 +137,10 @@ export class PermissionEntry {
     principalType: PrincipalType;
     sid: string;
 
-    static fromData(data: PermissionEntry, target?: PermissionEntry): PermissionEntry {
+    static fromData(
+        data: PermissionEntry,
+        target?: PermissionEntry,
+    ): PermissionEntry {
         if (!data) {
             return data;
         }
@@ -160,7 +174,9 @@ export class Principal {
         instance.accountLocked = data.accountLocked;
         instance.accountExpired = data.accountExpired;
         instance.username = data.username;
-        instance.objectPermissions = __getCopyArrayFn(__identity<string>())(data.objectPermissions);
+        instance.objectPermissions = __getCopyArrayFn(__identity<string>())(
+            data.objectPermissions,
+        );
         instance.roles = __getCopyArrayFn(__identity<Role>())(data.roles);
         instance.groups = __getCopyArrayFn(__identity<string>())(data.groups);
         instance.principalType = data.principalType;
@@ -174,7 +190,10 @@ export class RawUserApiToken {
     tokenId: string;
     tokenName: string;
 
-    static fromData(data: RawUserApiToken, target?: RawUserApiToken): RawUserApiToken {
+    static fromData(
+        data: RawUserApiToken,
+        target?: RawUserApiToken,
+    ): RawUserApiToken {
         if (!data) {
             return data;
         }
@@ -191,7 +210,10 @@ export class ServiceAccount extends Principal {
     clientSecret: string;
     secretEncrypted: boolean;
 
-    static fromData(data: ServiceAccount, target?: ServiceAccount): ServiceAccount {
+    static fromData(
+        data: ServiceAccount,
+        target?: ServiceAccount,
+    ): ServiceAccount {
         if (!data) {
             return data;
         }
@@ -221,10 +243,18 @@ export class UserAccount extends Principal {
         super.fromData(data, instance);
         instance.fullName = data.fullName;
         instance.password = data.password;
-        instance.preferredDataStreams = __getCopyArrayFn(__identity<string>())(data.preferredDataStreams);
-        instance.preferredDataProcessors = __getCopyArrayFn(__identity<string>())(data.preferredDataProcessors);
-        instance.preferredDataSinks = __getCopyArrayFn(__identity<string>())(data.preferredDataSinks);
-        instance.userApiTokens = __getCopyArrayFn(UserApiToken.fromData)(data.userApiTokens);
+        instance.preferredDataStreams = __getCopyArrayFn(__identity<string>())(
+            data.preferredDataStreams,
+        );
+        instance.preferredDataProcessors = __getCopyArrayFn(
+            __identity<string>(),
+        )(data.preferredDataProcessors);
+        instance.preferredDataSinks = __getCopyArrayFn(__identity<string>())(
+            data.preferredDataSinks,
+        );
+        instance.userApiTokens = __getCopyArrayFn(UserApiToken.fromData)(
+            data.userApiTokens,
+        );
         instance.hideTutorial = data.hideTutorial;
         instance.darkMode = data.darkMode;
         return instance;
@@ -246,11 +276,48 @@ export class UserApiToken {
     }
 }
 
-export type PrincipalType = "USER_ACCOUNT" | "SERVICE_ACCOUNT" | "GROUP";
+export type PrincipalType = 'USER_ACCOUNT' | 'SERVICE_ACCOUNT' | 'GROUP';
 
-export type Privilege = "PRIVILEGE_READ_PIPELINE" | "PRIVILEGE_WRITE_PIPELINE" | "PRIVILEGE_DELETE_PIPELINE" | "PRIVILEGE_READ_ADAPTER" | "PRIVILEGE_WRITE_ADAPTER" | "PRIVILEGE_DELETE_ADAPTER" | "PRIVILEGE_READ_PIPELINE_ELEMENT" | "PRIVILEGE_WRITE_PIPELINE_ELEMENT" | "PRIVILEGE_DELETE_PIPELINE_ELEMENT" | "PRIVILEGE_READ_DASHBOARD" | "PRIVILEGE_WRITE_DASHBOARD" | "PRIVILEGE_DELETE_DASHBOARD" | "PRIVILEGE_READ_DASHBOARD_WIDGET" | "PRIVILEGE_WRITE_DASHBOARD_WIDGET" | "PRIVILEGE_DELETE_DASHBOARD_WIDGET" | "PRIVILEGE_READ_DATA_EXPLORER_VIEW" | "PRIVILEGE_WRITE_DATA_EXPLORER_VIEW" | "PRIVILEGE_DELETE_DATA_EXPLORER_VIEW" | "PRIVILEGE_READ_DATA_EXPLORER_WIDGET" | "PRIVILEGE_WRITE_DATA_EXPLORER_WIDGET" | "PRIVILEGE_DELETE_DATA_EXPLORER_WIDGET" | "PRIVILEGE_READ_APPS" | "PRIVILEGE_WRITE_APPS" | "PRIVILEGE_READ_NOTIFICATIONS" | "PRIVILEGE_READ_FILES" | "PRIVILEGE_WRITE_FILES" | "PRIVILEGE_DELETE_FILES";
+export type Privilege =
+    | 'PRIVILEGE_READ_PIPELINE'
+    | 'PRIVILEGE_WRITE_PIPELINE'
+    | 'PRIVILEGE_DELETE_PIPELINE'
+    | 'PRIVILEGE_READ_ADAPTER'
+    | 'PRIVILEGE_WRITE_ADAPTER'
+    | 'PRIVILEGE_DELETE_ADAPTER'
+    | 'PRIVILEGE_READ_PIPELINE_ELEMENT'
+    | 'PRIVILEGE_WRITE_PIPELINE_ELEMENT'
+    | 'PRIVILEGE_DELETE_PIPELINE_ELEMENT'
+    | 'PRIVILEGE_READ_DASHBOARD'
+    | 'PRIVILEGE_WRITE_DASHBOARD'
+    | 'PRIVILEGE_DELETE_DASHBOARD'
+    | 'PRIVILEGE_READ_DASHBOARD_WIDGET'
+    | 'PRIVILEGE_WRITE_DASHBOARD_WIDGET'
+    | 'PRIVILEGE_DELETE_DASHBOARD_WIDGET'
+    | 'PRIVILEGE_READ_DATA_EXPLORER_VIEW'
+    | 'PRIVILEGE_WRITE_DATA_EXPLORER_VIEW'
+    | 'PRIVILEGE_DELETE_DATA_EXPLORER_VIEW'
+    | 'PRIVILEGE_READ_DATA_EXPLORER_WIDGET'
+    | 'PRIVILEGE_WRITE_DATA_EXPLORER_WIDGET'
+    | 'PRIVILEGE_DELETE_DATA_EXPLORER_WIDGET'
+    | 'PRIVILEGE_READ_APPS'
+    | 'PRIVILEGE_WRITE_APPS'
+    | 'PRIVILEGE_READ_NOTIFICATIONS'
+    | 'PRIVILEGE_READ_FILES'
+    | 'PRIVILEGE_WRITE_FILES'
+    | 'PRIVILEGE_DELETE_FILES';
 
-export type Role = "ROLE_ADMIN" | "ROLE_SERVICE_ADMIN" | "ROLE_PIPELINE_ADMIN" | "ROLE_DASHBOARD_ADMIN" | "ROLE_DATA_EXPLORER_ADMIN" | "ROLE_CONNECT_ADMIN" | "ROLE_DASHBOARD_USER" | "ROLE_DATA_EXPLORER_USER" | "ROLE_PIPELINE_USER" | "ROLE_APP_USER";
+export type Role =
+    | 'ROLE_ADMIN'
+    | 'ROLE_SERVICE_ADMIN'
+    | 'ROLE_PIPELINE_ADMIN'
+    | 'ROLE_DASHBOARD_ADMIN'
+    | 'ROLE_DATA_EXPLORER_ADMIN'
+    | 'ROLE_CONNECT_ADMIN'
+    | 'ROLE_DASHBOARD_USER'
+    | 'ROLE_DATA_EXPLORER_USER'
+    | 'ROLE_PIPELINE_USER'
+    | 'ROLE_APP_USER';
 
 function __getCopyArrayFn<T>(itemCopyFn: (item: T) => T): (array: T[]) => T[] {
     return (array: T[]) => __copyArray(array, itemCopyFn);
@@ -260,11 +327,16 @@ function __copyArray<T>(array: T[], itemCopyFn: (item: T) => T): T[] {
     return array && array.map(item => item && itemCopyFn(item));
 }
 
-function __getCopyObjectFn<T>(itemCopyFn: (item: T) => T): (object: { [index: string]: T }) => { [index: string]: T } {
+function __getCopyObjectFn<T>(
+    itemCopyFn: (item: T) => T,
+): (object: { [index: string]: T }) => { [index: string]: T } {
     return (object: { [index: string]: T }) => __copyObject(object, itemCopyFn);
 }
 
-function __copyObject<T>(object: { [index: string]: T }, itemCopyFn: (item: T) => T): { [index: string]: T } {
+function __copyObject<T>(
+    object: { [index: string]: T },
+    itemCopyFn: (item: T) => T,
+): { [index: string]: T } {
     if (!object) {
         return object;
     }

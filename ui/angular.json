@@ -7,6 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "prefix": "sp",
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
@@ -17,10 +18,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "allowedCommonJsDependencies": [
-              "lodash",
-              "codemirror"
-            ],
+            "allowedCommonJsDependencies": ["lodash", "codemirror"],
             "assets": [
               "src/assets",
               {
@@ -29,9 +27,7 @@
                 "output": "assets/img"
               }
             ],
-            "styles": [
-              "src/scss/main.scss"
-            ],
+            "styles": ["src/scss/main.scss"],
             "scripts": [
               "node_modules/plotly.js/dist/plotly.min.js",
               "node_modules/jquery/dist/jquery.min.js",
@@ -80,8 +76,7 @@
           "options": {
             "browserTarget": "app:build:development"
           },
-          "configurations": {
-          }
+          "configurations": {}
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -96,11 +91,14 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/assets"
-            ],
-            "scripts": [
-            ]
+            "assets": ["src/assets"],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
@@ -173,5 +171,13 @@
       }
     }
   },
-  "defaultProject": "app"
+  "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "cli": {
+    "schematicCollections": ["@angular-eslint/schematics"],
+    "analytics": false
+  }
 }

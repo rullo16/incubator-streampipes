@@ -21,7 +21,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class ElementIdGenerator {
 
-  private static final String prefix = "urn:streampipes.apache.org:spi:";
+  private static final String prefix = "sp:";
 
   public static String makeElementId(Object obj) {
     return makeElementId(obj.getClass());
@@ -29,13 +29,13 @@ public class ElementIdGenerator {
 
   public static String makeElementId(Class<?> clazz) {
     return makeFixedElementId(clazz)
-            + ":"
-            + RandomStringUtils.randomAlphabetic(6);
+        + ":"
+        + RandomStringUtils.randomAlphabetic(6);
   }
 
   public static String makeFixedElementId(Class<?> clazz) {
     return prefix
-            + clazz.getSimpleName().toLowerCase();
+        + clazz.getSimpleName().toLowerCase();
   }
 
   public static String makeElementIdFromAppId(String appId) {

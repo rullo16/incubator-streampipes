@@ -19,7 +19,7 @@
 package org.apache.streampipes.processors.transformation.jvm.processor.mapper;
 
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
-import org.apache.streampipes.container.api.ResolvesContainerProvidedOutputStrategy;
+import org.apache.streampipes.extensions.api.runtime.ResolvesContainerProvidedOutputStrategy;
 import org.apache.streampipes.model.graph.DataProcessorDescription;
 import org.apache.streampipes.model.graph.DataProcessorInvocation;
 import org.apache.streampipes.model.runtime.Event;
@@ -46,7 +46,8 @@ import org.apache.streampipes.wrapper.standalone.StreamPipesDataProcessor;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FieldMapperProcessor extends StreamPipesDataProcessor implements ResolvesContainerProvidedOutputStrategy<DataProcessorInvocation, ProcessingElementParameterExtractor> {
+public class FieldMapperProcessor extends StreamPipesDataProcessor
+    implements ResolvesContainerProvidedOutputStrategy<DataProcessorInvocation, ProcessingElementParameterExtractor> {
 
   private static final String REPLACE_PROPERTIES = "replaceProperties";
   private static final String FIELD_NAME = "fieldName";
@@ -57,16 +58,16 @@ public class FieldMapperProcessor extends StreamPipesDataProcessor implements Re
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("org.apache.streampipes.processors.transformation.jvm.field-mapper")
-      .withLocales(Locales.EN)
-      .withAssets(Assets.DOCUMENTATION, Assets.ICON)
-      .requiredStream(StreamRequirementsBuilder
-        .create()
-        .requiredPropertyWithNaryMapping(EpRequirements.anyProperty(), Labels.withId
-          (REPLACE_PROPERTIES), PropertyScope.NONE)
-        .build())
-      .requiredTextParameter(Labels.withId(FIELD_NAME))
-      .outputStrategy(OutputStrategies.customTransformation())
-      .build();
+        .withLocales(Locales.EN)
+        .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+        .requiredStream(StreamRequirementsBuilder
+            .create()
+            .requiredPropertyWithNaryMapping(EpRequirements.anyProperty(), Labels.withId
+                (REPLACE_PROPERTIES), PropertyScope.NONE)
+            .build())
+        .requiredTextParameter(Labels.withId(FIELD_NAME))
+        .outputStrategy(OutputStrategies.customTransformation())
+        .build();
   }
 
   @Override
@@ -92,8 +93,8 @@ public class FieldMapperProcessor extends StreamPipesDataProcessor implements Re
     }
 
     event.addField(newFieldName, HashAlgorithmType.MD5.hashAlgorithm().toHashValue(hashValue
-      .toString
-        ()));
+        .toString
+            ()));
     out.collect(event);
   }
 

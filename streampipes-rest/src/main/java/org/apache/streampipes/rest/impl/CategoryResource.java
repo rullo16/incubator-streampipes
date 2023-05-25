@@ -24,9 +24,17 @@ import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 import org.apache.streampipes.storage.management.StorageDispatcher;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,78 +42,78 @@ import java.util.Map;
 public class CategoryResource extends AbstractRestResource {
 
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @JacksonSerialized
-    public Response getAll() {
-        return ok(StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getCategoryStorageAPI()
-                .getAllCategories()
-        );
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response getAll() {
+    return ok(StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getCategoryStorageAPI()
+        .getAllCategories()
+    );
+  }
+
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response add(Category category) {
+    String categoryId = StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getCategoryStorageAPI()
+        .storeCategory(category);
+
+    return ok(StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getCategoryStorageAPI().getCategory(categoryId));
+  }
+
+  @GET
+  @Path("/{categoryId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response getCategory(@PathParam("categoryId") String categoryId) {
+    return ok(StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getCategoryStorageAPI()
+        .getCategory(categoryId));
+  }
+
+  @PUT
+  @Path("/{categoryId}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response update(@PathParam("categoryId") String categoryId, Category category) {
+    if (!categoryId.equals(category.getId())) {
+      String resString = "CategoryId not the same as in message body";
+      Map<String, Object> errorDetails = new HashMap<>();
+      errorDetails.put("message", resString);
+      return badRequest(errorDetails);
     }
+    StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getCategoryStorageAPI()
+        .updateCategory(category);
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @JacksonSerialized
-    public Response add(Category category) {
-        String categoryId = StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getCategoryStorageAPI()
-                .storeCategory(category);
+    return ok(StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getCategoryStorageAPI().getCategory(categoryId));
+  }
 
-        return ok(StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getCategoryStorageAPI().getCategory(categoryId));
-    }
-
-    @GET
-    @Path("/{categoryId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @JacksonSerialized
-    public Response getCategory(@PathParam("categoryId") String categoryId) {
-        return ok(StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getCategoryStorageAPI()
-                .getCategory(categoryId));
-    }
-
-    @PUT
-    @Path("/{categoryId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @JacksonSerialized
-    public Response update(@PathParam("categoryId") String categoryId, Category category) {
-        if (!categoryId.equals(category.getId())) {
-            String resString = "CategoryId not the same as in message body";
-            Map<String, Object> errorDetails = new HashMap<>();
-            errorDetails.put("message", resString);
-            return badRequest(errorDetails);
-        }
-        StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getCategoryStorageAPI()
-                .updateCategory(category);
-
-        return ok(StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getCategoryStorageAPI().getCategory(categoryId));
-    }
-
-    @DELETE
-    @Path("/{categoryId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @JacksonSerialized
-    public Response delete(@PathParam("categoryId") String key) {
-        StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getCategoryStorageAPI()
-                .deleteCategory(key);
-        StorageDispatcher.INSTANCE
-                .getNoSqlStore()
-                .getLabelStorageAPI()
-                .deleteAllForCategory(key);
-        return ok();
-    }
+  @DELETE
+  @Path("/{categoryId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @JacksonSerialized
+  public Response delete(@PathParam("categoryId") String key) {
+    StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getCategoryStorageAPI()
+        .deleteCategory(key);
+    StorageDispatcher.INSTANCE
+        .getNoSqlStore()
+        .getLabelStorageAPI()
+        .deleteAllForCategory(key);
+    return ok();
+  }
 }

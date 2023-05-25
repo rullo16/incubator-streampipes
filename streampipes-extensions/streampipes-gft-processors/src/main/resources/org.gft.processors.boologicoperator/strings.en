@@ -1,0 +1,17 @@
+org.gft.processors.boologicoperator.title= Logical Operator
+org.gft.processors.boologicoperator.description=Performs a logical boolean operation b/w selected fields
+
+operator-field.title=Boolean Operator
+operator-field.description=The boolean operation that needs to be performed
+
+first-property.title=First Property
+first-property.description=Property(operand) on which operation needs to be performed
+
+second-property.title=Second Property
+second-property.description=Property(operand) on which operation needs to be performed
+
+timestamp-first.title=First Timestamp
+timestamp-first.description= Time for the first property.
+
+timestamp-second.title=Second Timestamp
+timestamp-second.description= Time for the first property

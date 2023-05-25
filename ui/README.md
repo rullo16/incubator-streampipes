@@ -16,32 +16,22 @@
   ~
   -->
 
-<h1 align="center">
-  <br>
-   <img src="https://streampipes.apache.org/img/sp-logo-color.png" 
-   alt="StreamPipes Logo" title="StreamPipes Logo" width="50%"/>
-  <br>
-</h1>
-<h3 align="center">Self-Service Data Analytics for the (Industrial) IoT</h3>
-<h4 align="center">StreamPipes is a complete toolbox to easily analyze IoT (big) data streams without programming skills.</h4>
-<p align="center">  
-    <img src="https://streampipes.apache.org/img/streampipes-screenshot.png" alt="StreamPipes Pipeline Editor"/>
-</p>
+# Streampipes UI
 
-***
+## Development
 
-## About StreamPipes
+Please make sure you have a recent version of [node](https://nodejs.org/en/) and npm (bundled with node) installed.
 
-StreamPipes enables flexible modeling of stream processing pipelines by providing a graphical modeling editor on top of existing stream processing frameworks.
+To build the ui, perform the following steps:
 
-It leverages non-technical users to quickly define and execute processing pipelines based on an easily extensible 
-toolbox of data sources, data processors and data sinks. StreamPipes has an exchangeable runtime execution layer and executes pipelines using one of the provided wrappers, e.g., for Apache Flink or Apache Kafka Streams.
+```
+    npm install
+    npm run build
+```
 
-Pipeline elements in StreamPipes can be installed at runtime - the built-in SDK allows to easily implement new 
-pipeline elements according to your needs. Pipeline elements are standalone microservices that can run anywhere - centrally on your server, in a large-scale cluster or close at the edge.
+### Formatting and Linting
 
-Learn more about StreamPipes at [https://streampipes.apache.org](https://streampipes.apache.org)
+Running `npm install` will cause a pre-commit hook to be created.
+This hook ensures that if you want to commit changes to this repository, these changes are compliant with our [formatting](https://prettier.io/) and [linting](https://eslint.org/) rules.
 
-Read the full documentation at [https://streampipes.apache.org/docs](https://streampipes.apache.org/docs)
-
-For more information on StreamPipes, also visit the main project at [https://github.com/apache/incubator-streampipes](https://github.com/apache/incubator-streampipes)
+If you see errors there, you can try to run `npm run format:fix` and `npm run lint:fix` to fix these issues automatically. Otherwise you have to run `npm run format` and `npm run lint` to get additional information about the problems.

@@ -18,7 +18,8 @@
 package org.apache.streampipes.wrapper.context;
 
 import org.apache.streampipes.client.StreamPipesClient;
-import org.apache.streampipes.container.config.ConfigExtractor;
+import org.apache.streampipes.extensions.management.config.ConfigExtractor;
+import org.apache.streampipes.extensions.management.monitoring.SpMonitoringManager;
 import org.apache.streampipes.model.runtime.SchemaInfo;
 import org.apache.streampipes.model.runtime.SourceInfo;
 
@@ -26,7 +27,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class SpEventProcessorRuntimeContext extends SpRuntimeContext implements
-        EventProcessorRuntimeContext, Serializable {
+    EventProcessorRuntimeContext, Serializable {
 
   private SchemaInfo outputSchemaInfo;
   private SourceInfo outputSourceInfo;
@@ -37,8 +38,9 @@ public class SpEventProcessorRuntimeContext extends SpRuntimeContext implements
                                         SchemaInfo outputSchemaInfo,
                                         String correspondingUser,
                                         ConfigExtractor configExtractor,
-                                        StreamPipesClient streamPipesClient) {
-    super(inputSourceInfo, inputSchemaInfo, correspondingUser, configExtractor, streamPipesClient);
+                                        StreamPipesClient streamPipesClient,
+                                        SpMonitoringManager logManager) {
+    super(inputSourceInfo, inputSchemaInfo, correspondingUser, configExtractor, streamPipesClient, logManager);
     this.outputSchemaInfo = outputSchemaInfo;
     this.outputSourceInfo = outputSourceInfo;
   }

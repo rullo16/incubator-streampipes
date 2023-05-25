@@ -21,7 +21,7 @@
     <parent>
         <artifactId>streampipes-parent</artifactId>
         <groupId>org.apache.streampipes</groupId>
-        <version>0.70.0</version>
+        <version>0.91.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -31,18 +31,23 @@
         <!-- StreamPipes dependencies -->
         <dependency>
             <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-model</artifactId>
+            <version>0.91.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-serializers-json</artifactId>
-            <version>0.70.0</version>
+            <version>0.91.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-vocabulary</artifactId>
-            <version>0.70.0</version>
+            <version>0.91.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-service-discovery</artifactId>
-            <version>0.70.0</version>
+            <version>0.91.1-SNAPSHOT</version>
         </dependency>
 
         <!-- External dependencies -->
@@ -51,4 +56,13 @@
             <artifactId>jsr305</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

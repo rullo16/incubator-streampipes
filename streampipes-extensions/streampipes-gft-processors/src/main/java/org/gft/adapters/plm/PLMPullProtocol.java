@@ -1,17 +1,21 @@
 package org.gft.adapters.plm;
 
-import org.apache.streampipes.connect.SendToPipeline;
-import org.apache.streampipes.connect.adapter.model.generic.Protocol;
-import org.apache.streampipes.connect.api.IAdapterPipeline;
-import org.apache.streampipes.connect.api.IFormat;
-import org.apache.streampipes.connect.api.IParser;
-import org.apache.streampipes.connect.api.exception.ParseException;
+import org.apache.streampipes.extensions.api.connect.IAdapterPipeline;
+import org.apache.streampipes.extensions.api.connect.IFormat;
+import org.apache.streampipes.extensions.api.connect.IParser;
+import org.apache.streampipes.extensions.api.connect.exception.ParseException;
+import org.apache.streampipes.extensions.management.connect.SendToPipeline;
+import org.apache.streampipes.extensions.management.connect.adapter.model.generic.Protocol;
+import org.apache.streampipes.model.connect.grounding.ProtocolDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 
+// This is a Streampipes built in Class used to manage the waiting time between two consecutive poll
 public abstract class PLMPullProtocol extends Protocol {
 
     private ScheduledExecutorService scheduler;
@@ -73,6 +77,8 @@ public abstract class PLMPullProtocol extends Protocol {
     public void stop() {
         scheduler.shutdownNow();
     }
+
+    public abstract List<Map<String, Object>> getNElements(int n) throws ParseException;
 
     abstract InputStream getDataFromEndpoint() throws ParseException, java.text.ParseException;
 }

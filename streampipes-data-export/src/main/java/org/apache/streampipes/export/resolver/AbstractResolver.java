@@ -18,14 +18,17 @@
 
 package org.apache.streampipes.export.resolver;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.streampipes.commons.exceptions.ElementNotFoundException;
+import org.apache.streampipes.export.utils.EventGroundingProcessor;
 import org.apache.streampipes.export.utils.SerializationUtils;
 import org.apache.streampipes.model.assets.AssetLink;
 import org.apache.streampipes.model.export.ExportItem;
+import org.apache.streampipes.model.grounding.EventGrounding;
 import org.apache.streampipes.storage.api.INoSqlStorage;
 import org.apache.streampipes.storage.management.StorageDispatcher;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.lightcouch.DocumentConflictException;
 
 import java.util.Objects;
@@ -44,11 +47,11 @@ public abstract class AbstractResolver<T> {
 
   public Set<ExportItem> resolve(Set<AssetLink> assetLinks) {
     return assetLinks
-      .stream()
-      .map(link -> findDocument(link.getResourceId()))
-      .filter(this::existsDoc)
-      .map(this::convert)
-      .collect(Collectors.toSet());
+        .stream()
+        .map(link -> findDocument(link.getResourceId()))
+        .filter(this::existsDoc)
+        .map(this::convert)
+        .collect(Collectors.toSet());
   }
 
   protected boolean existsDoc(T doc) {
@@ -79,4 +82,9 @@ public abstract class AbstractResolver<T> {
   public abstract void writeDocument(String document) throws JsonProcessingException, DocumentConflictException;
 
   protected abstract T deserializeDocument(String document) throws JsonProcessingException;
+
+  protected void overrideProtocol(EventGrounding grounding) {
+    var newProtocol = new EventGroundingProcessor().applyOverride(grounding.getTransportProtocol());
+    grounding.setTransportProtocol(newProtocol);
+  }
 }

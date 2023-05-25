@@ -18,15 +18,17 @@
 
 package org.apache.streampipes.rest.impl;
 
-import com.google.gson.JsonObject;
+
 import org.apache.streampipes.config.backend.BackendConfig;
 import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import com.google.gson.JsonObject;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/v2/setup")
 public class Setup extends AbstractRestResource {

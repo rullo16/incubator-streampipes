@@ -21,14 +21,23 @@ import org.apache.streampipes.manager.file.FileManager;
 import org.apache.streampipes.model.file.FileMetadata;
 import org.apache.streampipes.rest.core.base.impl.AbstractAuthGuardedRestResource;
 import org.apache.streampipes.rest.security.AuthConstants;
+
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.io.InputStream;
 
 @Path("/v2/files")
@@ -41,7 +50,8 @@ public class PipelineElementFile extends AbstractAuthGuardedRestResource {
   public Response storeFile(@FormDataParam("file_upload") InputStream uploadedInputStream,
                             @FormDataParam("file_upload") FormDataContentDisposition fileDetail) {
     try {
-      FileMetadata metadata = FileManager.storeFile(getAuthenticatedUsername(), fileDetail.getFileName(), uploadedInputStream);
+      FileMetadata metadata =
+          FileManager.storeFile(getAuthenticatedUsername(), fileDetail.getFileName(), uploadedInputStream);
       return ok(metadata);
     } catch (Exception e) {
       return fail();

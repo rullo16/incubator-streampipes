@@ -1,0 +1,14 @@
+org.gft.processors.hoursmonitoring.title=Operating Time Monitoring
+org.gft.processors.hoursmonitoring.description=Measures how long a boolean measure does not change and cumulates it by calculating daily, weekly and monthly minutes/hours
+
+timestamp.title=Timestamp
+timestamp.description= Time of measurement.
+
+bool.title=Boolean Value Field
+bool.description=The boolean value (status of the operation) that is monitored
+
+true_false.title=Value to observe
+true_false.description=Define whether the time for true or false should be measured
+
+output-unit.title = Unit to display
+output-unit.description = Unit of the output measurements

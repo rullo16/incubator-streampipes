@@ -23,9 +23,15 @@ import org.apache.streampipes.model.preview.PipelinePreviewModel;
 import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/v2/pipeline-element-preview")
 public class PipelineElementPreview extends AbstractRestResource {

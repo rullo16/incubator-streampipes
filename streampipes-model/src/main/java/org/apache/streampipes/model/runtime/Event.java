@@ -17,6 +17,7 @@
  */
 package org.apache.streampipes.model.runtime;
 
+import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.model.constants.PropertySelectorConstants;
 import org.apache.streampipes.model.runtime.field.AbstractField;
 import org.apache.streampipes.model.runtime.field.PrimitiveField;
@@ -25,15 +26,16 @@ import org.apache.streampipes.model.schema.EventSchema;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Event {
 
+  private final Map<String, AbstractField> fieldMap;
   private SourceInfo sourceInfo;
   private SchemaInfo schemaInfo;
-  private Map<String, AbstractField> fieldMap;
 
   public Event(Map<String, AbstractField> fieldMap, SourceInfo
-          sourceInfo, SchemaInfo schemaInfo) {
+      sourceInfo, SchemaInfo schemaInfo) {
     this.fieldMap = fieldMap;
     this.sourceInfo = sourceInfo;
     this.schemaInfo = schemaInfo;
@@ -41,6 +43,11 @@ public class Event {
 
   public Event() {
     this.fieldMap = new HashMap<>();
+  }
+
+  public Event(SourceInfo sourceInfo) {
+    this();
+    this.sourceInfo = sourceInfo;
   }
 
   public Map<String, AbstractField> getFields() {
@@ -63,15 +70,19 @@ public class Event {
     return EventFactory.fromEvents(this, otherEvent, outputSchema);
   }
 
+  public Optional<AbstractField> getOptionalFieldByRuntimeName(String runtimeName) {
+    return fieldMap
+        .entrySet()
+        .stream()
+        .map(Map.Entry::getValue)
+        .filter(entry -> entry.getFieldNameIn().equals(runtimeName))
+        .findFirst();
+  }
+
   public AbstractField getFieldByRuntimeName(String runtimeName) {
     // TODO this currently only works for first-level properties
-    return fieldMap
-            .entrySet()
-            .stream()
-            .map(Map.Entry::getValue)
-            .filter(entry -> entry.getFieldNameIn().equals(runtimeName))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Field " + runtimeName + " not found"));
+    return getOptionalFieldByRuntimeName(runtimeName)
+        .orElseThrow(() -> new SpRuntimeException("Field " + runtimeName + " not found"));
   }
 
   public void removeFieldBySelector(String fieldSelector) {
@@ -83,7 +94,7 @@ public class Event {
   }
 
   private AbstractField getFieldBySelector(String fieldSelector, Map<String, AbstractField>
-          currentFieldMap) {
+      currentFieldMap) {
     if (currentFieldMap.containsKey(fieldSelector)) {
       return currentFieldMap.get(fieldSelector);
     } else {
@@ -92,9 +103,9 @@ public class Event {
   }
 
   private Map<String, AbstractField> getNestedItem(String fieldSelector, Map<String,
-          AbstractField> currentFieldMap) {
+      AbstractField> currentFieldMap) {
     String key = currentFieldMap.keySet().stream().filter(fieldSelector::startsWith)
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("Key not found"));
+        .findFirst().orElseThrow(() -> new IllegalArgumentException("Key not found"));
     return currentFieldMap.get(key).getAsComposite().getRawValue();
   }
 
@@ -103,20 +114,20 @@ public class Event {
       fieldMap.put(selector, field);
     } else {
       updateFieldMap(fieldMap.get(makeSelector(selector, 2))
-              .getAsComposite()
-              .getRawValue(), selector, 2, field);
+          .getAsComposite()
+          .getRawValue(), selector, 2, field);
     }
   }
 
   private void updateFieldMap(Map<String, AbstractField> currentFieldMap,
-                                                  String selector, Integer position,
-                                                  AbstractField field) {
+                              String selector, Integer position,
+                              AbstractField field) {
     if (currentFieldMap.containsKey(selector)) {
       currentFieldMap.put(selector, field);
     } else {
-        updateFieldMap(currentFieldMap.get(makeSelector(selector, position + 1))
-                .getAsComposite()
-                .getRawValue(), selector, 2, field);
+      updateFieldMap(currentFieldMap.get(makeSelector(selector, position + 1))
+          .getAsComposite()
+          .getRawValue(), selector, 2, field);
     }
   }
 
@@ -162,7 +173,7 @@ public class Event {
   }
 
   public void addField(String runtimeName, Integer value) {
-   addPrimitive(runtimeName, value);
+    addPrimitive(runtimeName, value);
   }
 
   public void addField(String runtimeName, Long value) {
@@ -170,9 +181,9 @@ public class Event {
   }
 
   public void addField(String runtimeName, Object value) {
-    if (AbstractField.class.isInstance(value)) {
-     ((AbstractField<?>) value).rename(runtimeName);
-     addField((AbstractField) value);
+    if (value instanceof AbstractField) {
+      ((AbstractField<?>) value).rename(runtimeName);
+      addField((AbstractField) value);
     } else {
       addPrimitive(runtimeName, value);
     }
@@ -199,15 +210,20 @@ public class Event {
   }
 
   public void addFieldAtPosition(String baseSelector, AbstractField field) {
-    getFieldBySelector(baseSelector).getAsComposite().addField
-            (makeSelector(baseSelector, field.getFieldNameIn()), field);
+    getFieldBySelector(baseSelector)
+        .getAsComposite()
+        .addField(
+            makeSelector(baseSelector, field.getFieldNameIn()
+            ),
+            field
+        );
   }
 
   private String makeKey(AbstractField field) {
     return sourceInfo != null && sourceInfo.getSelectorPrefix() != null ? sourceInfo
-            .getSelectorPrefix()
-            + PropertySelectorConstants.PROPERTY_DELIMITER
-            + field.getFieldNameIn() : field.getFieldNameIn();
+        .getSelectorPrefix()
+        + PropertySelectorConstants.PROPERTY_DELIMITER
+        + field.getFieldNameIn() : field.getFieldNameIn();
   }
 
   public Event getSubset(List<String> fieldSelectors) {

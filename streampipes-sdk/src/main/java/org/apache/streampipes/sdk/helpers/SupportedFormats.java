@@ -25,45 +25,50 @@ public class SupportedFormats {
 
   /**
    * Defines that a pipeline element (data processor or data sink) supports processing messaging arriving in JSON format
+   *
    * @return The resulting {@link org.apache.streampipes.model.grounding.TransportFormat}.
    */
   public static TransportFormat jsonFormat() {
-    return new TransportFormat(MessageFormat.Json);
+    return new TransportFormat(MessageFormat.JSON);
   }
 
   /**
    * Defines that a pipeline element (data processor or data sink) supports processing messaging arriving in Thrift
    * format
+   *
    * @return The resulting {@link org.apache.streampipes.model.grounding.TransportFormat}.
    */
   public static TransportFormat thriftFormat() {
-    return new TransportFormat(MessageFormat.Thrift);
+    return new TransportFormat(MessageFormat.THRIFT);
   }
 
   /**
    * Defines that a pipeline element (data processor or data sink) supports processing messaging
    * arriving in Cbor format
+   *
    * @return The resulting {@link org.apache.streampipes.model.grounding.TransportFormat}.
    */
   public static TransportFormat cborFormat() {
-    return new TransportFormat(MessageFormat.Cbor);
+    return new TransportFormat(MessageFormat.CBOR);
   }
 
   /**
    * Defines that a pipeline element (data processor or data sink) supports processing messaging
    * arriving in fast-serialization format
+   *
    * @return The resulting {@link org.apache.streampipes.model.grounding.TransportFormat}.
    */
   public static TransportFormat fstFormat() {
-    return new TransportFormat(MessageFormat.Fst);
+    return new TransportFormat(MessageFormat.FST);
   }
 
   /**
    * Defines that a pipeline element (data processor or data sink) supports processing messaging
    * arriving in smile format
+   *
    * @return The resulting {@link org.apache.streampipes.model.grounding.TransportFormat}.
    */
   public static TransportFormat smileFormat() {
-    return new TransportFormat(MessageFormat.Smile);
+    return new TransportFormat(MessageFormat.SMILE);
   }
 }

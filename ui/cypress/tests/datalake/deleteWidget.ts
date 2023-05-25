@@ -15,27 +15,24 @@
  * limitations under the License.
  *
  */
-import { DataLakeUtils } from '../../support/utils/DataLakeUtils';
+import { DataLakeUtils } from '../../support/utils/datalake/DataLakeUtils';
 
 describe('Test Table View in Data Explorer', () => {
-
     beforeEach('Setup Test', () => {
         cy.initStreamPipesTest();
         DataLakeUtils.loadDataIntoDataLake('datalake/sample.csv', false);
-        // cy.login();
     });
 
     it('Perform Test', () => {
-
         /**
          * Prepare tests
          */
         DataLakeUtils.addDataViewAndTableWidget('TestView', 'Persist');
 
-
         // Check that widget is visible
-        cy.dataCy('widget-datalake_configuration', {timeout: 10000})
-            .should('be.visible');
+        cy.dataCy('widget-datalake_configuration', { timeout: 10000 }).should(
+            'be.visible',
+        );
 
         // Activate edit mode
         DataLakeUtils.saveAndReEditWidget('TestView');
@@ -47,18 +44,23 @@ describe('Test Table View in Data Explorer', () => {
         DataLakeUtils.saveDataExplorerWidgetConfiguration();
 
         // Check that widget is gone
-        cy.dataCy('widget-datalake_configuration', {timeout: 10000})
-            .should('not.exist');
+        cy.dataCy('widget-datalake_configuration', { timeout: 10000 }).should(
+            'not.exist',
+        );
 
         // Delete Dashboard
-        DataLakeUtils.clickStartTab();
+        // DataLakeUtils.clickStartTab();
 
         // Check that dashboard is gone
 
-        cy.dataCy('delete-dashboard-TestView', {timeout: 10000}).should('have.length', 1);
-        cy.dataCy('delete-dashboard-TestView', {timeout: 10000})
-            .click();
-        cy.dataCy('delete-dashboard-TestView', {timeout: 10000}).should('have.length', 0);
+        cy.dataCy('delete-dashboard-TestView', { timeout: 10000 }).should(
+            'have.length',
+            1,
+        );
+        cy.dataCy('delete-dashboard-TestView', { timeout: 10000 }).click();
+        cy.dataCy('delete-dashboard-TestView', { timeout: 10000 }).should(
+            'have.length',
+            0,
+        );
     });
-
 });

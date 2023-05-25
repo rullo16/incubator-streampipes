@@ -1,0 +1,15 @@
+org.gft.processors.multifieldrename.title=Multi-Field Renamer
+org.gft.processors.multifieldrename.description=Replaces the runtime names of an event property with a custom defined name.
+
+first-convert-property.title=First Field
+first-convert-property.description=The first old field to rename
+
+second-convert-property.title=Second Field
+second-convert-property.description=The second  field to rename
+
+first-field-name.title=First New field
+first-field-name.description=The first new field name
+
+second-field-name.title=Second New Field
+second-field-name.description=The second new field name
+

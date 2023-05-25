@@ -22,13 +22,13 @@ import org.apache.streampipes.commons.exceptions.NoSuitableSepasAvailableExcepti
 import org.apache.streampipes.commons.exceptions.SepaParseException;
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.manager.endpoint.EndpointItemFetcher;
-import org.apache.streampipes.manager.execution.http.PipelineExecutor;
-import org.apache.streampipes.manager.execution.http.PipelineStorageService;
+import org.apache.streampipes.manager.execution.PipelineExecutor;
 import org.apache.streampipes.manager.matching.DataSetGroundingSelector;
 import org.apache.streampipes.manager.matching.PipelineVerificationHandlerV2;
 import org.apache.streampipes.manager.recommender.ElementRecommender;
 import org.apache.streampipes.manager.remote.ContainerProvidedOptionsHandler;
 import org.apache.streampipes.manager.runtime.PipelineElementRuntimeInfoFetcher;
+import org.apache.streampipes.manager.storage.PipelineStorageService;
 import org.apache.streampipes.manager.template.PipelineTemplateGenerator;
 import org.apache.streampipes.manager.template.PipelineTemplateInvocationGenerator;
 import org.apache.streampipes.manager.template.PipelineTemplateInvocationHandler;
@@ -61,7 +61,6 @@ import java.util.List;
 public class Operations {
 
   /**
-   *
    * @param pipeline the pipeline to validate
    * @return PipelineModificationMessage a message containing desired pipeline modifications
    */
@@ -84,7 +83,8 @@ public class Operations {
   }
 
   public static PipelineElementRecommendationMessage findRecommendedElements(Pipeline partialPipeline,
-                                                                             String baseRecId) throws NoSuitableSepasAvailableException {
+                                                                             String baseRecId)
+      throws NoSuitableSepasAvailableException {
     return new ElementRecommender(partialPipeline, baseRecId).findRecommendedElements();
   }
 
@@ -96,25 +96,14 @@ public class Operations {
     new PipelineStorageService(pipeline).updatePipeline();
   }
 
-  public static PipelineOperationStatus startPipeline(
-          Pipeline pipeline) {
-    return startPipeline(pipeline, true);
-  }
-
-  public static PipelineOperationStatus startPipeline(
-          Pipeline pipeline, boolean storeStatus) {
-    return new PipelineExecutor(pipeline, storeStatus, false).startPipeline();
-  }
-
-  public static PipelineOperationStatus stopPipeline(
-          Pipeline pipeline, boolean forceStop) {
-    return stopPipeline(pipeline, true, forceStop);
+  public static PipelineOperationStatus startPipeline(Pipeline pipeline) {
+    return new PipelineExecutor(pipeline, false).startPipeline();
   }
 
   public static List<PipelineOperationStatus> stopAllPipelines(boolean forceStop) {
     List<PipelineOperationStatus> status = new ArrayList<>();
     List<Pipeline> pipelines =
-            StorageDispatcher.INSTANCE.getNoSqlStore().getPipelineStorageAPI().getAllPipelines();
+        StorageDispatcher.INSTANCE.getNoSqlStore().getPipelineStorageAPI().getAllPipelines();
 
     pipelines.forEach(p -> {
       if (p.isRunning()) {
@@ -125,9 +114,8 @@ public class Operations {
   }
 
   public static PipelineOperationStatus stopPipeline(Pipeline pipeline,
-                                                     boolean storeStatus,
                                                      boolean forceStop) {
-    return new PipelineExecutor(pipeline, storeStatus, forceStop).stopPipeline();
+    return new PipelineExecutor(pipeline, forceStop).stopPipeline();
   }
 
   public static List<ExtensionsServiceEndpointItem> getEndpointUriContents(List<ExtensionsServiceEndpoint> endpoints) {
@@ -150,11 +138,15 @@ public class Operations {
     return new PipelineTemplateGenerator().getAllPipelineTemplates();
   }
 
-  public static PipelineOperationStatus handlePipelineTemplateInvocation(String userSid, PipelineTemplateInvocation pipelineTemplateInvocation) {
+  public static PipelineOperationStatus handlePipelineTemplateInvocation(
+      String userSid,
+      PipelineTemplateInvocation pipelineTemplateInvocation) {
     return new PipelineTemplateInvocationHandler(userSid, pipelineTemplateInvocation).handlePipelineInvocation();
   }
 
-  public static PipelineTemplateInvocation getPipelineInvocationTemplate(SpDataStream dataStream, PipelineTemplateDescription pipelineTemplateDescription) {
+  public static PipelineTemplateInvocation getPipelineInvocationTemplate(
+      SpDataStream dataStream,
+      PipelineTemplateDescription pipelineTemplateDescription) {
     return new PipelineTemplateInvocationGenerator(dataStream, pipelineTemplateDescription).generateInvocation();
   }
 }

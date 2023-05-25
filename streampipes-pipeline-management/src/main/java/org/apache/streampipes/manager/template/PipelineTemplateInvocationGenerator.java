@@ -32,14 +32,16 @@ public class PipelineTemplateInvocationGenerator {
   private SpDataStream spDataStream;
   private PipelineTemplateDescription pipelineTemplateDescription;
 
-  public PipelineTemplateInvocationGenerator(SpDataStream dataStream, PipelineTemplateDescription pipelineTemplateDescription) {
+  public PipelineTemplateInvocationGenerator(SpDataStream dataStream,
+                                             PipelineTemplateDescription pipelineTemplateDescription) {
     this.spDataStream = dataStream;
     this.pipelineTemplateDescription = pipelineTemplateDescription;
   }
 
   public PipelineTemplateInvocation generateInvocation() {
 
-    Pipeline pipeline = new PipelineGenerator(spDataStream.getElementId(), pipelineTemplateDescription, "test").makePipeline();
+    Pipeline pipeline =
+        new PipelineGenerator(spDataStream.getElementId(), pipelineTemplateDescription, "test").makePipeline();
 
     PipelineTemplateInvocation pipelineTemplateInvocation = new PipelineTemplateInvocation();
     pipelineTemplateInvocation.setStaticProperties(collectStaticProperties(pipeline));
@@ -53,11 +55,11 @@ public class PipelineTemplateInvocationGenerator {
     List<StaticProperty> staticProperties = new ArrayList<>();
 
     pipeline.getSepas().forEach(pe -> {
-      pe.getStaticProperties().forEach(sp -> sp.setInternalName(pe.getDOM() + sp.getInternalName()));
+      pe.getStaticProperties().forEach(sp -> sp.setInternalName(pe.getDom() + sp.getInternalName()));
       staticProperties.addAll(pe.getStaticProperties());
     });
     pipeline.getActions().forEach(pe -> {
-      pe.getStaticProperties().forEach(sp -> sp.setInternalName(pe.getDOM() + sp.getInternalName()));
+      pe.getStaticProperties().forEach(sp -> sp.setInternalName(pe.getDom() + sp.getInternalName()));
       staticProperties.addAll(pe.getStaticProperties());
     });
 
@@ -66,10 +68,10 @@ public class PipelineTemplateInvocationGenerator {
 
   private List<StaticProperty> filter(List<StaticProperty> staticProperties) {
     return staticProperties
-            .stream()
-            // TODO fix (predefined is always true
-            //.filter(sp -> !(sp instanceof MappingProperty))
-            .filter(sp -> !(sp.isPredefined()))
-            .collect(Collectors.toList());
+        .stream()
+        // TODO fix (predefined is always true
+        //.filter(sp -> !(sp instanceof MappingProperty))
+        .filter(sp -> !(sp.isPredefined()))
+        .collect(Collectors.toList());
   }
 }

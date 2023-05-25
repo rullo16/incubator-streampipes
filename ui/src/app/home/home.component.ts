@@ -22,24 +22,35 @@ import { HomeService } from './home.service';
 import { Router } from '@angular/router';
 import { AppConstants } from '../services/app.constants';
 import { SpBreadcrumbService } from '@streampipes/shared-ui';
+import { AuthService } from '../services/auth.service';
+import { UserRole } from '../_enums/user-role.enum';
 
 @Component({
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
+    styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-
     serviceLinks = [];
+    showStatus = false;
 
-    constructor(private homeService: HomeService,
-                private sanitizer: DomSanitizer,
-                private router: Router,
-                public appConstants: AppConstants,
-                private breadcrumbService: SpBreadcrumbService) {
+    constructor(
+        private homeService: HomeService,
+        private authService: AuthService,
+        private sanitizer: DomSanitizer,
+        private router: Router,
+        public appConstants: AppConstants,
+        private breadcrumbService: SpBreadcrumbService,
+    ) {
         this.serviceLinks = this.homeService.getFilteredServiceLinks();
     }
 
     ngOnInit() {
+        this.authService.user$.subscribe(userInfo => {
+            const isAdmin = userInfo.roles.indexOf(UserRole.ROLE_ADMIN) > -1;
+            this.showStatus =
+                isAdmin ||
+                userInfo.roles.indexOf(UserRole.ROLE_PIPELINE_ADMIN) > -1;
+        });
         this.breadcrumbService.updateBreadcrumb([]);
     }
 
@@ -54,5 +65,4 @@ export class HomeComponent implements OnInit {
             this.router.navigate([link.link.value]);
         }
     }
-
 }

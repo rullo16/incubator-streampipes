@@ -12,3 +12,9 @@ threshold.description = Threshold value to apply to interpolation
 
 interpolation_operation.title = Interpolation Operation
 interpolation_operation.description = Choose kind of interpolation to perform
+
+chosen_timestamp.title = ""
+chosen_timestamp.description = ""
+
+interpolation_value.title = ""
+interpolation_value.description =  ""

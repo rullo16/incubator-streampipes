@@ -18,22 +18,29 @@
 
 package org.apache.streampipes.manager.setup;
 
+import org.apache.streampipes.manager.setup.design.UserDesignDocument;
 import org.apache.streampipes.manager.setup.tasks.CreateAssetLinkTypeTask;
 import org.apache.streampipes.manager.setup.tasks.CreateDefaultAssetTask;
 import org.apache.streampipes.model.client.endpoint.ExtensionsServiceEndpoint;
 import org.apache.streampipes.storage.couchdb.impl.ExtensionsServiceEndpointStorageImpl;
 import org.apache.streampipes.storage.couchdb.utils.Utils;
+
 import org.lightcouch.DesignDocument;
 import org.lightcouch.DesignDocument.MapReduce;
 import org.lightcouch.Response;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.apache.streampipes.manager.setup.design.DesignDocumentUtils.prepareDocument;
 
 public class CouchDbInstallationStep extends InstallationStep {
 
   private static final String initRdfEndpointHost = "http://localhost:";
-  private static final String PREPARING_NOTIFICATIONS_TEXT = "Preparing database " +
-          "'notifications'...";
+  private static final String PREPARING_NOTIFICATIONS_TEXT = "Preparing database "
+      + "'notifications'...";
   private static final String PREPARING_USERS_TEXT = "Preparing database 'users'...";
   private static List<String> initRdfEndpointPorts = new ArrayList<>();
 
@@ -93,8 +100,8 @@ public class CouchDbInstallationStep extends InstallationStep {
   private void addRdfEndpoints() {
     ExtensionsServiceEndpointStorageImpl rdfEndpointStorage = new ExtensionsServiceEndpointStorageImpl();
     initRdfEndpointPorts
-            .forEach(p -> rdfEndpointStorage
-                    .addExtensionsServiceEndpoint(new ExtensionsServiceEndpoint(initRdfEndpointHost + p)));
+        .forEach(p -> rdfEndpointStorage
+            .addExtensionsServiceEndpoint(new ExtensionsServiceEndpoint(initRdfEndpointHost + p)));
 
     logSuccess("Discovering pipeline element endpoints...");
   }
@@ -106,30 +113,33 @@ public class CouchDbInstallationStep extends InstallationStep {
 
       Map<String, MapReduce> notificationTypeViews = new HashMap<>();
       MapReduce notificationTypeFunction = new MapReduce();
-      notificationTypeFunction.setMap("function (doc) { var vizName = doc.title.replace(/\\s/g, '-'); var indexName = doc.correspondingPipelineId + '-' + vizName; emit([indexName, doc.createdAtTimestamp], doc);}");
+      notificationTypeFunction.setMap(
+          "function (doc) { var vizName = doc.title.replace(/\\s/g, '-'); "
+              + "var indexName = doc.correspondingPipelineId + '-' + vizName; "
+              + "emit([indexName, doc.createdAtTimestamp], doc);}");
       notificationTypeViews.put("notificationtypes", notificationTypeFunction);
       userDocument.setViews(notificationTypeViews);
       Response resp = Utils.getCouchDbNotificationClient().design().synchronizeWithDb(userDocument);
 
       Map<String, MapReduce> notificationCountTypeViews = new HashMap<>();
       MapReduce countFunction = new MapReduce();
-      countFunction.setMap("function (doc) {\n" +
-              "  var user = doc.targetedAt; \n" +
-              "  if (!doc.read) {\n" +
-              "    emit(user, 1);\n" +
-              "  }\n" +
-              "}");
-      countFunction.setReduce("function (keys, values, rereduce) {\n" +
-              "  if (rereduce) {\n" +
-              "    return sum(values);\n" +
-              "  } else {\n" +
-              "    return values.length;\n" +
-              "  }\n" +
-              "}");
+      countFunction.setMap("function (doc) {\n"
+          + "  var user = doc.targetedAt; \n"
+          + "  if (!doc.read) {\n"
+          + "    emit(user, 1);\n"
+          + "  }\n"
+          + "}");
+      countFunction.setReduce("function (keys, values, rereduce) {\n"
+          + "  if (rereduce) {\n"
+          + "    return sum(values);\n"
+          + "  } else {\n"
+          + "    return values.length;\n"
+          + "  }\n"
+          + "}");
       notificationCountTypeViews.put("unread", countFunction);
       notificationCountDocument.setViews(notificationCountTypeViews);
       Response countResp =
-              Utils.getCouchDbNotificationClient().design().synchronizeWithDb(notificationCountDocument);
+          Utils.getCouchDbNotificationClient().design().synchronizeWithDb(notificationCountDocument);
 
       if (resp.getError() != null && countResp != null) {
         logFailure(PREPARING_NOTIFICATIONS_TEXT);
@@ -148,14 +158,14 @@ public class CouchDbInstallationStep extends InstallationStep {
     Map<String, MapReduce> pipelineViews = new HashMap<>();
 
     MapReduce adapterFunction = new MapReduce();
-    adapterFunction.setMap("function (doc) {\n" +
-            "  for(var i = 0; i < doc.streams.length; i++) {\n" +
-            "    var stream = doc.streams[i];\n" +
-            "    if (stream.correspondingAdapterId) {\n" +
-            "      emit(stream.correspondingAdapterId, doc._id);\n" +
-            "    }\n" +
-            "  }\n" +
-            "}");
+    adapterFunction.setMap("function (doc) {\n"
+        + "  for(var i = 0; i < doc.streams.length; i++) {\n"
+        + "    var stream = doc.streams[i];\n"
+        + "    if (stream.correspondingAdapterId) {\n"
+        + "      emit(stream.correspondingAdapterId, doc._id);\n"
+        + "    }\n"
+        + "  }\n"
+        + "}");
 
     adapterViews.put("used-adapters", adapterFunction);
     pipelineDocument.setViews(adapterViews);
@@ -163,9 +173,9 @@ public class CouchDbInstallationStep extends InstallationStep {
 
 
     MapReduce allPipelinesFunction = new MapReduce();
-    allPipelinesFunction.setMap("function (doc) {\n" +
-            "  emit(doc._id, doc);\n" +
-            "}");
+    allPipelinesFunction.setMap("function (doc) {\n"
+        + "  emit(doc._id, doc);\n"
+        + "}");
     pipelineViews.put("all", allPipelinesFunction);
     allPipelinesDocument.setViews(pipelineViews);
     Utils.getCouchDbPipelineClient().design().synchronizeWithDb(allPipelinesDocument);
@@ -173,48 +183,7 @@ public class CouchDbInstallationStep extends InstallationStep {
 
   private void addUserView() {
     try {
-      DesignDocument userDocument = prepareDocument("_design/users");
-      Map<String, MapReduce> views = new HashMap<>();
-
-      MapReduce passwordFunction = new MapReduce();
-      passwordFunction.setMap("function(doc) { if(doc.properties.username && doc.properties.principalType === 'USER_ACCOUNT' && doc.properties.password) { emit(doc.properties.username, doc.properties.password); } }");
-
-      MapReduce usernameFunction = new MapReduce();
-      usernameFunction.setMap("function(doc) { if(doc.properties.username) { emit(doc.properties.username, doc); } }");
-
-      MapReduce permissionFunction = new MapReduce();
-      permissionFunction.setMap("function(doc) { if(doc.$type === 'permission') { emit(doc._id, doc); } }");
-
-      MapReduce groupFunction = new MapReduce();
-      groupFunction.setMap("function(doc) { if(doc.$type === 'group') { emit(doc._id, doc); } }");
-
-      MapReduce tokenFunction = new MapReduce();
-      tokenFunction.setMap("function(doc) { if (doc.properties.userApiTokens) { doc.properties.userApiTokens.forEach(function(token) { emit(token.properties.hashedToken, doc.properties.email); });}}");
-
-      MapReduce userPermissionFunction = new MapReduce();
-      userPermissionFunction.setMap("function(doc) { if (doc.$type === 'permission') {emit(doc.ownerSid, doc); for(var i = 0; i < doc.grantedAuthorities.length; i++) {emit(doc.grantedAuthorities[i].sid,doc)}}}");
-
-      MapReduce objectPermissionFunction = new MapReduce();
-      objectPermissionFunction.setMap("function(doc) { if (doc.$type === 'permission') {emit(doc.objectInstanceId, doc);}}");
-
-      MapReduce userActivationFunction = new MapReduce();
-      userActivationFunction.setMap("function(doc) { if (doc.$type === 'user-activation') {emit(doc._id, doc);}}");
-
-      MapReduce passwordRecoveryFunction = new MapReduce();
-      passwordRecoveryFunction.setMap("function(doc) { if (doc.$type === 'password-recovery') {emit(doc._id, doc);}}");
-
-
-      views.put("password", passwordFunction);
-      views.put("username", usernameFunction);
-      views.put("groups", groupFunction);
-      views.put("permissions", permissionFunction);
-      views.put("token", tokenFunction);
-      views.put("userpermissions", userPermissionFunction);
-      views.put("objectpermissions", objectPermissionFunction);
-      views.put("user-activation", userActivationFunction);
-      views.put("password-recovery", passwordRecoveryFunction);
-
-      userDocument.setViews(views);
+      var userDocument = new UserDesignDocument().make();
       Response resp = Utils.getCouchDbUserClient().design().synchronizeWithDb(userDocument);
 
       if (resp.getError() != null) {
@@ -274,10 +243,5 @@ public class CouchDbInstallationStep extends InstallationStep {
     }
   }
 
-  private DesignDocument prepareDocument(String id) {
-    DesignDocument doc = new DesignDocument();
-    doc.setLanguage("javascript");
-    doc.setId(id);
-    return doc;
-  }
+
 }

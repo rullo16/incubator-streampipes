@@ -18,10 +18,17 @@
 
 package org.apache.streampipes.resource.management;
 
+import org.apache.streampipes.commons.environment.Environment;
+import org.apache.streampipes.commons.environment.Environments;
 import org.apache.streampipes.commons.exceptions.UserNotFoundException;
 import org.apache.streampipes.commons.exceptions.UsernameAlreadyTakenException;
 import org.apache.streampipes.mail.MailSender;
-import org.apache.streampipes.model.client.user.*;
+import org.apache.streampipes.model.client.user.PasswordRecoveryToken;
+import org.apache.streampipes.model.client.user.Principal;
+import org.apache.streampipes.model.client.user.RegistrationData;
+import org.apache.streampipes.model.client.user.Role;
+import org.apache.streampipes.model.client.user.UserAccount;
+import org.apache.streampipes.model.client.user.UserActivationToken;
 import org.apache.streampipes.model.util.ElementIdGenerator;
 import org.apache.streampipes.storage.api.IPasswordRecoveryTokenStorage;
 import org.apache.streampipes.storage.api.IUserActivationTokenStorage;
@@ -55,6 +62,13 @@ public class UserResourceManager extends AbstractResourceManager<IUserStorage> {
 
   public Principal getPrincipalById(String principalId) {
     return db.getUserById(principalId);
+  }
+
+  public Principal getServiceAdmin() {
+    var env = getEnvironment();
+    return db.getServiceAccount(
+        env.getInitialServiceUser().getValueOrDefault()
+    );
   }
 
   public boolean registerUser(RegistrationData data) throws UsernameAlreadyTakenException {
@@ -145,6 +159,10 @@ public class UserResourceManager extends AbstractResourceManager<IUserStorage> {
 
   private IUserActivationTokenStorage getUserActivationTokenStorage() {
     return StorageDispatcher.INSTANCE.getNoSqlStore().getUserActivationTokenStorage();
+  }
+
+  private Environment getEnvironment() {
+    return Environments.getEnvironment();
   }
 
 

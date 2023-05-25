@@ -22,7 +22,11 @@ import org.apache.streampipes.commons.exceptions.UserNotFoundException;
 import org.apache.streampipes.commons.exceptions.UsernameAlreadyTakenException;
 import org.apache.streampipes.config.backend.BackendConfig;
 import org.apache.streampipes.config.backend.model.GeneralConfig;
-import org.apache.streampipes.model.client.user.*;
+import org.apache.streampipes.model.client.user.JwtAuthenticationResponse;
+import org.apache.streampipes.model.client.user.LoginRequest;
+import org.apache.streampipes.model.client.user.Principal;
+import org.apache.streampipes.model.client.user.RegistrationData;
+import org.apache.streampipes.model.client.user.UserAccount;
 import org.apache.streampipes.model.message.ErrorMessage;
 import org.apache.streampipes.model.message.NotificationType;
 import org.apache.streampipes.model.message.Notifications;
@@ -31,15 +35,23 @@ import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 import org.apache.streampipes.user.management.jwt.JwtTokenProvider;
 import org.apache.streampipes.user.management.model.PrincipalUserDetails;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +68,8 @@ public class Authentication extends AbstractRestResource {
   @Path("/login")
   public Response doLogin(LoginRequest token) {
     try {
-      org.springframework.security.core.Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(token.getUsername(), token.getPassword()));
+      org.springframework.security.core.Authentication authentication = authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(token.getUsername(), token.getPassword()));
       SecurityContextHolder.getContext().setAuthentication(authentication);
       return processAuth(authentication);
     } catch (BadCredentialsException e) {

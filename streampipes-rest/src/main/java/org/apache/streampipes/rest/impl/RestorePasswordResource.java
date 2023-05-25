@@ -20,9 +20,15 @@ package org.apache.streampipes.rest.impl;
 import org.apache.streampipes.model.client.user.RegistrationData;
 import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 

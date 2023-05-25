@@ -22,9 +22,15 @@ import org.apache.streampipes.rest.core.base.impl.AbstractRestResource;
 import org.apache.streampipes.rest.shared.annotation.JacksonSerialized;
 import org.apache.streampipes.storage.api.IPipelineCanvasMetadataStorage;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/v2/pipeline-canvas-metadata")
 public class PipelineCanvasMetadataResource extends AbstractRestResource {
@@ -36,7 +42,7 @@ public class PipelineCanvasMetadataResource extends AbstractRestResource {
   public Response getPipelineCanvasMetadataForPipeline(@PathParam("pipelineId") String pipelineId) {
     try {
       return ok(getPipelineCanvasMetadataStorage()
-              .getPipelineCanvasMetadataForPipeline(pipelineId));
+          .getPipelineCanvasMetadataForPipeline(pipelineId));
     } catch (IllegalArgumentException e) {
       return badRequest();
     }
@@ -49,7 +55,7 @@ public class PipelineCanvasMetadataResource extends AbstractRestResource {
   public Response getPipelineCanvasMetadata(@PathParam("canvasId") String pipelineCanvasId) {
     try {
       return ok(getPipelineCanvasMetadataStorage()
-              .getElementById(pipelineCanvasId));
+          .getElementById(pipelineCanvasId));
     } catch (IllegalArgumentException e) {
       return badRequest();
     }
@@ -78,7 +84,8 @@ public class PipelineCanvasMetadataResource extends AbstractRestResource {
   @Path("/pipeline/{pipelineId}")
   @JacksonSerialized
   public Response deletePipelineCanvasMetadataForPipeline(@PathParam("pipelineId") String pipelineId) {
-    PipelineCanvasMetadata metadata = getPipelineCanvasMetadataStorage().getPipelineCanvasMetadataForPipeline(pipelineId);
+    PipelineCanvasMetadata metadata =
+        getPipelineCanvasMetadataStorage().getPipelineCanvasMetadataForPipeline(pipelineId);
     getPipelineCanvasMetadataStorage().deleteElement(metadata);
     return ok();
   }

@@ -20,9 +20,13 @@ package org.apache.streampipes.rest.impl;
 import org.apache.streampipes.manager.pipeline.PipelineCanvasMetadataCacheManager;
 import org.apache.streampipes.rest.core.base.impl.AbstractAuthGuardedRestResource;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/v2/pipeline-canvas-cache")
 public class PipelineCanvasMetadataCache extends AbstractAuthGuardedRestResource {
@@ -37,7 +41,7 @@ public class PipelineCanvasMetadataCache extends AbstractAuthGuardedRestResource
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getCachedCanvasMetadata() {
-      String result = PipelineCanvasMetadataCacheManager.getCachedCanvasMetadata(getAuthenticatedUsername());
+    String result = PipelineCanvasMetadataCacheManager.getCachedCanvasMetadata(getAuthenticatedUsername());
     if (result != null) {
       return ok(result);
     } else {

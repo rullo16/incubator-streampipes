@@ -16,28 +16,34 @@
  *
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { StreamPipesErrorMessage } from '@streampipes/platform-services';
 import { DialogRef } from '../../../dialog/base-dialog/dialog-ref';
 
 @Component({
-  selector: 'sp-exception-details-dialog',
-  templateUrl: './exception-details-dialog.component.html',
-  styleUrls: ['./exception-details-dialog.component.scss', '../../../../../../../../src/scss/sp/sp-dialog.scss']
+    selector: 'sp-exception-details-dialog',
+    templateUrl: './exception-details-dialog.component.html',
+    styleUrls: [
+        './exception-details-dialog.component.scss',
+        '../../../../../../../../src/scss/sp/sp-dialog.scss',
+    ],
 })
-export class SpExceptionDetailsDialogComponent {
+export class SpExceptionDetailsDialogComponent implements OnInit {
+    @Input()
+    message: StreamPipesErrorMessage;
 
-  @Input()
-  message: StreamPipesErrorMessage;
+    @Input()
+    title: string;
 
-  showDetails = false;
+    showDetails = false;
 
-  constructor(private dialogRef: DialogRef<SpExceptionDetailsDialogComponent>) {
+    constructor(
+        private dialogRef: DialogRef<SpExceptionDetailsDialogComponent>,
+    ) {}
 
-  }
+    close() {
+        this.dialogRef.close();
+    }
 
-  close() {
-    this.dialogRef.close();
-  }
-
+    ngOnInit(): void {}
 }

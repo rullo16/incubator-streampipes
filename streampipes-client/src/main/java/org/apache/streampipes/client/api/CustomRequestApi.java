@@ -20,6 +20,8 @@ package org.apache.streampipes.client.api;
 import org.apache.streampipes.client.model.StreamPipesClientConfig;
 import org.apache.streampipes.client.util.StreamPipesApiPath;
 
+import java.util.Map;
+
 public class CustomRequestApi extends AbstractClientApi {
 
   public CustomRequestApi(StreamPipesClientConfig clientConfig) {
@@ -28,6 +30,17 @@ public class CustomRequestApi extends AbstractClientApi {
 
   public <T> void sendPost(String apiPath, T payload) {
     post(StreamPipesApiPath.fromStreamPipesBasePath(apiPath), payload);
+  }
+
+  public <T> T sendGet(String apiPath, Class<T> responseClass) {
+    return getSingle(StreamPipesApiPath.fromStreamPipesBasePath(apiPath), responseClass);
+  }
+
+  public <T> T sendGet(String apiPath, Map<String, String> queryParameters, Class<T> responseClass) {
+    return getSingle(
+        StreamPipesApiPath.fromStreamPipesBasePath(apiPath)
+            .withQueryParameters(queryParameters),
+        responseClass);
   }
 
 }

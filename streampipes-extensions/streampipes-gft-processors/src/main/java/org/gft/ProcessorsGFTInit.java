@@ -18,23 +18,30 @@
 
 package org.gft;
 
-import org.apache.streampipes.container.extensions.ExtensionsModelSubmitter;
-import org.apache.streampipes.container.model.SpServiceDefinition;
-import org.apache.streampipes.container.model.SpServiceDefinitionBuilder;
 import org.apache.streampipes.dataformat.cbor.CborDataFormatFactory;
 import org.apache.streampipes.dataformat.fst.FstDataFormatFactory;
 import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
 import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinition;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinitionBuilder;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
-
+import org.apache.streampipes.service.extensions.ExtensionsModelSubmitter;
 import org.gft.adapters.backend.BackendHttpStreamProtocol;
 import org.gft.adapters.plm.PLMHttpStreamProtocol;
-import org.gft.processors.interpolation.InterpolationDataProcessor;
+import org.gft.processors.alerttrigger.AlertTriggerProcessor;
+import org.gft.processors.boologicoperator.BoolOperatorProcessor;
+import org.gft.processors.fieldselector.FieldSelector;
+import org.gft.processors.hoursmonitoring.HoursMonitoringProcessor;
+import org.gft.processors.interpolation.DataInterpolationProcessor;
 import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
+import org.gft.processors.multifieldrename.MultiFieldRename;
 import org.gft.processors.powertracking.PowerTrackingProcessor;
 import org.gft.processors.powertrackingdwm.PowerTrackingDWM;
+import org.gft.processors.productiontracking.ProductionTracking;
+import org.gft.processors.settostream.SetToStream;
+import org.gft.processors.signalmonitoring.SignalMonitoringProcessor;
 import org.gft.processors.trendfiltered.TrendFilteredController;
 import org.gft.processors.waterflowtrackingdwm.WaterFlowTrackingDWM;
 import org.gft.processors.watertrackinghourly.WaterTrackingHourly;
@@ -50,14 +57,9 @@ public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
     return SpServiceDefinitionBuilder.create("org.gft",
                     "GFT Processors",
                     "", 8090)
-            .registerPipelineElements(
-                    new InterpolationDataProcessor(),
-                    new TrendFilteredController(),
-                    new LoessInterpolationDataProcessor(),
-                    new PowerTrackingProcessor(),
-                    new PowerTrackingDWM())
-            .registerPipelineElement(new WaterTrackingHourly())
-            .registerPipelineElement(new WaterFlowTrackingDWM())
+            .registerPipelineElements(new AlertTriggerProcessor(), new BoolOperatorProcessor(), new FieldSelector(), new HoursMonitoringProcessor(), new DataInterpolationProcessor(), new LoessInterpolationDataProcessor(),
+                    new DataInterpolationProcessor(), new MultiFieldRename(), new PowerTrackingProcessor(), new PowerTrackingDWM(), new ProductionTracking(), new SetToStream(),
+                    new SignalMonitoringProcessor(), new TrendFilteredController(), new WaterTrackingHourly(), new WaterFlowTrackingDWM())
             .registerAdapter(new BackendHttpStreamProtocol())
             .registerAdapter(new PLMHttpStreamProtocol())
             .registerMessagingFormats(

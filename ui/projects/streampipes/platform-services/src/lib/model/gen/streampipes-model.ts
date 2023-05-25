@@ -1,216 +1,172 @@
 /*
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements.  See the NOTICE file distributed with
- *   this work for additional information regarding copyright ownership.
- *   The ASF licenses this file to You under the Apache License, Version 2.0
- *   (the "License"); you may not use this file except in compliance with
- *   the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-
 
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
-// Generated using typescript-generator version 2.27.744 on 2022-08-23 09:28:28.
+// Generated using typescript-generator version 3.1.1185 on 2023-01-08 16:02:05.
 
-export class AbstractStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.base.AbstractStreamPipesEntity" | "org.apache.streampipes.model.base.NamedStreamPipesEntity" | "org.apache.streampipes.model.connect.adapter.AdapterDescription" | "org.apache.streampipes.model.connect.adapter.AdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.AdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription" | "org.apache.streampipes.model.connect.grounding.ProtocolDescription" | "org.apache.streampipes.model.graph.DataSourceDescription" | "org.apache.streampipes.model.template.PipelineTemplateDescription" | "org.apache.streampipes.model.connect.grounding.FormatDescription" | "org.apache.streampipes.model.SpDataStream" | "org.apache.streampipes.model.SpDataSet" | "org.apache.streampipes.model.base.InvocableStreamPipesEntity" | "org.apache.streampipes.model.graph.DataProcessorInvocation" | "org.apache.streampipes.model.graph.DataSinkInvocation" | "org.apache.streampipes.model.base.UnnamedStreamPipesEntity" | "org.apache.streampipes.model.connect.guess.GuessSchema" | "org.apache.streampipes.model.connect.rules.TransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.ValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription" | "org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.StreamTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.SchemaTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription" | "org.apache.streampipes.model.dashboard.DashboardWidgetSettings" | "org.apache.streampipes.model.datalake.DataLakeMeasure" | "org.apache.streampipes.model.runtime.RuntimeOptionsRequest" | "org.apache.streampipes.model.runtime.RuntimeOptionsResponse" | "org.apache.streampipes.model.staticproperty.StaticProperty" | "org.apache.streampipes.model.staticproperty.CodeInputStaticProperty" | "org.apache.streampipes.model.staticproperty.CollectionStaticProperty" | "org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty" | "org.apache.streampipes.model.staticproperty.DomainStaticProperty" | "org.apache.streampipes.model.staticproperty.FileStaticProperty" | "org.apache.streampipes.model.staticproperty.FreeTextStaticProperty" | "org.apache.streampipes.model.staticproperty.MatchingStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty" | "org.apache.streampipes.model.staticproperty.SecretStaticProperty" | "org.apache.streampipes.model.staticproperty.StaticPropertyAlternative" | "org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives" | "org.apache.streampipes.model.staticproperty.StaticPropertyGroup" | "org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty" | "org.apache.streampipes.model.staticproperty.SelectionStaticProperty" | "org.apache.streampipes.model.staticproperty.AnyStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty" | "org.apache.streampipes.model.staticproperty.OneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.MappingProperty" | "org.apache.streampipes.model.staticproperty.MappingPropertyUnary" | "org.apache.streampipes.model.staticproperty.MappingPropertyNary" | "org.apache.streampipes.model.template.PipelineTemplateInvocation" | "org.apache.streampipes.model.ApplicationLink" | "org.apache.streampipes.model.grounding.EventGrounding" | "org.apache.streampipes.model.schema.EventSchema" | "org.apache.streampipes.model.template.BoundPipelineElement" | "org.apache.streampipes.model.grounding.TransportProtocol" | "org.apache.streampipes.model.grounding.JmsTransportProtocol" | "org.apache.streampipes.model.grounding.KafkaTransportProtocol" | "org.apache.streampipes.model.grounding.MqttTransportProtocol" | "org.apache.streampipes.model.grounding.TransportFormat" | "org.apache.streampipes.model.quality.EventStreamQualityRequirement" | "org.apache.streampipes.model.quality.MeasurementCapability" | "org.apache.streampipes.model.quality.MeasurementObject" | "org.apache.streampipes.model.schema.EventProperty" | "org.apache.streampipes.model.schema.EventPropertyList" | "org.apache.streampipes.model.schema.EventPropertyNested" | "org.apache.streampipes.model.schema.EventPropertyPrimitive" | "org.apache.streampipes.model.output.OutputStrategy" | "org.apache.streampipes.model.output.AppendOutputStrategy" | "org.apache.streampipes.model.output.CustomOutputStrategy" | "org.apache.streampipes.model.output.CustomTransformOutputStrategy" | "org.apache.streampipes.model.output.FixedOutputStrategy" | "org.apache.streampipes.model.output.KeepOutputStrategy" | "org.apache.streampipes.model.output.ListOutputStrategy" | "org.apache.streampipes.model.output.TransformOutputStrategy" | "org.apache.streampipes.model.output.UserDefinedOutputStrategy" | "org.apache.streampipes.model.monitoring.ElementStatusInfoSettings" | "org.apache.streampipes.model.staticproperty.Option" | "org.apache.streampipes.model.staticproperty.SupportedProperty" | "org.apache.streampipes.model.staticproperty.PropertyValueSpecification" | "org.apache.streampipes.model.grounding.TopicDefinition" | "org.apache.streampipes.model.grounding.SimpleTopicDefinition" | "org.apache.streampipes.model.grounding.WildcardTopicDefinition" | "org.apache.streampipes.model.quality.MeasurementProperty" | "org.apache.streampipes.model.quality.EventStreamQualityDefinition" | "org.apache.streampipes.model.quality.Frequency" | "org.apache.streampipes.model.quality.Latency" | "org.apache.streampipes.model.quality.EventPropertyQualityDefinition" | "org.apache.streampipes.model.quality.Accuracy" | "org.apache.streampipes.model.quality.MeasurementRange" | "org.apache.streampipes.model.quality.Precision" | "org.apache.streampipes.model.quality.Resolution" | "org.apache.streampipes.model.quality.EventPropertyQualityRequirement" | "org.apache.streampipes.model.output.PropertyRenameRule" | "org.apache.streampipes.model.schema.ValueSpecification" | "org.apache.streampipes.model.schema.QuantitativeValue" | "org.apache.streampipes.model.schema.Enumeration" | "org.apache.streampipes.model.output.TransformOperation" | "org.apache.streampipes.model.grounding.WildcardTopicMapping";
-    elementId: string;
+export class NamedStreamPipesEntity {
+    '@class':
+        | 'org.apache.streampipes.model.connect.adapter.AdapterDescription'
+        | 'org.apache.streampipes.model.connect.adapter.AdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.AdapterStreamDescription'
+        | 'org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription'
+        | 'org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription'
+        | 'org.apache.streampipes.model.connect.grounding.ProtocolDescription'
+        | 'org.apache.streampipes.model.template.PipelineTemplateDescription'
+        | 'org.apache.streampipes.model.SpDataStream'
+        | 'org.apache.streampipes.model.SpDataSet'
+        | 'org.apache.streampipes.model.connect.grounding.FormatDescription'
+        | 'org.apache.streampipes.model.base.InvocableStreamPipesEntity'
+        | 'org.apache.streampipes.model.graph.DataProcessorInvocation'
+        | 'org.apache.streampipes.model.graph.DataSinkInvocation';
+    '_rev': string;
+    'appId': string;
+    'connectedTo': string[];
+    'description': string;
+    'dom': string;
+    'elementId': string;
+    'iconUrl': string;
+    'includedAssets': string[];
+    'includedLocales': string[];
+    'includesAssets': boolean;
+    'includesLocales': boolean;
+    'internallyManaged': boolean;
+    'name': string;
+    /**
+     * @deprecated
+     */
+    'uri': string;
 
-    static fromData(data: AbstractStreamPipesEntity, target?: AbstractStreamPipesEntity): AbstractStreamPipesEntity {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new AbstractStreamPipesEntity();
-        instance["@class"] = data["@class"];
-        instance.elementId = data.elementId;
-        return instance;
-    }
-}
-
-export class UnnamedStreamPipesEntity extends AbstractStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.base.UnnamedStreamPipesEntity" | "org.apache.streampipes.model.connect.guess.GuessSchema" | "org.apache.streampipes.model.connect.rules.TransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.ValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription" | "org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.StreamTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.SchemaTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription" | "org.apache.streampipes.model.dashboard.DashboardWidgetSettings" | "org.apache.streampipes.model.datalake.DataLakeMeasure" | "org.apache.streampipes.model.runtime.RuntimeOptionsRequest" | "org.apache.streampipes.model.runtime.RuntimeOptionsResponse" | "org.apache.streampipes.model.staticproperty.StaticProperty" | "org.apache.streampipes.model.staticproperty.CodeInputStaticProperty" | "org.apache.streampipes.model.staticproperty.CollectionStaticProperty" | "org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty" | "org.apache.streampipes.model.staticproperty.DomainStaticProperty" | "org.apache.streampipes.model.staticproperty.FileStaticProperty" | "org.apache.streampipes.model.staticproperty.FreeTextStaticProperty" | "org.apache.streampipes.model.staticproperty.MatchingStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty" | "org.apache.streampipes.model.staticproperty.SecretStaticProperty" | "org.apache.streampipes.model.staticproperty.StaticPropertyAlternative" | "org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives" | "org.apache.streampipes.model.staticproperty.StaticPropertyGroup" | "org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty" | "org.apache.streampipes.model.staticproperty.SelectionStaticProperty" | "org.apache.streampipes.model.staticproperty.AnyStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty" | "org.apache.streampipes.model.staticproperty.OneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.MappingProperty" | "org.apache.streampipes.model.staticproperty.MappingPropertyUnary" | "org.apache.streampipes.model.staticproperty.MappingPropertyNary" | "org.apache.streampipes.model.template.PipelineTemplateInvocation" | "org.apache.streampipes.model.ApplicationLink" | "org.apache.streampipes.model.grounding.EventGrounding" | "org.apache.streampipes.model.schema.EventSchema" | "org.apache.streampipes.model.template.BoundPipelineElement" | "org.apache.streampipes.model.grounding.TransportProtocol" | "org.apache.streampipes.model.grounding.JmsTransportProtocol" | "org.apache.streampipes.model.grounding.KafkaTransportProtocol" | "org.apache.streampipes.model.grounding.MqttTransportProtocol" | "org.apache.streampipes.model.grounding.TransportFormat" | "org.apache.streampipes.model.quality.EventStreamQualityRequirement" | "org.apache.streampipes.model.quality.MeasurementCapability" | "org.apache.streampipes.model.quality.MeasurementObject" | "org.apache.streampipes.model.schema.EventProperty" | "org.apache.streampipes.model.schema.EventPropertyList" | "org.apache.streampipes.model.schema.EventPropertyNested" | "org.apache.streampipes.model.schema.EventPropertyPrimitive" | "org.apache.streampipes.model.output.OutputStrategy" | "org.apache.streampipes.model.output.AppendOutputStrategy" | "org.apache.streampipes.model.output.CustomOutputStrategy" | "org.apache.streampipes.model.output.CustomTransformOutputStrategy" | "org.apache.streampipes.model.output.FixedOutputStrategy" | "org.apache.streampipes.model.output.KeepOutputStrategy" | "org.apache.streampipes.model.output.ListOutputStrategy" | "org.apache.streampipes.model.output.TransformOutputStrategy" | "org.apache.streampipes.model.output.UserDefinedOutputStrategy" | "org.apache.streampipes.model.monitoring.ElementStatusInfoSettings" | "org.apache.streampipes.model.staticproperty.Option" | "org.apache.streampipes.model.staticproperty.SupportedProperty" | "org.apache.streampipes.model.staticproperty.PropertyValueSpecification" | "org.apache.streampipes.model.grounding.TopicDefinition" | "org.apache.streampipes.model.grounding.SimpleTopicDefinition" | "org.apache.streampipes.model.grounding.WildcardTopicDefinition" | "org.apache.streampipes.model.quality.MeasurementProperty" | "org.apache.streampipes.model.quality.EventStreamQualityDefinition" | "org.apache.streampipes.model.quality.Frequency" | "org.apache.streampipes.model.quality.Latency" | "org.apache.streampipes.model.quality.EventPropertyQualityDefinition" | "org.apache.streampipes.model.quality.Accuracy" | "org.apache.streampipes.model.quality.MeasurementRange" | "org.apache.streampipes.model.quality.Precision" | "org.apache.streampipes.model.quality.Resolution" | "org.apache.streampipes.model.quality.EventPropertyQualityRequirement" | "org.apache.streampipes.model.output.PropertyRenameRule" | "org.apache.streampipes.model.schema.ValueSpecification" | "org.apache.streampipes.model.schema.QuantitativeValue" | "org.apache.streampipes.model.schema.Enumeration" | "org.apache.streampipes.model.output.TransformOperation" | "org.apache.streampipes.model.grounding.WildcardTopicMapping";
-
-    static fromData(data: UnnamedStreamPipesEntity, target?: UnnamedStreamPipesEntity): UnnamedStreamPipesEntity {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new UnnamedStreamPipesEntity();
-        super.fromData(data, instance);
-        return instance;
-    }
-}
-
-export class MeasurementProperty extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.quality.MeasurementProperty" | "org.apache.streampipes.model.quality.EventStreamQualityDefinition" | "org.apache.streampipes.model.quality.Frequency" | "org.apache.streampipes.model.quality.Latency" | "org.apache.streampipes.model.quality.EventPropertyQualityDefinition" | "org.apache.streampipes.model.quality.Accuracy" | "org.apache.streampipes.model.quality.MeasurementRange" | "org.apache.streampipes.model.quality.Precision" | "org.apache.streampipes.model.quality.Resolution";
-
-    static fromData(data: MeasurementProperty, target?: MeasurementProperty): MeasurementProperty {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new MeasurementProperty();
-        super.fromData(data, instance);
-        return instance;
-    }
-
-    static fromDataUnion(data: MeasurementPropertyUnion): MeasurementPropertyUnion {
-        if (!data) {
-            return data;
-        }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.quality.EventPropertyQualityDefinition":
-                return EventPropertyQualityDefinition.fromData(data);
-            case "org.apache.streampipes.model.quality.EventStreamQualityDefinition":
-                return EventStreamQualityDefinition.fromData(data);
-        }
-    }
-}
-
-export class EventPropertyQualityDefinition extends MeasurementProperty {
-    "@class": "org.apache.streampipes.model.quality.EventPropertyQualityDefinition" | "org.apache.streampipes.model.quality.Accuracy" | "org.apache.streampipes.model.quality.MeasurementRange" | "org.apache.streampipes.model.quality.Precision" | "org.apache.streampipes.model.quality.Resolution";
-
-    static fromData(data: EventPropertyQualityDefinition, target?: EventPropertyQualityDefinition): EventPropertyQualityDefinition {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new EventPropertyQualityDefinition();
-        super.fromData(data, instance);
-        return instance;
-    }
-
-    static fromDataUnion(data: EventPropertyQualityDefinitionUnion): EventPropertyQualityDefinitionUnion {
-        if (!data) {
-            return data;
-        }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.quality.Accuracy":
-                return Accuracy.fromData(data);
-            case "org.apache.streampipes.model.quality.MeasurementRange":
-                return MeasurementRange.fromData(data);
-            case "org.apache.streampipes.model.quality.Precision":
-                return Precision.fromData(data);
-            case "org.apache.streampipes.model.quality.Resolution":
-                return Resolution.fromData(data);
-        }
-    }
-}
-
-export class Accuracy extends EventPropertyQualityDefinition {
-    "@class": "org.apache.streampipes.model.quality.Accuracy";
-    quantityValue: number;
-
-    static fromData(data: Accuracy, target?: Accuracy): Accuracy {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new Accuracy();
-        super.fromData(data, instance);
-        instance.quantityValue = data.quantityValue;
-        return instance;
-    }
-}
-
-export class NamedStreamPipesEntity extends AbstractStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.base.NamedStreamPipesEntity" | "org.apache.streampipes.model.connect.adapter.AdapterDescription" | "org.apache.streampipes.model.connect.adapter.AdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.AdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription" | "org.apache.streampipes.model.connect.grounding.ProtocolDescription" | "org.apache.streampipes.model.graph.DataSourceDescription" | "org.apache.streampipes.model.template.PipelineTemplateDescription" | "org.apache.streampipes.model.connect.grounding.FormatDescription" | "org.apache.streampipes.model.SpDataStream" | "org.apache.streampipes.model.SpDataSet" | "org.apache.streampipes.model.base.InvocableStreamPipesEntity" | "org.apache.streampipes.model.graph.DataProcessorInvocation" | "org.apache.streampipes.model.graph.DataSinkInvocation";
-    _rev: string;
-    appId: string;
-    applicationLinks: ApplicationLink[];
-    connectedTo: string[];
-    description: string;
-    dom: string;
-    iconUrl: string;
-    includedAssets: string[];
-    includedLocales: string[];
-    includesAssets: boolean;
-    includesLocales: boolean;
-    internallyManaged: boolean;
-    name: string;
-    uri: string;
-
-    static fromData(data: NamedStreamPipesEntity, target?: NamedStreamPipesEntity): NamedStreamPipesEntity {
+    static 'fromData'(
+        data: NamedStreamPipesEntity,
+        target?: NamedStreamPipesEntity,
+    ): NamedStreamPipesEntity {
         if (!data) {
             return data;
         }
         const instance = target || new NamedStreamPipesEntity();
-        super.fromData(data, instance);
-        instance.name = data.name;
-        instance.description = data.description;
-        instance.iconUrl = data.iconUrl;
+        instance['@class'] = data['@class'];
+        instance._rev = data._rev;
         instance.appId = data.appId;
+        instance.connectedTo = __getCopyArrayFn(__identity<string>())(
+            data.connectedTo,
+        );
+        instance.description = data.description;
+        instance.dom = data.dom;
+        instance.elementId = data.elementId;
+        instance.iconUrl = data.iconUrl;
+        instance.includedAssets = __getCopyArrayFn(__identity<string>())(
+            data.includedAssets,
+        );
+        instance.includedLocales = __getCopyArrayFn(__identity<string>())(
+            data.includedLocales,
+        );
         instance.includesAssets = data.includesAssets;
         instance.includesLocales = data.includesLocales;
-        instance.includedAssets = __getCopyArrayFn(__identity<string>())(data.includedAssets);
-        instance.includedLocales = __getCopyArrayFn(__identity<string>())(data.includedLocales);
-        instance.applicationLinks = __getCopyArrayFn(ApplicationLink.fromData)(data.applicationLinks);
         instance.internallyManaged = data.internallyManaged;
-        instance.connectedTo = __getCopyArrayFn(__identity<string>())(data.connectedTo);
+        instance.name = data.name;
         instance.uri = data.uri;
-        instance.dom = data.dom;
-        instance._rev = data._rev;
         return instance;
     }
 }
 
 export class AdapterDescription extends NamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.connect.adapter.AdapterDescription" | "org.apache.streampipes.model.connect.adapter.AdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.AdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription";
-    adapterType: string;
-    category: string[];
-    config: StaticPropertyUnion[];
-    correspondingDataStreamElementId: string;
-    correspondingServiceGroup: string;
-    createdAt: number;
-    eventGrounding: EventGrounding;
-    icon: string;
-    rules: TransformationRuleDescriptionUnion[];
-    schemaRules: TransformationRuleDescriptionUnion[];
-    selectedEndpointUrl: string;
-    streamRules: TransformationRuleDescriptionUnion[];
-    userName: string;
-    valueRules: TransformationRuleDescriptionUnion[];
+    '@class':
+        | 'org.apache.streampipes.model.connect.adapter.AdapterDescription'
+        | 'org.apache.streampipes.model.connect.adapter.AdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.AdapterStreamDescription'
+        | 'org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription'
+        | 'org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription';
+    'adapterType': string;
+    'category': string[];
+    'config': StaticPropertyUnion[];
+    'correspondingDataStreamElementId': string;
+    /**
+     * @deprecated
+     */
+    'correspondingServiceGroup': string;
+    'createdAt': number;
+    'eventGrounding': EventGrounding;
+    'icon': string;
+    'rules': TransformationRuleDescriptionUnion[];
+    'schemaRules': TransformationRuleDescriptionUnion[];
+    'selectedEndpointUrl': string;
+    'streamRules': TransformationRuleDescriptionUnion[];
+    'valueRules': TransformationRuleDescriptionUnion[];
 
-    static fromData(data: AdapterDescription, target?: AdapterDescription): AdapterDescription {
+    static 'fromData'(
+        data: AdapterDescription,
+        target?: AdapterDescription,
+    ): AdapterDescription {
         if (!data) {
             return data;
         }
         const instance = target || new AdapterDescription();
         super.fromData(data, instance);
-        instance.userName = data.userName;
-        instance.eventGrounding = EventGrounding.fromData(data.eventGrounding);
         instance.adapterType = data.adapterType;
-        instance.icon = data.icon;
-        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.config);
-        instance.rules = __getCopyArrayFn(TransformationRuleDescription.fromDataUnion)(data.rules);
-        instance.category = __getCopyArrayFn(__identity<string>())(data.category);
-        instance.createdAt = data.createdAt;
-        instance.selectedEndpointUrl = data.selectedEndpointUrl;
+        instance.category = __getCopyArrayFn(__identity<string>())(
+            data.category,
+        );
+        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(
+            data.config,
+        );
+        instance.correspondingDataStreamElementId =
+            data.correspondingDataStreamElementId;
         instance.correspondingServiceGroup = data.correspondingServiceGroup;
-        instance.correspondingDataStreamElementId = data.correspondingDataStreamElementId;
-        instance.valueRules = __getCopyArrayFn(TransformationRuleDescription.fromDataUnion)(data.valueRules);
-        instance.streamRules = __getCopyArrayFn(TransformationRuleDescription.fromDataUnion)(data.streamRules);
-        instance.schemaRules = __getCopyArrayFn(TransformationRuleDescription.fromDataUnion)(data.schemaRules);
+        instance.createdAt = data.createdAt;
+        instance.eventGrounding = EventGrounding.fromData(data.eventGrounding);
+        instance.icon = data.icon;
+        instance.rules = __getCopyArrayFn(
+            TransformationRuleDescription.fromDataUnion,
+        )(data.rules);
+        instance.schemaRules = __getCopyArrayFn(
+            TransformationRuleDescription.fromDataUnion,
+        )(data.schemaRules);
+        instance.selectedEndpointUrl = data.selectedEndpointUrl;
+        instance.streamRules = __getCopyArrayFn(
+            TransformationRuleDescription.fromDataUnion,
+        )(data.streamRules);
+        instance.valueRules = __getCopyArrayFn(
+            TransformationRuleDescription.fromDataUnion,
+        )(data.valueRules);
         return instance;
     }
 
-    static fromDataUnion(data: AdapterDescriptionUnion): AdapterDescriptionUnion {
+    static 'fromDataUnion'(
+        data: AdapterDescriptionUnion,
+    ): AdapterDescriptionUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription':
                 return GenericAdapterSetDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription":
+            case 'org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription':
                 return GenericAdapterStreamDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription":
+            case 'org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription':
                 return SpecificAdapterStreamDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription":
+            case 'org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription':
                 return SpecificAdapterSetDescription.fromData(data);
         }
     }
@@ -220,22 +176,35 @@ export class AdapterEventPreview {
     inputData: { [index: string]: GuessTypeInfo };
     rules: TransformationRuleDescriptionUnion[];
 
-    static fromData(data: AdapterEventPreview, target?: AdapterEventPreview): AdapterEventPreview {
+    static fromData(
+        data: AdapterEventPreview,
+        target?: AdapterEventPreview,
+    ): AdapterEventPreview {
         if (!data) {
             return data;
         }
         const instance = target || new AdapterEventPreview();
-        instance.rules = __getCopyArrayFn(TransformationRuleDescription.fromDataUnion)(data.rules);
-        instance.inputData = __getCopyObjectFn(GuessTypeInfo.fromData)(data.inputData);
+        instance.inputData = __getCopyObjectFn(GuessTypeInfo.fromData)(
+            data.inputData,
+        );
+        instance.rules = __getCopyArrayFn(
+            TransformationRuleDescription.fromDataUnion,
+        )(data.rules);
         return instance;
     }
 }
 
 export class AdapterSetDescription extends AdapterDescription {
-    "@class": "org.apache.streampipes.model.connect.adapter.AdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription";
-    dataSet: SpDataSet;
+    '@class':
+        | 'org.apache.streampipes.model.connect.adapter.AdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription'
+        | 'org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription';
+    'dataSet': SpDataSet;
 
-    static fromData(data: AdapterSetDescription, target?: AdapterSetDescription): AdapterSetDescription {
+    static 'fromData'(
+        data: AdapterSetDescription,
+        target?: AdapterSetDescription,
+    ): AdapterSetDescription {
         if (!data) {
             return data;
         }
@@ -245,25 +214,33 @@ export class AdapterSetDescription extends AdapterDescription {
         return instance;
     }
 
-    static fromDataUnion(data: AdapterSetDescriptionUnion): AdapterSetDescriptionUnion {
+    static 'fromDataUnion'(
+        data: AdapterSetDescriptionUnion,
+    ): AdapterSetDescriptionUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription':
                 return GenericAdapterSetDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription":
+            case 'org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription':
                 return SpecificAdapterSetDescription.fromData(data);
         }
     }
 }
 
 export class AdapterStreamDescription extends AdapterDescription {
-    "@class": "org.apache.streampipes.model.connect.adapter.AdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription" | "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription";
-    dataStream: SpDataStreamUnion;
-    running: boolean;
+    '@class':
+        | 'org.apache.streampipes.model.connect.adapter.AdapterStreamDescription'
+        | 'org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription'
+        | 'org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription';
+    'dataStream': SpDataStreamUnion;
+    'running': boolean;
 
-    static fromData(data: AdapterStreamDescription, target?: AdapterStreamDescription): AdapterStreamDescription {
+    static 'fromData'(
+        data: AdapterStreamDescription,
+        target?: AdapterStreamDescription,
+    ): AdapterStreamDescription {
         if (!data) {
             return data;
         }
@@ -274,14 +251,16 @@ export class AdapterStreamDescription extends AdapterDescription {
         return instance;
     }
 
-    static fromDataUnion(data: AdapterStreamDescriptionUnion): AdapterStreamDescriptionUnion {
+    static 'fromDataUnion'(
+        data: AdapterStreamDescriptionUnion,
+    ): AdapterStreamDescriptionUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription':
                 return SpecificAdapterStreamDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription":
+            case 'org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription':
                 return SpecificAdapterStreamDescription.fromData(data);
         }
     }
@@ -297,62 +276,101 @@ export class AdapterType {
             return data;
         }
         const instance = target || new AdapterType();
-        instance.label = data.label;
-        instance.description = data.description;
         instance.code = data.code;
+        instance.description = data.description;
+        instance.label = data.label;
         return instance;
     }
 }
 
-export class TransformationRuleDescription extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.connect.rules.TransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.ValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription" | "org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.StreamTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.SchemaTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription";
+export class TransformationRuleDescription {
+    '@class':
+        | 'org.apache.streampipes.model.connect.rules.DebugSinkRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.ValueTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.stream.StreamTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.SchemaTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription';
 
-    static fromData(data: TransformationRuleDescription, target?: TransformationRuleDescription): TransformationRuleDescription {
+    static 'fromData'(
+        data: TransformationRuleDescription,
+        target?: TransformationRuleDescription,
+    ): TransformationRuleDescription {
         if (!data) {
             return data;
         }
         const instance = target || new TransformationRuleDescription();
-        super.fromData(data, instance);
+        instance['@class'] = data['@class'];
         return instance;
     }
 
-    static fromDataUnion(data: TransformationRuleDescriptionUnion): TransformationRuleDescriptionUnion {
+    static 'fromDataUnion'(
+        data: TransformationRuleDescriptionUnion,
+    ): TransformationRuleDescriptionUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription':
                 return AddTimestampRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription':
                 return AddValueTransformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription':
                 return TimestampTranfsformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription':
                 return UnitTransformRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription':
                 return EventRateTransformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription":
-                return RemoveDuplicatesTransformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription':
+                return RemoveDuplicatesTransformationRuleDescription.fromData(
+                    data,
+                );
+            case 'org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription':
                 return CreateNestedRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription':
                 return DeleteRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription':
                 return RenameRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription':
                 return MoveRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription":
-                return ChangeDatatypeTransformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription":
-                return CorrectionValueTransformationRuleDescription.fromData(data);
+            case 'org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription':
+                return ChangeDatatypeTransformationRuleDescription.fromData(
+                    data,
+                );
+            case 'org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription':
+                return CorrectionValueTransformationRuleDescription.fromData(
+                    data,
+                );
+            case 'org.apache.streampipes.model.connect.rules.DebugSinkRuleDescription':
+                return DebugSinkRuleDescription.fromData(data);
         }
     }
 }
 
 export class ValueTransformationRuleDescription extends TransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.value.ValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription" | "org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription" | "org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription";
+    '@class':
+        | 'org.apache.streampipes.model.connect.rules.value.ValueTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription';
 
-    static fromData(data: ValueTransformationRuleDescription, target?: ValueTransformationRuleDescription): ValueTransformationRuleDescription {
+    static 'fromData'(
+        data: ValueTransformationRuleDescription,
+        target?: ValueTransformationRuleDescription,
+    ): ValueTransformationRuleDescription {
         if (!data) {
             return data;
         }
@@ -361,30 +379,37 @@ export class ValueTransformationRuleDescription extends TransformationRuleDescri
         return instance;
     }
 
-    static fromDataUnion(data: ValueTransformationRuleDescriptionUnion): ValueTransformationRuleDescriptionUnion {
+    static 'fromDataUnion'(
+        data: ValueTransformationRuleDescriptionUnion,
+    ): ValueTransformationRuleDescriptionUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription':
                 return AddTimestampRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription':
                 return AddValueTransformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription':
                 return TimestampTranfsformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription":
+            case 'org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription':
                 return UnitTransformRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription":
-                return CorrectionValueTransformationRuleDescription.fromData(data);
+            case 'org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription':
+                return CorrectionValueTransformationRuleDescription.fromData(
+                    data,
+                );
         }
     }
 }
 
 export class AddTimestampRuleDescription extends ValueTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription";
-    runtimeKey: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.value.AddTimestampRuleDescription';
+    'runtimeKey': string;
 
-    static fromData(data: AddTimestampRuleDescription, target?: AddTimestampRuleDescription): AddTimestampRuleDescription {
+    static 'fromData'(
+        data: AddTimestampRuleDescription,
+        target?: AddTimestampRuleDescription,
+    ): AddTimestampRuleDescription {
         if (!data) {
             return data;
         }
@@ -396,11 +421,14 @@ export class AddTimestampRuleDescription extends ValueTransformationRuleDescript
 }
 
 export class AddValueTransformationRuleDescription extends ValueTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription";
-    runtimeKey: string;
-    staticValue: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.value.AddValueTransformationRuleDescription';
+    'runtimeKey': string;
+    'staticValue': string;
 
-    static fromData(data: AddValueTransformationRuleDescription, target?: AddValueTransformationRuleDescription): AddValueTransformationRuleDescription {
+    static 'fromData'(
+        data: AddValueTransformationRuleDescription,
+        target?: AddValueTransformationRuleDescription,
+    ): AddValueTransformationRuleDescription {
         if (!data) {
             return data;
         }
@@ -412,112 +440,151 @@ export class AddValueTransformationRuleDescription extends ValueTransformationRu
     }
 }
 
-export class StaticProperty extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.staticproperty.StaticProperty" | "org.apache.streampipes.model.staticproperty.CodeInputStaticProperty" | "org.apache.streampipes.model.staticproperty.CollectionStaticProperty" | "org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty" | "org.apache.streampipes.model.staticproperty.DomainStaticProperty" | "org.apache.streampipes.model.staticproperty.FileStaticProperty" | "org.apache.streampipes.model.staticproperty.FreeTextStaticProperty" | "org.apache.streampipes.model.staticproperty.MatchingStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty" | "org.apache.streampipes.model.staticproperty.SecretStaticProperty" | "org.apache.streampipes.model.staticproperty.StaticPropertyAlternative" | "org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives" | "org.apache.streampipes.model.staticproperty.StaticPropertyGroup" | "org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty" | "org.apache.streampipes.model.staticproperty.SelectionStaticProperty" | "org.apache.streampipes.model.staticproperty.AnyStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty" | "org.apache.streampipes.model.staticproperty.OneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.MappingProperty" | "org.apache.streampipes.model.staticproperty.MappingPropertyUnary" | "org.apache.streampipes.model.staticproperty.MappingPropertyNary";
-    description: string;
-    index: number;
-    internalName: string;
-    label: string;
-    predefined: boolean;
-    staticPropertyType: StaticPropertyType;
-    valueRequired: boolean;
+export class StaticProperty {
+    '@class':
+        | 'org.apache.streampipes.model.staticproperty.CodeInputStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.CollectionStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.DomainStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.FileStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.FreeTextStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.MatchingStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.SecretStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.StaticPropertyAlternative'
+        | 'org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives'
+        | 'org.apache.streampipes.model.staticproperty.StaticPropertyGroup'
+        | 'org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.SelectionStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.AnyStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.OneOfStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.MappingProperty'
+        | 'org.apache.streampipes.model.staticproperty.MappingPropertyUnary'
+        | 'org.apache.streampipes.model.staticproperty.MappingPropertyNary';
+    'description': string;
+    'index': number;
+    'internalName': string;
+    'label': string;
+    'predefined': boolean;
+    'staticPropertyType': StaticPropertyType;
+    'valueRequired': boolean;
 
-    static fromData(data: StaticProperty, target?: StaticProperty): StaticProperty {
+    static 'fromData'(
+        data: StaticProperty,
+        target?: StaticProperty,
+    ): StaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new StaticProperty();
-        super.fromData(data, instance);
-        instance.index = data.index;
-        instance.label = data.label;
+        instance['@class'] = data['@class'];
         instance.description = data.description;
+        instance.index = data.index;
         instance.internalName = data.internalName;
-        instance.valueRequired = data.valueRequired;
+        instance.label = data.label;
         instance.predefined = data.predefined;
         instance.staticPropertyType = data.staticPropertyType;
+        instance.valueRequired = data.valueRequired;
         return instance;
     }
 
-    static fromDataUnion(data: StaticPropertyUnion): StaticPropertyUnion {
+    static 'fromDataUnion'(data: StaticPropertyUnion): StaticPropertyUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.staticproperty.AnyStaticProperty":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.staticproperty.AnyStaticProperty':
                 return AnyStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.CodeInputStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.CodeInputStaticProperty':
                 return CodeInputStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.CollectionStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.CollectionStaticProperty':
                 return CollectionStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty':
                 return ColorPickerStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.DomainStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.DomainStaticProperty':
                 return DomainStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.FileStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.FileStaticProperty':
                 return FileStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.FreeTextStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.FreeTextStaticProperty':
                 return FreeTextStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.MappingPropertyUnary":
+            case 'org.apache.streampipes.model.staticproperty.MappingPropertyUnary':
                 return MappingPropertyUnary.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.MappingPropertyNary":
+            case 'org.apache.streampipes.model.staticproperty.MappingPropertyNary':
                 return MappingPropertyNary.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.MatchingStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.MatchingStaticProperty':
                 return MatchingStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.OneOfStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.OneOfStaticProperty':
                 return OneOfStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty':
                 return RuntimeResolvableAnyStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty':
                 return RuntimeResolvableOneOfStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty':
                 return RuntimeResolvableTreeInputStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.SecretStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.SecretStaticProperty':
                 return SecretStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.StaticPropertyAlternative":
+            case 'org.apache.streampipes.model.staticproperty.StaticPropertyAlternative':
                 return StaticPropertyAlternative.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives":
+            case 'org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives':
                 return StaticPropertyAlternatives.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.StaticPropertyGroup":
+            case 'org.apache.streampipes.model.staticproperty.StaticPropertyGroup':
                 return StaticPropertyGroup.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty':
                 return SlideToggleStaticProperty.fromData(data);
         }
     }
 }
 
 export class SelectionStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.SelectionStaticProperty" | "org.apache.streampipes.model.staticproperty.AnyStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty" | "org.apache.streampipes.model.staticproperty.OneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty";
-    horizontalRendering: boolean;
-    options: Option[];
+    '@class':
+        | 'org.apache.streampipes.model.staticproperty.SelectionStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.AnyStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.OneOfStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty';
+    'horizontalRendering': boolean;
+    'options': Option[];
 
-    static fromData(data: SelectionStaticProperty, target?: SelectionStaticProperty): SelectionStaticProperty {
+    static 'fromData'(
+        data: SelectionStaticProperty,
+        target?: SelectionStaticProperty,
+    ): SelectionStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new SelectionStaticProperty();
         super.fromData(data, instance);
-        instance.options = __getCopyArrayFn(Option.fromData)(data.options);
         instance.horizontalRendering = data.horizontalRendering;
+        instance.options = __getCopyArrayFn(Option.fromData)(data.options);
         return instance;
     }
 
-    static fromDataUnion(data: SelectionStaticPropertyUnion): SelectionStaticPropertyUnion {
+    static 'fromDataUnion'(
+        data: SelectionStaticPropertyUnion,
+    ): SelectionStaticPropertyUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.staticproperty.AnyStaticProperty":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.staticproperty.AnyStaticProperty':
                 return AnyStaticProperty.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.OneOfStaticProperty":
+            case 'org.apache.streampipes.model.staticproperty.OneOfStaticProperty':
                 return OneOfStaticProperty.fromData(data);
         }
     }
 }
 
 export class AnyStaticProperty extends SelectionStaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.AnyStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty";
+    '@class':
+        | 'org.apache.streampipes.model.staticproperty.AnyStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty';
 
-    static fromData(data: AnyStaticProperty, target?: AnyStaticProperty): AnyStaticProperty {
+    static 'fromData'(
+        data: AnyStaticProperty,
+        target?: AnyStaticProperty,
+    ): AnyStaticProperty {
         if (!data) {
             return data;
         }
@@ -527,81 +594,76 @@ export class AnyStaticProperty extends SelectionStaticProperty {
     }
 }
 
-export class OutputStrategy extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.output.OutputStrategy" | "org.apache.streampipes.model.output.AppendOutputStrategy" | "org.apache.streampipes.model.output.CustomOutputStrategy" | "org.apache.streampipes.model.output.CustomTransformOutputStrategy" | "org.apache.streampipes.model.output.FixedOutputStrategy" | "org.apache.streampipes.model.output.KeepOutputStrategy" | "org.apache.streampipes.model.output.ListOutputStrategy" | "org.apache.streampipes.model.output.TransformOutputStrategy" | "org.apache.streampipes.model.output.UserDefinedOutputStrategy";
-    name: string;
-    renameRules: PropertyRenameRule[];
+export class OutputStrategy {
+    '@class':
+        | 'org.apache.streampipes.model.output.AppendOutputStrategy'
+        | 'org.apache.streampipes.model.output.CustomOutputStrategy'
+        | 'org.apache.streampipes.model.output.CustomTransformOutputStrategy'
+        | 'org.apache.streampipes.model.output.FixedOutputStrategy'
+        | 'org.apache.streampipes.model.output.KeepOutputStrategy'
+        | 'org.apache.streampipes.model.output.ListOutputStrategy'
+        | 'org.apache.streampipes.model.output.TransformOutputStrategy'
+        | 'org.apache.streampipes.model.output.UserDefinedOutputStrategy';
+    'name': string;
+    'renameRules': PropertyRenameRule[];
 
-    static fromData(data: OutputStrategy, target?: OutputStrategy): OutputStrategy {
+    static 'fromData'(
+        data: OutputStrategy,
+        target?: OutputStrategy,
+    ): OutputStrategy {
         if (!data) {
             return data;
         }
         const instance = target || new OutputStrategy();
-        super.fromData(data, instance);
+        instance['@class'] = data['@class'];
         instance.name = data.name;
-        instance.renameRules = __getCopyArrayFn(PropertyRenameRule.fromData)(data.renameRules);
+        instance.renameRules = __getCopyArrayFn(PropertyRenameRule.fromData)(
+            data.renameRules,
+        );
         return instance;
     }
 
-    static fromDataUnion(data: OutputStrategyUnion): OutputStrategyUnion {
+    static 'fromDataUnion'(data: OutputStrategyUnion): OutputStrategyUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.output.AppendOutputStrategy":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.output.AppendOutputStrategy':
                 return AppendOutputStrategy.fromData(data);
-            case "org.apache.streampipes.model.output.CustomOutputStrategy":
+            case 'org.apache.streampipes.model.output.CustomOutputStrategy':
                 return CustomOutputStrategy.fromData(data);
-            case "org.apache.streampipes.model.output.CustomTransformOutputStrategy":
+            case 'org.apache.streampipes.model.output.CustomTransformOutputStrategy':
                 return CustomTransformOutputStrategy.fromData(data);
-            case "org.apache.streampipes.model.output.FixedOutputStrategy":
+            case 'org.apache.streampipes.model.output.FixedOutputStrategy':
                 return FixedOutputStrategy.fromData(data);
-            case "org.apache.streampipes.model.output.KeepOutputStrategy":
+            case 'org.apache.streampipes.model.output.KeepOutputStrategy':
                 return KeepOutputStrategy.fromData(data);
-            case "org.apache.streampipes.model.output.ListOutputStrategy":
+            case 'org.apache.streampipes.model.output.ListOutputStrategy':
                 return ListOutputStrategy.fromData(data);
-            case "org.apache.streampipes.model.output.TransformOutputStrategy":
+            case 'org.apache.streampipes.model.output.TransformOutputStrategy':
                 return TransformOutputStrategy.fromData(data);
-            case "org.apache.streampipes.model.output.UserDefinedOutputStrategy":
+            case 'org.apache.streampipes.model.output.UserDefinedOutputStrategy':
                 return UserDefinedOutputStrategy.fromData(data);
         }
     }
 }
 
 export class AppendOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.AppendOutputStrategy";
-    eventProperties: EventPropertyUnion[];
+    '@class': 'org.apache.streampipes.model.output.AppendOutputStrategy';
+    'eventProperties': EventPropertyUnion[];
 
-    static fromData(data: AppendOutputStrategy, target?: AppendOutputStrategy): AppendOutputStrategy {
+    static 'fromData'(
+        data: AppendOutputStrategy,
+        target?: AppendOutputStrategy,
+    ): AppendOutputStrategy {
         if (!data) {
             return data;
         }
         const instance = target || new AppendOutputStrategy();
         super.fromData(data, instance);
-        instance.eventProperties = __getCopyArrayFn(EventProperty.fromDataUnion)(data.eventProperties);
-        return instance;
-    }
-}
-
-export class ApplicationLink extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.ApplicationLink";
-    applicationDescription: string;
-    applicationIconUrl: string;
-    applicationLinkType: string;
-    applicationName: string;
-    applicationUrl: string;
-
-    static fromData(data: ApplicationLink, target?: ApplicationLink): ApplicationLink {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new ApplicationLink();
-        super.fromData(data, instance);
-        instance.applicationName = data.applicationName;
-        instance.applicationDescription = data.applicationDescription;
-        instance.applicationUrl = data.applicationUrl;
-        instance.applicationIconUrl = data.applicationIconUrl;
-        instance.applicationLinkType = data.applicationLinkType;
+        instance.eventProperties = __getCopyArrayFn(
+            EventProperty.fromDataUnion,
+        )(data.eventProperties);
         return instance;
     }
 }
@@ -619,39 +681,59 @@ export class AssetExportConfiguration {
     overrideBrokerSettings: boolean;
     pipelines: ExportItem[];
 
-    static fromData(data: AssetExportConfiguration, target?: AssetExportConfiguration): AssetExportConfiguration {
+    static fromData(
+        data: AssetExportConfiguration,
+        target?: AssetExportConfiguration,
+    ): AssetExportConfiguration {
         if (!data) {
             return data;
         }
         const instance = target || new AssetExportConfiguration();
+        instance.adapters = __getCopyArrayFn(ExportItem.fromData)(
+            data.adapters,
+        );
         instance.assetId = data.assetId;
         instance.assetName = data.assetName;
         instance.assets = __getCopyArrayFn(ExportItem.fromData)(data.assets);
-        instance.adapters = __getCopyArrayFn(ExportItem.fromData)(data.adapters);
-        instance.dashboards = __getCopyArrayFn(ExportItem.fromData)(data.dashboards);
-        instance.dataViews = __getCopyArrayFn(ExportItem.fromData)(data.dataViews);
-        instance.dataLakeMeasures = __getCopyArrayFn(ExportItem.fromData)(data.dataLakeMeasures);
-        instance.dataSources = __getCopyArrayFn(ExportItem.fromData)(data.dataSources);
-        instance.pipelines = __getCopyArrayFn(ExportItem.fromData)(data.pipelines);
+        instance.dashboards = __getCopyArrayFn(ExportItem.fromData)(
+            data.dashboards,
+        );
+        instance.dataLakeMeasures = __getCopyArrayFn(ExportItem.fromData)(
+            data.dataLakeMeasures,
+        );
+        instance.dataSources = __getCopyArrayFn(ExportItem.fromData)(
+            data.dataSources,
+        );
+        instance.dataViews = __getCopyArrayFn(ExportItem.fromData)(
+            data.dataViews,
+        );
         instance.files = __getCopyArrayFn(ExportItem.fromData)(data.files);
         instance.overrideBrokerSettings = data.overrideBrokerSettings;
+        instance.pipelines = __getCopyArrayFn(ExportItem.fromData)(
+            data.pipelines,
+        );
         return instance;
     }
 }
 
-export class BoundPipelineElement extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.template.BoundPipelineElement";
+export class BoundPipelineElement {
     connectedTo: BoundPipelineElement[];
     pipelineElementTemplate: InvocableStreamPipesEntity;
 
-    static fromData(data: BoundPipelineElement, target?: BoundPipelineElement): BoundPipelineElement {
+    static fromData(
+        data: BoundPipelineElement,
+        target?: BoundPipelineElement,
+    ): BoundPipelineElement {
         if (!data) {
             return data;
         }
         const instance = target || new BoundPipelineElement();
-        super.fromData(data, instance);
-        instance.pipelineElementTemplate = InvocableStreamPipesEntity.fromData(data.pipelineElementTemplate);
-        instance.connectedTo = __getCopyArrayFn(BoundPipelineElement.fromData)(data.connectedTo);
+        instance.connectedTo = __getCopyArrayFn(BoundPipelineElement.fromData)(
+            data.connectedTo,
+        );
+        instance.pipelineElementTemplate = InvocableStreamPipesEntity.fromData(
+            data.pipelineElementTemplate,
+        );
         return instance;
     }
 }
@@ -660,7 +742,10 @@ export class CanvasPosition {
     x: number;
     y: number;
 
-    static fromData(data: CanvasPosition, target?: CanvasPosition): CanvasPosition {
+    static fromData(
+        data: CanvasPosition,
+        target?: CanvasPosition,
+    ): CanvasPosition {
         if (!data) {
             return data;
         }
@@ -684,78 +769,95 @@ export class Category {
             return data;
         }
         const instance = target || new Category();
-        instance.name = data.name;
-        instance.internalName = data.internalName;
-        instance.superLabelId = data.superLabelId;
         instance._id = data._id;
         instance._rev = data._rev;
+        instance.internalName = data.internalName;
+        instance.name = data.name;
         instance.superLabel = data.superLabel;
+        instance.superLabelId = data.superLabelId;
         return instance;
     }
 }
 
 export class ChangeDatatypeTransformationRuleDescription extends ValueTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription";
-    originalDatatypeXsd: string;
-    runtimeKey: string;
-    targetDatatypeXsd: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.value.ChangeDatatypeTransformationRuleDescription';
+    'originalDatatypeXsd': string;
+    'runtimeKey': string;
+    'targetDatatypeXsd': string;
 
-    static fromData(data: ChangeDatatypeTransformationRuleDescription, target?: ChangeDatatypeTransformationRuleDescription): ChangeDatatypeTransformationRuleDescription {
+    static 'fromData'(
+        data: ChangeDatatypeTransformationRuleDescription,
+        target?: ChangeDatatypeTransformationRuleDescription,
+    ): ChangeDatatypeTransformationRuleDescription {
         if (!data) {
             return data;
         }
-        const instance = target || new ChangeDatatypeTransformationRuleDescription();
+        const instance =
+            target || new ChangeDatatypeTransformationRuleDescription();
         super.fromData(data, instance);
-        instance.runtimeKey = data.runtimeKey;
         instance.originalDatatypeXsd = data.originalDatatypeXsd;
+        instance.runtimeKey = data.runtimeKey;
         instance.targetDatatypeXsd = data.targetDatatypeXsd;
         return instance;
     }
 }
 
 export class CodeInputStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.CodeInputStaticProperty";
-    codeTemplate: string;
-    language: string;
-    value: string;
+    '@class': 'org.apache.streampipes.model.staticproperty.CodeInputStaticProperty';
+    'codeTemplate': string;
+    'language': string;
+    'value': string;
 
-    static fromData(data: CodeInputStaticProperty, target?: CodeInputStaticProperty): CodeInputStaticProperty {
+    static 'fromData'(
+        data: CodeInputStaticProperty,
+        target?: CodeInputStaticProperty,
+    ): CodeInputStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new CodeInputStaticProperty();
         super.fromData(data, instance);
-        instance.language = data.language;
         instance.codeTemplate = data.codeTemplate;
+        instance.language = data.language;
         instance.value = data.value;
         return instance;
     }
 }
 
 export class CollectionStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.CollectionStaticProperty";
-    memberType: string;
-    members: StaticPropertyUnion[];
-    staticPropertyTemplate: StaticPropertyUnion;
+    '@class': 'org.apache.streampipes.model.staticproperty.CollectionStaticProperty';
+    'memberType': string;
+    'members': StaticPropertyUnion[];
+    'staticPropertyTemplate': StaticPropertyUnion;
 
-    static fromData(data: CollectionStaticProperty, target?: CollectionStaticProperty): CollectionStaticProperty {
+    static 'fromData'(
+        data: CollectionStaticProperty,
+        target?: CollectionStaticProperty,
+    ): CollectionStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new CollectionStaticProperty();
         super.fromData(data, instance);
-        instance.staticPropertyTemplate = StaticProperty.fromDataUnion(data.staticPropertyTemplate);
-        instance.members = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.members);
         instance.memberType = data.memberType;
+        instance.members = __getCopyArrayFn(StaticProperty.fromDataUnion)(
+            data.members,
+        );
+        instance.staticPropertyTemplate = StaticProperty.fromDataUnion(
+            data.staticPropertyTemplate,
+        );
         return instance;
     }
 }
 
 export class ColorPickerStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty";
-    selectedColor: string;
+    '@class': 'org.apache.streampipes.model.staticproperty.ColorPickerStaticProperty';
+    'selectedColor': string;
 
-    static fromData(data: ColorPickerStaticProperty, target?: ColorPickerStaticProperty): ColorPickerStaticProperty {
+    static 'fromData'(
+        data: ColorPickerStaticProperty,
+        target?: ColorPickerStaticProperty,
+    ): ColorPickerStaticProperty {
         if (!data) {
             return data;
         }
@@ -775,8 +877,8 @@ export class MessagesInfo {
             return data;
         }
         const instance = target || new MessagesInfo();
-        instance.topicName = data.topicName;
         instance.groupId = data.groupId;
+        instance.topicName = data.topicName;
         return instance;
     }
 }
@@ -786,42 +888,59 @@ export class ConsumedMessagesInfo extends MessagesInfo {
     lag: number;
     totalMessagesSincePipelineStart: number;
 
-    static fromData(data: ConsumedMessagesInfo, target?: ConsumedMessagesInfo): ConsumedMessagesInfo {
+    static fromData(
+        data: ConsumedMessagesInfo,
+        target?: ConsumedMessagesInfo,
+    ): ConsumedMessagesInfo {
         if (!data) {
             return data;
         }
         const instance = target || new ConsumedMessagesInfo();
         super.fromData(data, instance);
-        instance.totalMessagesSincePipelineStart = data.totalMessagesSincePipelineStart;
-        instance.consumedMessagesSincePipelineStart = data.consumedMessagesSincePipelineStart;
+        instance.consumedMessagesSincePipelineStart =
+            data.consumedMessagesSincePipelineStart;
         instance.lag = data.lag;
+        instance.totalMessagesSincePipelineStart =
+            data.totalMessagesSincePipelineStart;
         return instance;
     }
 }
 
 export class CorrectionValueTransformationRuleDescription extends ValueTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription";
-    correctionValue: number;
-    operator: string;
-    runtimeKey: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.value.CorrectionValueTransformationRuleDescription';
+    'correctionValue': number;
+    'operator': string;
+    'runtimeKey': string;
 
-    static fromData(data: CorrectionValueTransformationRuleDescription, target?: CorrectionValueTransformationRuleDescription): CorrectionValueTransformationRuleDescription {
+    static 'fromData'(
+        data: CorrectionValueTransformationRuleDescription,
+        target?: CorrectionValueTransformationRuleDescription,
+    ): CorrectionValueTransformationRuleDescription {
         if (!data) {
             return data;
         }
-        const instance = target || new CorrectionValueTransformationRuleDescription();
+        const instance =
+            target || new CorrectionValueTransformationRuleDescription();
         super.fromData(data, instance);
-        instance.runtimeKey = data.runtimeKey;
         instance.correctionValue = data.correctionValue;
         instance.operator = data.operator;
+        instance.runtimeKey = data.runtimeKey;
         return instance;
     }
 }
 
 export class SchemaTransformationRuleDescription extends TransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.schema.SchemaTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription" | "org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription";
+    '@class':
+        | 'org.apache.streampipes.model.connect.rules.schema.SchemaTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription';
 
-    static fromData(data: SchemaTransformationRuleDescription, target?: SchemaTransformationRuleDescription): SchemaTransformationRuleDescription {
+    static 'fromData'(
+        data: SchemaTransformationRuleDescription,
+        target?: SchemaTransformationRuleDescription,
+    ): SchemaTransformationRuleDescription {
         if (!data) {
             return data;
         }
@@ -832,10 +951,13 @@ export class SchemaTransformationRuleDescription extends TransformationRuleDescr
 }
 
 export class CreateNestedRuleDescription extends SchemaTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription";
-    runtimeKey: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.schema.CreateNestedRuleDescription';
+    'runtimeKey': string;
 
-    static fromData(data: CreateNestedRuleDescription, target?: CreateNestedRuleDescription): CreateNestedRuleDescription {
+    static 'fromData'(
+        data: CreateNestedRuleDescription,
+        target?: CreateNestedRuleDescription,
+    ): CreateNestedRuleDescription {
         if (!data) {
             return data;
         }
@@ -847,35 +969,47 @@ export class CreateNestedRuleDescription extends SchemaTransformationRuleDescrip
 }
 
 export class CustomOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.CustomOutputStrategy";
-    availablePropertyKeys: string[];
-    outputRight: boolean;
-    selectedPropertyKeys: string[];
+    '@class': 'org.apache.streampipes.model.output.CustomOutputStrategy';
+    'availablePropertyKeys': string[];
+    'outputRight': boolean;
+    'selectedPropertyKeys': string[];
 
-    static fromData(data: CustomOutputStrategy, target?: CustomOutputStrategy): CustomOutputStrategy {
+    static 'fromData'(
+        data: CustomOutputStrategy,
+        target?: CustomOutputStrategy,
+    ): CustomOutputStrategy {
         if (!data) {
             return data;
         }
         const instance = target || new CustomOutputStrategy();
         super.fromData(data, instance);
-        instance.selectedPropertyKeys = __getCopyArrayFn(__identity<string>())(data.selectedPropertyKeys);
+        instance.availablePropertyKeys = __getCopyArrayFn(__identity<string>())(
+            data.availablePropertyKeys,
+        );
         instance.outputRight = data.outputRight;
-        instance.availablePropertyKeys = __getCopyArrayFn(__identity<string>())(data.availablePropertyKeys);
+        instance.selectedPropertyKeys = __getCopyArrayFn(__identity<string>())(
+            data.selectedPropertyKeys,
+        );
         return instance;
     }
 }
 
 export class CustomTransformOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.CustomTransformOutputStrategy";
-    eventProperties: EventPropertyUnion[];
+    '@class': 'org.apache.streampipes.model.output.CustomTransformOutputStrategy';
+    'eventProperties': EventPropertyUnion[];
 
-    static fromData(data: CustomTransformOutputStrategy, target?: CustomTransformOutputStrategy): CustomTransformOutputStrategy {
+    static 'fromData'(
+        data: CustomTransformOutputStrategy,
+        target?: CustomTransformOutputStrategy,
+    ): CustomTransformOutputStrategy {
         if (!data) {
             return data;
         }
         const instance = target || new CustomTransformOutputStrategy();
         super.fromData(data, instance);
-        instance.eventProperties = __getCopyArrayFn(EventProperty.fromDataUnion)(data.eventProperties);
+        instance.eventProperties = __getCopyArrayFn(
+            EventProperty.fromDataUnion,
+        )(data.eventProperties);
         return instance;
     }
 }
@@ -884,7 +1018,10 @@ export class DashboardEntity {
     _id: string;
     _rev: string;
 
-    static fromData(data: DashboardEntity, target?: DashboardEntity): DashboardEntity {
+    static fromData(
+        data: DashboardEntity,
+        target?: DashboardEntity,
+    ): DashboardEntity {
         if (!data) {
             return data;
         }
@@ -905,17 +1042,22 @@ export class DashboardItem {
     x: number;
     y: number;
 
-    static fromData(data: DashboardItem, target?: DashboardItem): DashboardItem {
+    static fromData(
+        data: DashboardItem,
+        target?: DashboardItem,
+    ): DashboardItem {
         if (!data) {
             return data;
         }
         const instance = target || new DashboardItem();
+        instance.cols = data.cols;
+        instance.component = data.component;
         instance.id = data.id;
         instance.name = data.name;
-        instance.component = data.component;
-        instance.settings = __getCopyArrayFn(__identity<string>())(data.settings);
-        instance.cols = data.cols;
         instance.rows = data.rows;
+        instance.settings = __getCopyArrayFn(__identity<string>())(
+            data.settings,
+        );
         instance.x = data.x;
         instance.y = data.y;
         return instance;
@@ -933,20 +1075,29 @@ export class DashboardModel {
     name: string;
     widgets: DashboardItem[];
 
-    static fromData(data: DashboardModel, target?: DashboardModel): DashboardModel {
+    static fromData(
+        data: DashboardModel,
+        target?: DashboardModel,
+    ): DashboardModel {
         if (!data) {
             return data;
         }
         const instance = target || new DashboardModel();
-        instance.id = data.id;
-        instance.name = data.name;
-        instance.description = data.description;
-        instance.displayHeader = data.displayHeader;
-        instance.dashboardTimeSettings = __getCopyObjectFn(__identity<any>())(data.dashboardTimeSettings);
-        instance.dashboardGeneralSettings = __getCopyObjectFn(__identity<any>())(data.dashboardGeneralSettings);
-        instance.widgets = __getCopyArrayFn(DashboardItem.fromData)(data.widgets);
         instance._id = data._id;
         instance._rev = data._rev;
+        instance.dashboardGeneralSettings = __getCopyObjectFn(
+            __identity<any>(),
+        )(data.dashboardGeneralSettings);
+        instance.dashboardTimeSettings = __getCopyObjectFn(__identity<any>())(
+            data.dashboardTimeSettings,
+        );
+        instance.description = data.description;
+        instance.displayHeader = data.displayHeader;
+        instance.id = data.id;
+        instance.name = data.name;
+        instance.widgets = __getCopyArrayFn(DashboardItem.fromData)(
+            data.widgets,
+        );
         return instance;
     }
 }
@@ -958,23 +1109,27 @@ export class DashboardWidgetModel extends DashboardEntity {
     widgetId: string;
     widgetType: string;
 
-    static fromData(data: DashboardWidgetModel, target?: DashboardWidgetModel): DashboardWidgetModel {
+    static fromData(
+        data: DashboardWidgetModel,
+        target?: DashboardWidgetModel,
+    ): DashboardWidgetModel {
         if (!data) {
             return data;
         }
         const instance = target || new DashboardWidgetModel();
         super.fromData(data, instance);
-        instance.widgetId = data.widgetId;
-        instance.widgetType = data.widgetType;
-        instance.dashboardWidgetSettings = DashboardWidgetSettings.fromData(data.dashboardWidgetSettings);
+        instance.dashboardWidgetSettings = DashboardWidgetSettings.fromData(
+            data.dashboardWidgetSettings,
+        );
         instance.pipelineId = data.pipelineId;
         instance.visualizationName = data.visualizationName;
+        instance.widgetId = data.widgetId;
+        instance.widgetType = data.widgetType;
         return instance;
     }
 }
 
-export class DashboardWidgetSettings extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.dashboard.DashboardWidgetSettings";
+export class DashboardWidgetSettings {
     config: StaticPropertyUnion[];
     requiredSchema: EventSchema;
     widgetDescription: string;
@@ -982,18 +1137,22 @@ export class DashboardWidgetSettings extends UnnamedStreamPipesEntity {
     widgetLabel: string;
     widgetName: string;
 
-    static fromData(data: DashboardWidgetSettings, target?: DashboardWidgetSettings): DashboardWidgetSettings {
+    static fromData(
+        data: DashboardWidgetSettings,
+        target?: DashboardWidgetSettings,
+    ): DashboardWidgetSettings {
         if (!data) {
             return data;
         }
         const instance = target || new DashboardWidgetSettings();
-        super.fromData(data, instance);
+        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(
+            data.config,
+        );
+        instance.requiredSchema = EventSchema.fromData(data.requiredSchema);
+        instance.widgetDescription = data.widgetDescription;
+        instance.widgetIconName = data.widgetIconName;
         instance.widgetLabel = data.widgetLabel;
         instance.widgetName = data.widgetName;
-        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.config);
-        instance.requiredSchema = EventSchema.fromData(data.requiredSchema);
-        instance.widgetIconName = data.widgetIconName;
-        instance.widgetDescription = data.widgetDescription;
         return instance;
     }
 }
@@ -1007,104 +1166,141 @@ export class DataExplorerWidgetModel extends DashboardEntity {
     widgetId: string;
     widgetType: string;
 
-    static fromData(data: DataExplorerWidgetModel, target?: DataExplorerWidgetModel): DataExplorerWidgetModel {
+    static fromData(
+        data: DataExplorerWidgetModel,
+        target?: DataExplorerWidgetModel,
+    ): DataExplorerWidgetModel {
         if (!data) {
             return data;
         }
         const instance = target || new DataExplorerWidgetModel();
         super.fromData(data, instance);
+        instance.baseAppearanceConfig = __getCopyObjectFn(__identity<any>())(
+            data.baseAppearanceConfig,
+        );
+        instance.dataConfig = __getCopyObjectFn(__identity<any>())(
+            data.dataConfig,
+        );
+        instance.measureName = data.measureName;
+        instance.pipelineId = data.pipelineId;
+        instance.visualizationConfig = __getCopyObjectFn(__identity<any>())(
+            data.visualizationConfig,
+        );
         instance.widgetId = data.widgetId;
         instance.widgetType = data.widgetType;
-        instance.baseAppearanceConfig = __getCopyObjectFn(__identity<any>())(data.baseAppearanceConfig);
-        instance.visualizationConfig = __getCopyObjectFn(__identity<any>())(data.visualizationConfig);
-        instance.dataConfig = __getCopyObjectFn(__identity<any>())(data.dataConfig);
-        instance.pipelineId = data.pipelineId;
-        instance.measureName = data.measureName;
         return instance;
     }
 }
 
-export class DataLakeMeasure extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.datalake.DataLakeMeasure";
-    _rev: string;
-    eventSchema: EventSchema;
-    measureName: string;
-    pipelineId: string;
-    pipelineIsRunning: boolean;
-    pipelineName: string;
-    schemaVersion: string;
-    timestampField: string;
+export class DataLakeMeasure {
+    '@class': 'org.apache.streampipes.model.datalake.DataLakeMeasure';
+    '_rev': string;
+    'elementId': string;
+    'eventSchema': EventSchema;
+    'measureName': string;
+    'pipelineId': string;
+    'pipelineIsRunning': boolean;
+    'pipelineName': string;
+    'schemaVersion': string;
+    'timestampField': string;
 
-    static fromData(data: DataLakeMeasure, target?: DataLakeMeasure): DataLakeMeasure {
+    static 'fromData'(
+        data: DataLakeMeasure,
+        target?: DataLakeMeasure,
+    ): DataLakeMeasure {
         if (!data) {
             return data;
         }
         const instance = target || new DataLakeMeasure();
-        super.fromData(data, instance);
-        instance.measureName = data.measureName;
-        instance.timestampField = data.timestampField;
-        instance.eventSchema = EventSchema.fromData(data.eventSchema);
-        instance.pipelineId = data.pipelineId;
-        instance.pipelineName = data.pipelineName;
-        instance.pipelineIsRunning = data.pipelineIsRunning;
-        instance.schemaVersion = data.schemaVersion;
+        instance['@class'] = data['@class'];
         instance._rev = data._rev;
+        instance.elementId = data.elementId;
+        instance.eventSchema = EventSchema.fromData(data.eventSchema);
+        instance.measureName = data.measureName;
+        instance.pipelineId = data.pipelineId;
+        instance.pipelineIsRunning = data.pipelineIsRunning;
+        instance.pipelineName = data.pipelineName;
+        instance.schemaVersion = data.schemaVersion;
+        instance.timestampField = data.timestampField;
         return instance;
     }
 }
 
 export class InvocableStreamPipesEntity extends NamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.base.InvocableStreamPipesEntity" | "org.apache.streampipes.model.graph.DataProcessorInvocation" | "org.apache.streampipes.model.graph.DataSinkInvocation";
-    belongsTo: string;
-    configured: boolean;
-    correspondingPipeline: string;
-    correspondingUser: string;
-    inputStreams: SpDataStreamUnion[];
-    selectedEndpointUrl: string;
-    staticProperties: StaticPropertyUnion[];
-    statusInfoSettings: ElementStatusInfoSettings;
-    streamRequirements: SpDataStreamUnion[];
-    supportedGrounding: EventGrounding;
-    uncompleted: boolean;
+    '@class':
+        | 'org.apache.streampipes.model.base.InvocableStreamPipesEntity'
+        | 'org.apache.streampipes.model.graph.DataProcessorInvocation'
+        | 'org.apache.streampipes.model.graph.DataSinkInvocation';
+    'belongsTo': string;
+    'configured': boolean;
+    'correspondingPipeline': string;
+    'correspondingUser': string;
+    'inputStreams': SpDataStreamUnion[];
+    'selectedEndpointUrl': string;
+    'staticProperties': StaticPropertyUnion[];
+    'statusInfoSettings': ElementStatusInfoSettings;
+    'streamRequirements': SpDataStreamUnion[];
+    'supportedGrounding': EventGrounding;
+    'uncompleted': boolean;
 
-    static fromData(data: InvocableStreamPipesEntity, target?: InvocableStreamPipesEntity): InvocableStreamPipesEntity {
+    static 'fromData'(
+        data: InvocableStreamPipesEntity,
+        target?: InvocableStreamPipesEntity,
+    ): InvocableStreamPipesEntity {
         if (!data) {
             return data;
         }
         const instance = target || new InvocableStreamPipesEntity();
         super.fromData(data, instance);
-        instance.inputStreams = __getCopyArrayFn(SpDataStream.fromDataUnion)(data.inputStreams);
-        instance.staticProperties = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.staticProperties);
         instance.belongsTo = data.belongsTo;
-        instance.statusInfoSettings = ElementStatusInfoSettings.fromData(data.statusInfoSettings);
-        instance.supportedGrounding = EventGrounding.fromData(data.supportedGrounding);
+        instance.configured = data.configured;
         instance.correspondingPipeline = data.correspondingPipeline;
         instance.correspondingUser = data.correspondingUser;
-        instance.streamRequirements = __getCopyArrayFn(SpDataStream.fromDataUnion)(data.streamRequirements);
-        instance.configured = data.configured;
-        instance.uncompleted = data.uncompleted;
+        instance.inputStreams = __getCopyArrayFn(SpDataStream.fromDataUnion)(
+            data.inputStreams,
+        );
         instance.selectedEndpointUrl = data.selectedEndpointUrl;
+        instance.staticProperties = __getCopyArrayFn(
+            StaticProperty.fromDataUnion,
+        )(data.staticProperties);
+        instance.statusInfoSettings = ElementStatusInfoSettings.fromData(
+            data.statusInfoSettings,
+        );
+        instance.streamRequirements = __getCopyArrayFn(
+            SpDataStream.fromDataUnion,
+        )(data.streamRequirements);
+        instance.supportedGrounding = EventGrounding.fromData(
+            data.supportedGrounding,
+        );
+        instance.uncompleted = data.uncompleted;
         return instance;
     }
 }
 
 export class DataProcessorInvocation extends InvocableStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.graph.DataProcessorInvocation";
-    category: string[];
-    outputStrategies: OutputStrategyUnion[];
-    outputStream: SpDataStreamUnion;
-    pathName: string;
+    '@class': 'org.apache.streampipes.model.graph.DataProcessorInvocation';
+    'category': string[];
+    'outputStrategies': OutputStrategyUnion[];
+    'outputStream': SpDataStreamUnion;
+    'pathName': string;
 
-    static fromData(data: DataProcessorInvocation, target?: DataProcessorInvocation): DataProcessorInvocation {
+    static 'fromData'(
+        data: DataProcessorInvocation,
+        target?: DataProcessorInvocation,
+    ): DataProcessorInvocation {
         if (!data) {
             return data;
         }
         const instance = target || new DataProcessorInvocation();
         super.fromData(data, instance);
+        instance.category = __getCopyArrayFn(__identity<string>())(
+            data.category,
+        );
+        instance.outputStrategies = __getCopyArrayFn(
+            OutputStrategy.fromDataUnion,
+        )(data.outputStrategies);
         instance.outputStream = SpDataStream.fromDataUnion(data.outputStream);
-        instance.outputStrategies = __getCopyArrayFn(OutputStrategy.fromDataUnion)(data.outputStrategies);
         instance.pathName = data.pathName;
-        instance.category = __getCopyArrayFn(__identity<string>())(data.category);
         return instance;
     }
 }
@@ -1114,14 +1310,17 @@ export class DataProcessorType {
     description: string;
     label: string;
 
-    static fromData(data: DataProcessorType, target?: DataProcessorType): DataProcessorType {
+    static fromData(
+        data: DataProcessorType,
+        target?: DataProcessorType,
+    ): DataProcessorType {
         if (!data) {
             return data;
         }
         const instance = target || new DataProcessorType();
-        instance.label = data.label;
-        instance.description = data.description;
         instance.code = data.code;
+        instance.description = data.description;
+        instance.label = data.label;
         return instance;
     }
 }
@@ -1137,10 +1336,12 @@ export class DataSeries {
             return data;
         }
         const instance = target || new DataSeries();
-        instance.total = data.total;
-        instance.rows = __getCopyArrayFn(__getCopyArrayFn(__identity<any>()))(data.rows);
-        instance.tags = __getCopyObjectFn(__identity<string>())(data.tags);
         instance.headers = __getCopyArrayFn(__identity<string>())(data.headers);
+        instance.rows = __getCopyArrayFn(__getCopyArrayFn(__identity<any>()))(
+            data.rows,
+        );
+        instance.tags = __getCopyObjectFn(__identity<string>())(data.tags);
+        instance.total = data.total;
         return instance;
     }
 }
@@ -1155,9 +1356,11 @@ export class Message {
             return data;
         }
         const instance = target || new Message();
-        instance.success = data.success;
         instance.elementName = data.elementName;
-        instance.notifications = __getCopyArrayFn(Notification.fromData)(data.notifications);
+        instance.notifications = __getCopyArrayFn(Notification.fromData)(
+            data.notifications,
+        );
+        instance.success = data.success;
         return instance;
     }
 }
@@ -1166,7 +1369,10 @@ export class DataSetModificationMessage extends Message {
     eventGrounding: EventGrounding;
     invocationId: string;
 
-    static fromData(data: DataSetModificationMessage, target?: DataSetModificationMessage): DataSetModificationMessage {
+    static fromData(
+        data: DataSetModificationMessage,
+        target?: DataSetModificationMessage,
+    ): DataSetModificationMessage {
         if (!data) {
             return data;
         }
@@ -1179,16 +1385,21 @@ export class DataSetModificationMessage extends Message {
 }
 
 export class DataSinkInvocation extends InvocableStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.graph.DataSinkInvocation";
-    category: string[];
+    '@class': 'org.apache.streampipes.model.graph.DataSinkInvocation';
+    'category': string[];
 
-    static fromData(data: DataSinkInvocation, target?: DataSinkInvocation): DataSinkInvocation {
+    static 'fromData'(
+        data: DataSinkInvocation,
+        target?: DataSinkInvocation,
+    ): DataSinkInvocation {
         if (!data) {
             return data;
         }
         const instance = target || new DataSinkInvocation();
         super.fromData(data, instance);
-        instance.category = __getCopyArrayFn(__identity<string>())(data.category);
+        instance.category = __getCopyArrayFn(__identity<string>())(
+            data.category,
+        );
         return instance;
     }
 }
@@ -1203,35 +1414,37 @@ export class DataSinkType {
             return data;
         }
         const instance = target || new DataSinkType();
-        instance.label = data.label;
-        instance.description = data.description;
         instance.code = data.code;
+        instance.description = data.description;
+        instance.label = data.label;
         return instance;
     }
 }
 
-export class DataSourceDescription extends NamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.graph.DataSourceDescription";
-    correspondingSourceId: string;
-    spDataStreams: SpDataStreamUnion[];
+export class DebugSinkRuleDescription extends TransformationRuleDescription {
+    '@class': 'org.apache.streampipes.model.connect.rules.DebugSinkRuleDescription';
 
-    static fromData(data: DataSourceDescription, target?: DataSourceDescription): DataSourceDescription {
+    static 'fromData'(
+        data: DebugSinkRuleDescription,
+        target?: DebugSinkRuleDescription,
+    ): DebugSinkRuleDescription {
         if (!data) {
             return data;
         }
-        const instance = target || new DataSourceDescription();
+        const instance = target || new DebugSinkRuleDescription();
         super.fromData(data, instance);
-        instance.spDataStreams = __getCopyArrayFn(SpDataStream.fromDataUnion)(data.spDataStreams);
-        instance.correspondingSourceId = data.correspondingSourceId;
         return instance;
     }
 }
 
 export class DeleteRuleDescription extends SchemaTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription";
-    runtimeKey: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.schema.DeleteRuleDescription';
+    'runtimeKey': string;
 
-    static fromData(data: DeleteRuleDescription, target?: DeleteRuleDescription): DeleteRuleDescription {
+    static 'fromData'(
+        data: DeleteRuleDescription,
+        target?: DeleteRuleDescription,
+    ): DeleteRuleDescription {
         if (!data) {
             return data;
         }
@@ -1243,18 +1456,23 @@ export class DeleteRuleDescription extends SchemaTransformationRuleDescription {
 }
 
 export class DomainStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.DomainStaticProperty";
-    requiredClass: string;
-    supportedProperties: SupportedProperty[];
+    '@class': 'org.apache.streampipes.model.staticproperty.DomainStaticProperty';
+    'requiredClass': string;
+    'supportedProperties': SupportedProperty[];
 
-    static fromData(data: DomainStaticProperty, target?: DomainStaticProperty): DomainStaticProperty {
+    static 'fromData'(
+        data: DomainStaticProperty,
+        target?: DomainStaticProperty,
+    ): DomainStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new DomainStaticProperty();
         super.fromData(data, instance);
         instance.requiredClass = data.requiredClass;
-        instance.supportedProperties = __getCopyArrayFn(SupportedProperty.fromData)(data.supportedProperties);
+        instance.supportedProperties = __getCopyArrayFn(
+            SupportedProperty.fromData,
+        )(data.supportedProperties);
         return instance;
     }
 }
@@ -1263,13 +1481,18 @@ export class EdgeValidationStatus {
     notifications: Notification[];
     validationStatusType: EdgeValidationStatusType;
 
-    static fromData(data: EdgeValidationStatus, target?: EdgeValidationStatus): EdgeValidationStatus {
+    static fromData(
+        data: EdgeValidationStatus,
+        target?: EdgeValidationStatus,
+    ): EdgeValidationStatus {
         if (!data) {
             return data;
         }
         const instance = target || new EdgeValidationStatus();
+        instance.notifications = __getCopyArrayFn(Notification.fromData)(
+            data.notifications,
+        );
         instance.validationStatusType = data.validationStatusType;
-        instance.notifications = __getCopyArrayFn(Notification.fromData)(data.notifications);
         return instance;
     }
 }
@@ -1280,88 +1503,104 @@ export class ElementComposition {
     sepas: DataProcessorInvocation[];
     streams: SpDataStreamUnion[];
 
-    static fromData(data: ElementComposition, target?: ElementComposition): ElementComposition {
+    static fromData(
+        data: ElementComposition,
+        target?: ElementComposition,
+    ): ElementComposition {
         if (!data) {
             return data;
         }
         const instance = target || new ElementComposition();
-        instance.sepas = __getCopyArrayFn(DataProcessorInvocation.fromData)(data.sepas);
-        instance.streams = __getCopyArrayFn(SpDataStream.fromDataUnion)(data.streams);
-        instance.name = data.name;
         instance.description = data.description;
+        instance.name = data.name;
+        instance.sepas = __getCopyArrayFn(DataProcessorInvocation.fromData)(
+            data.sepas,
+        );
+        instance.streams = __getCopyArrayFn(SpDataStream.fromDataUnion)(
+            data.streams,
+        );
         return instance;
     }
 }
 
-export class ElementStatusInfoSettings extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.monitoring.ElementStatusInfoSettings";
+export class ElementStatusInfoSettings {
     elementIdentifier: string;
     errorTopic: string;
     kafkaHost: string;
     kafkaPort: number;
     statsTopic: string;
 
-    static fromData(data: ElementStatusInfoSettings, target?: ElementStatusInfoSettings): ElementStatusInfoSettings {
+    static fromData(
+        data: ElementStatusInfoSettings,
+        target?: ElementStatusInfoSettings,
+    ): ElementStatusInfoSettings {
         if (!data) {
             return data;
         }
         const instance = target || new ElementStatusInfoSettings();
-        super.fromData(data, instance);
         instance.elementIdentifier = data.elementIdentifier;
+        instance.errorTopic = data.errorTopic;
         instance.kafkaHost = data.kafkaHost;
         instance.kafkaPort = data.kafkaPort;
-        instance.errorTopic = data.errorTopic;
         instance.statsTopic = data.statsTopic;
         return instance;
     }
 }
 
-export class ValueSpecification extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.schema.ValueSpecification" | "org.apache.streampipes.model.schema.QuantitativeValue" | "org.apache.streampipes.model.schema.Enumeration";
+export class ValueSpecification {
+    '@class':
+        | 'org.apache.streampipes.model.schema.QuantitativeValue'
+        | 'org.apache.streampipes.model.schema.Enumeration';
 
-    static fromData(data: ValueSpecification, target?: ValueSpecification): ValueSpecification {
+    static 'fromData'(
+        data: ValueSpecification,
+        target?: ValueSpecification,
+    ): ValueSpecification {
         if (!data) {
             return data;
         }
         const instance = target || new ValueSpecification();
-        super.fromData(data, instance);
+        instance['@class'] = data['@class'];
         return instance;
     }
 
-    static fromDataUnion(data: ValueSpecificationUnion): ValueSpecificationUnion {
+    static 'fromDataUnion'(
+        data: ValueSpecificationUnion,
+    ): ValueSpecificationUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.schema.QuantitativeValue":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.schema.QuantitativeValue':
                 return QuantitativeValue.fromData(data);
-            case "org.apache.streampipes.model.schema.Enumeration":
+            case 'org.apache.streampipes.model.schema.Enumeration':
                 return Enumeration.fromData(data);
         }
     }
 }
 
 export class Enumeration extends ValueSpecification {
-    "@class": "org.apache.streampipes.model.schema.Enumeration";
-    description: string;
-    label: string;
-    runtimeValues: string[];
+    '@class': 'org.apache.streampipes.model.schema.Enumeration';
+    'description': string;
+    'label': string;
+    'runtimeValues': string[];
 
-    static fromData(data: Enumeration, target?: Enumeration): Enumeration {
+    static 'fromData'(data: Enumeration, target?: Enumeration): Enumeration {
         if (!data) {
             return data;
         }
         const instance = target || new Enumeration();
         super.fromData(data, instance);
-        instance.label = data.label;
         instance.description = data.description;
-        instance.runtimeValues = __getCopyArrayFn(__identity<string>())(data.runtimeValues);
+        instance.label = data.label;
+        instance.runtimeValues = __getCopyArrayFn(__identity<string>())(
+            data.runtimeValues,
+        );
         return instance;
     }
 }
 
 export class ErrorMessage extends Message {
-
     static fromData(data: ErrorMessage, target?: ErrorMessage): ErrorMessage {
         if (!data) {
             return data;
@@ -1372,140 +1611,155 @@ export class ErrorMessage extends Message {
     }
 }
 
-export class EventGrounding extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.grounding.EventGrounding";
+export class EventGrounding {
     transportFormats: TransportFormat[];
     transportProtocols: TransportProtocolUnion[];
 
-    static fromData(data: EventGrounding, target?: EventGrounding): EventGrounding {
+    static fromData(
+        data: EventGrounding,
+        target?: EventGrounding,
+    ): EventGrounding {
         if (!data) {
             return data;
         }
         const instance = target || new EventGrounding();
-        super.fromData(data, instance);
-        instance.transportProtocols = __getCopyArrayFn(TransportProtocol.fromDataUnion)(data.transportProtocols);
-        instance.transportFormats = __getCopyArrayFn(TransportFormat.fromData)(data.transportFormats);
+        instance.transportFormats = __getCopyArrayFn(TransportFormat.fromData)(
+            data.transportFormats,
+        );
+        instance.transportProtocols = __getCopyArrayFn(
+            TransportProtocol.fromDataUnion,
+        )(data.transportProtocols);
         return instance;
     }
 }
 
-export class EventProperty extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.schema.EventProperty" | "org.apache.streampipes.model.schema.EventPropertyList" | "org.apache.streampipes.model.schema.EventPropertyNested" | "org.apache.streampipes.model.schema.EventPropertyPrimitive";
-    description: string;
-    domainProperties: string[];
-    eventPropertyQualities: EventPropertyQualityDefinitionUnion[];
-    index: number;
-    label: string;
-    propertyScope: string;
-    required: boolean;
-    requiresEventPropertyQualities: EventPropertyQualityRequirement[];
-    runtimeId: string;
-    runtimeName: string;
+export class EventProperty {
+    '@class':
+        | 'org.apache.streampipes.model.schema.EventPropertyList'
+        | 'org.apache.streampipes.model.schema.EventPropertyNested'
+        | 'org.apache.streampipes.model.schema.EventPropertyPrimitive';
+    'description': string;
+    'domainProperties': string[];
+    'elementId': string;
+    'index': number;
+    'label': string;
+    'propertyScope': string;
+    'required': boolean;
+    'runtimeId': string;
+    'runtimeName': string;
 
-    static fromData(data: EventProperty, target?: EventProperty): EventProperty {
+    static 'fromData'(
+        data: EventProperty,
+        target?: EventProperty,
+    ): EventProperty {
         if (!data) {
             return data;
         }
         const instance = target || new EventProperty();
-        super.fromData(data, instance);
-        instance.label = data.label;
+        instance['@class'] = data['@class'];
         instance.description = data.description;
-        instance.runtimeName = data.runtimeName;
-        instance.required = data.required;
-        instance.domainProperties = __getCopyArrayFn(__identity<string>())(data.domainProperties);
-        instance.eventPropertyQualities = __getCopyArrayFn(EventPropertyQualityDefinition.fromDataUnion)(data.eventPropertyQualities);
-        instance.requiresEventPropertyQualities = __getCopyArrayFn(EventPropertyQualityRequirement.fromData)(data.requiresEventPropertyQualities);
-        instance.propertyScope = data.propertyScope;
+        instance.domainProperties = __getCopyArrayFn(__identity<string>())(
+            data.domainProperties,
+        );
+        instance.elementId = data.elementId;
         instance.index = data.index;
+        instance.label = data.label;
+        instance.propertyScope = data.propertyScope;
+        instance.required = data.required;
         instance.runtimeId = data.runtimeId;
+        instance.runtimeName = data.runtimeName;
         return instance;
     }
 
-    static fromDataUnion(data: EventPropertyUnion): EventPropertyUnion {
+    static 'fromDataUnion'(data: EventPropertyUnion): EventPropertyUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.schema.EventPropertyList":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.schema.EventPropertyList':
                 return EventPropertyList.fromData(data);
-            case "org.apache.streampipes.model.schema.EventPropertyNested":
+            case 'org.apache.streampipes.model.schema.EventPropertyNested':
                 return EventPropertyNested.fromData(data);
-            case "org.apache.streampipes.model.schema.EventPropertyPrimitive":
+            case 'org.apache.streampipes.model.schema.EventPropertyPrimitive':
                 return EventPropertyPrimitive.fromData(data);
         }
     }
 }
 
 export class EventPropertyList extends EventProperty {
-    "@class": "org.apache.streampipes.model.schema.EventPropertyList";
-    eventProperty: EventPropertyUnion;
+    '@class': 'org.apache.streampipes.model.schema.EventPropertyList';
+    'eventProperty': EventPropertyUnion;
 
-    static fromData(data: EventPropertyList, target?: EventPropertyList): EventPropertyList {
+    static 'fromData'(
+        data: EventPropertyList,
+        target?: EventPropertyList,
+    ): EventPropertyList {
         if (!data) {
             return data;
         }
         const instance = target || new EventPropertyList();
         super.fromData(data, instance);
-        instance.eventProperty = EventProperty.fromDataUnion(data.eventProperty);
+        instance.eventProperty = EventProperty.fromDataUnion(
+            data.eventProperty,
+        );
         return instance;
     }
 }
 
 export class EventPropertyNested extends EventProperty {
-    "@class": "org.apache.streampipes.model.schema.EventPropertyNested";
-    eventProperties: EventPropertyUnion[];
+    '@class': 'org.apache.streampipes.model.schema.EventPropertyNested';
+    'eventProperties': EventPropertyUnion[];
 
-    static fromData(data: EventPropertyNested, target?: EventPropertyNested): EventPropertyNested {
+    static 'fromData'(
+        data: EventPropertyNested,
+        target?: EventPropertyNested,
+    ): EventPropertyNested {
         if (!data) {
             return data;
         }
         const instance = target || new EventPropertyNested();
         super.fromData(data, instance);
-        instance.eventProperties = __getCopyArrayFn(EventProperty.fromDataUnion)(data.eventProperties);
+        instance.eventProperties = __getCopyArrayFn(
+            EventProperty.fromDataUnion,
+        )(data.eventProperties);
         return instance;
     }
 }
 
 export class EventPropertyPrimitive extends EventProperty {
-    "@class": "org.apache.streampipes.model.schema.EventPropertyPrimitive";
-    measurementUnit: string;
-    runtimeType: string;
-    valueSpecification: ValueSpecificationUnion;
+    '@class': 'org.apache.streampipes.model.schema.EventPropertyPrimitive';
+    'measurementUnit': string;
+    'runtimeType': string;
+    'valueSpecification': ValueSpecificationUnion;
 
-    static fromData(data: EventPropertyPrimitive, target?: EventPropertyPrimitive): EventPropertyPrimitive {
+    static 'fromData'(
+        data: EventPropertyPrimitive,
+        target?: EventPropertyPrimitive,
+    ): EventPropertyPrimitive {
         if (!data) {
             return data;
         }
         const instance = target || new EventPropertyPrimitive();
         super.fromData(data, instance);
-        instance.runtimeType = data.runtimeType;
         instance.measurementUnit = data.measurementUnit;
-        instance.valueSpecification = ValueSpecification.fromDataUnion(data.valueSpecification);
-        return instance;
-    }
-}
-
-export class EventPropertyQualityRequirement extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.quality.EventPropertyQualityRequirement";
-    maximumPropertyQuality: EventPropertyQualityDefinitionUnion;
-    minimumPropertyQuality: EventPropertyQualityDefinitionUnion;
-
-    static fromData(data: EventPropertyQualityRequirement, target?: EventPropertyQualityRequirement): EventPropertyQualityRequirement {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new EventPropertyQualityRequirement();
-        super.fromData(data, instance);
-        instance.minimumPropertyQuality = EventPropertyQualityDefinition.fromDataUnion(data.minimumPropertyQuality);
-        instance.maximumPropertyQuality = EventPropertyQualityDefinition.fromDataUnion(data.maximumPropertyQuality);
+        instance.runtimeType = data.runtimeType;
+        instance.valueSpecification = ValueSpecification.fromDataUnion(
+            data.valueSpecification,
+        );
         return instance;
     }
 }
 
 export class StreamTransformationRuleDescription extends TransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.stream.StreamTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription" | "org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription";
+    '@class':
+        | 'org.apache.streampipes.model.connect.rules.stream.StreamTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription'
+        | 'org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription';
 
-    static fromData(data: StreamTransformationRuleDescription, target?: StreamTransformationRuleDescription): StreamTransformationRuleDescription {
+    static 'fromData'(
+        data: StreamTransformationRuleDescription,
+        target?: StreamTransformationRuleDescription,
+    ): StreamTransformationRuleDescription {
         if (!data) {
             return data;
         }
@@ -1514,25 +1768,32 @@ export class StreamTransformationRuleDescription extends TransformationRuleDescr
         return instance;
     }
 
-    static fromDataUnion(data: StreamTransformationRuleDescriptionUnion): StreamTransformationRuleDescriptionUnion {
+    static 'fromDataUnion'(
+        data: StreamTransformationRuleDescriptionUnion,
+    ): StreamTransformationRuleDescriptionUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription':
                 return EventRateTransformationRuleDescription.fromData(data);
-            case "org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription":
-                return RemoveDuplicatesTransformationRuleDescription.fromData(data);
+            case 'org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription':
+                return RemoveDuplicatesTransformationRuleDescription.fromData(
+                    data,
+                );
         }
     }
 }
 
 export class EventRateTransformationRuleDescription extends StreamTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription";
-    aggregationTimeWindow: number;
-    aggregationType: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.stream.EventRateTransformationRuleDescription';
+    'aggregationTimeWindow': number;
+    'aggregationType': string;
 
-    static fromData(data: EventRateTransformationRuleDescription, target?: EventRateTransformationRuleDescription): EventRateTransformationRuleDescription {
+    static 'fromData'(
+        data: EventRateTransformationRuleDescription,
+        target?: EventRateTransformationRuleDescription,
+    ): EventRateTransformationRuleDescription {
         if (!data) {
             return data;
         }
@@ -1544,8 +1805,7 @@ export class EventRateTransformationRuleDescription extends StreamTransformation
     }
 }
 
-export class EventSchema extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.schema.EventSchema";
+export class EventSchema {
     eventProperties: EventPropertyUnion[];
 
     static fromData(data: EventSchema, target?: EventSchema): EventSchema {
@@ -1553,50 +1813,9 @@ export class EventSchema extends UnnamedStreamPipesEntity {
             return data;
         }
         const instance = target || new EventSchema();
-        super.fromData(data, instance);
-        instance.eventProperties = __getCopyArrayFn(EventProperty.fromDataUnion)(data.eventProperties);
-        return instance;
-    }
-}
-
-export class EventStreamQualityDefinition extends MeasurementProperty {
-    "@class": "org.apache.streampipes.model.quality.EventStreamQualityDefinition" | "org.apache.streampipes.model.quality.Frequency" | "org.apache.streampipes.model.quality.Latency";
-
-    static fromData(data: EventStreamQualityDefinition, target?: EventStreamQualityDefinition): EventStreamQualityDefinition {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new EventStreamQualityDefinition();
-        super.fromData(data, instance);
-        return instance;
-    }
-
-    static fromDataUnion(data: EventStreamQualityDefinitionUnion): EventStreamQualityDefinitionUnion {
-        if (!data) {
-            return data;
-        }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.quality.Frequency":
-                return Frequency.fromData(data);
-            case "org.apache.streampipes.model.quality.Latency":
-                return Latency.fromData(data);
-        }
-    }
-}
-
-export class EventStreamQualityRequirement extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.quality.EventStreamQualityRequirement";
-    maximumStreamQuality: EventStreamQualityDefinitionUnion;
-    minimumStreamQuality: EventStreamQualityDefinitionUnion;
-
-    static fromData(data: EventStreamQualityRequirement, target?: EventStreamQualityRequirement): EventStreamQualityRequirement {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new EventStreamQualityRequirement();
-        super.fromData(data, instance);
-        instance.minimumStreamQuality = EventStreamQualityDefinition.fromDataUnion(data.minimumStreamQuality);
-        instance.maximumStreamQuality = EventStreamQualityDefinition.fromDataUnion(data.maximumStreamQuality);
+        instance.eventProperties = __getCopyArrayFn(
+            EventProperty.fromDataUnion,
+        )(data.eventProperties);
         return instance;
     }
 }
@@ -1604,12 +1823,17 @@ export class EventStreamQualityRequirement extends UnnamedStreamPipesEntity {
 export class ExportConfiguration {
     assetExportConfiguration: AssetExportConfiguration[];
 
-    static fromData(data: ExportConfiguration, target?: ExportConfiguration): ExportConfiguration {
+    static fromData(
+        data: ExportConfiguration,
+        target?: ExportConfiguration,
+    ): ExportConfiguration {
         if (!data) {
             return data;
         }
         const instance = target || new ExportConfiguration();
-        instance.assetExportConfiguration = __getCopyArrayFn(AssetExportConfiguration.fromData)(data.assetExportConfiguration);
+        instance.assetExportConfiguration = __getCopyArrayFn(
+            AssetExportConfiguration.fromData,
+        )(data.assetExportConfiguration);
         return instance;
     }
 }
@@ -1624,8 +1848,8 @@ export class ExportItem {
             return data;
         }
         const instance = target || new ExportItem();
-        instance.resourceId = data.resourceId;
         instance.label = data.label;
+        instance.resourceId = data.resourceId;
         instance.selected = data.selected;
         return instance;
     }
@@ -1636,14 +1860,17 @@ export class FieldStatusInfo {
     changesRequired: boolean;
     fieldStatus: FieldStatus;
 
-    static fromData(data: FieldStatusInfo, target?: FieldStatusInfo): FieldStatusInfo {
+    static fromData(
+        data: FieldStatusInfo,
+        target?: FieldStatusInfo,
+    ): FieldStatusInfo {
         if (!data) {
             return data;
         }
         const instance = target || new FieldStatusInfo();
-        instance.fieldStatus = data.fieldStatus;
         instance.additionalInfo = data.additionalInfo;
         instance.changesRequired = data.changesRequired;
+        instance.fieldStatus = data.fieldStatus;
         return instance;
     }
 }
@@ -1663,25 +1890,28 @@ export class FileMetadata {
             return data;
         }
         const instance = target || new FileMetadata();
-        instance.fileId = data.fileId;
-        instance.rev = data.rev;
-        instance.internalFilename = data.internalFilename;
-        instance.originalFilename = data.originalFilename;
-        instance.filetype = data.filetype;
         instance.createdAt = data.createdAt;
-        instance.lastModified = data.lastModified;
         instance.createdByUser = data.createdByUser;
+        instance.fileId = data.fileId;
+        instance.filetype = data.filetype;
+        instance.internalFilename = data.internalFilename;
+        instance.lastModified = data.lastModified;
+        instance.originalFilename = data.originalFilename;
+        instance.rev = data.rev;
         return instance;
     }
 }
 
 export class FileStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.FileStaticProperty";
-    endpointUrl: string;
-    locationPath: string;
-    requiredFiletypes: string[];
+    '@class': 'org.apache.streampipes.model.staticproperty.FileStaticProperty';
+    'endpointUrl': string;
+    'locationPath': string;
+    'requiredFiletypes': string[];
 
-    static fromData(data: FileStaticProperty, target?: FileStaticProperty): FileStaticProperty {
+    static 'fromData'(
+        data: FileStaticProperty,
+        target?: FileStaticProperty,
+    ): FileStaticProperty {
         if (!data) {
             return data;
         }
@@ -1689,85 +1919,122 @@ export class FileStaticProperty extends StaticProperty {
         super.fromData(data, instance);
         instance.endpointUrl = data.endpointUrl;
         instance.locationPath = data.locationPath;
-        instance.requiredFiletypes = __getCopyArrayFn(__identity<string>())(data.requiredFiletypes);
+        instance.requiredFiletypes = __getCopyArrayFn(__identity<string>())(
+            data.requiredFiletypes,
+        );
         return instance;
     }
 }
 
 export class FixedOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.FixedOutputStrategy";
-    eventProperties: EventPropertyUnion[];
+    '@class': 'org.apache.streampipes.model.output.FixedOutputStrategy';
+    'eventProperties': EventPropertyUnion[];
 
-    static fromData(data: FixedOutputStrategy, target?: FixedOutputStrategy): FixedOutputStrategy {
+    static 'fromData'(
+        data: FixedOutputStrategy,
+        target?: FixedOutputStrategy,
+    ): FixedOutputStrategy {
         if (!data) {
             return data;
         }
         const instance = target || new FixedOutputStrategy();
         super.fromData(data, instance);
-        instance.eventProperties = __getCopyArrayFn(EventProperty.fromDataUnion)(data.eventProperties);
+        instance.eventProperties = __getCopyArrayFn(
+            EventProperty.fromDataUnion,
+        )(data.eventProperties);
         return instance;
     }
 }
 
 export class FormatDescription extends NamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.connect.grounding.FormatDescription";
-    config: StaticPropertyUnion[];
-    formatType: string;
+    '@class': 'org.apache.streampipes.model.connect.grounding.FormatDescription';
+    'config': StaticPropertyUnion[];
+    'formatType': string;
 
-    static fromData(data: FormatDescription, target?: FormatDescription): FormatDescription {
+    static 'fromData'(
+        data: FormatDescription,
+        target?: FormatDescription,
+    ): FormatDescription {
         if (!data) {
             return data;
         }
         const instance = target || new FormatDescription();
         super.fromData(data, instance);
-        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.config);
+        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(
+            data.config,
+        );
         instance.formatType = data.formatType;
         return instance;
     }
 }
 
 export class FreeTextStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.FreeTextStaticProperty";
-    htmlAllowed: boolean;
-    htmlFontFormat: boolean;
-    mapsTo: string;
-    multiLine: boolean;
-    placeholdersSupported: boolean;
-    requiredDatatype: string;
-    requiredDomainProperty: string;
-    value: string;
-    valueSpecification: PropertyValueSpecification;
+    '@class': 'org.apache.streampipes.model.staticproperty.FreeTextStaticProperty';
+    'htmlAllowed': boolean;
+    'htmlFontFormat': boolean;
+    'mapsTo': string;
+    'multiLine': boolean;
+    'placeholdersSupported': boolean;
+    'requiredDatatype': string;
+    'requiredDomainProperty': string;
+    'value': string;
+    'valueSpecification': PropertyValueSpecification;
 
-    static fromData(data: FreeTextStaticProperty, target?: FreeTextStaticProperty): FreeTextStaticProperty {
+    static 'fromData'(
+        data: FreeTextStaticProperty,
+        target?: FreeTextStaticProperty,
+    ): FreeTextStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new FreeTextStaticProperty();
         super.fromData(data, instance);
-        instance.value = data.value;
-        instance.requiredDatatype = data.requiredDatatype;
-        instance.requiredDomainProperty = data.requiredDomainProperty;
-        instance.mapsTo = data.mapsTo;
-        instance.multiLine = data.multiLine;
         instance.htmlAllowed = data.htmlAllowed;
         instance.htmlFontFormat = data.htmlFontFormat;
+        instance.mapsTo = data.mapsTo;
+        instance.multiLine = data.multiLine;
         instance.placeholdersSupported = data.placeholdersSupported;
-        instance.valueSpecification = PropertyValueSpecification.fromData(data.valueSpecification);
+        instance.requiredDatatype = data.requiredDatatype;
+        instance.requiredDomainProperty = data.requiredDomainProperty;
+        instance.value = data.value;
+        instance.valueSpecification = PropertyValueSpecification.fromData(
+            data.valueSpecification,
+        );
         return instance;
     }
 }
 
-export class Frequency extends EventStreamQualityDefinition {
-    "@class": "org.apache.streampipes.model.quality.Frequency";
-    quantityValue: number;
+export class FunctionDefinition {
+    consumedStreams: string[];
+    functionId: FunctionId;
 
-    static fromData(data: Frequency, target?: Frequency): Frequency {
+    static fromData(
+        data: FunctionDefinition,
+        target?: FunctionDefinition,
+    ): FunctionDefinition {
         if (!data) {
             return data;
         }
-        const instance = target || new Frequency();
-        super.fromData(data, instance);
-        instance.quantityValue = data.quantityValue;
+        const instance = target || new FunctionDefinition();
+        instance.consumedStreams = __getCopyArrayFn(__identity<string>())(
+            data.consumedStreams,
+        );
+        instance.functionId = FunctionId.fromData(data.functionId);
+        return instance;
+    }
+}
+
+export class FunctionId {
+    id: string;
+    version: number;
+
+    static fromData(data: FunctionId, target?: FunctionId): FunctionId {
+        if (!data) {
+            return data;
+        }
+        const instance = target || new FunctionId();
+        instance.id = data.id;
+        instance.version = data.version;
         return instance;
     }
 }
@@ -1779,59 +2046,83 @@ export interface GenericAdapterDescription {
     rules: TransformationRuleDescriptionUnion[];
 }
 
-export class GenericAdapterSetDescription extends AdapterSetDescription implements GenericAdapterDescription {
-    "@class": "org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription";
-    eventSchema: EventSchema;
-    formatDescription: FormatDescription;
-    protocolDescription: ProtocolDescription;
+export class GenericAdapterSetDescription
+    extends AdapterSetDescription
+    implements GenericAdapterDescription
+{
+    '@class': 'org.apache.streampipes.model.connect.adapter.GenericAdapterSetDescription';
+    'eventSchema': EventSchema;
+    'formatDescription': FormatDescription;
+    'protocolDescription': ProtocolDescription;
 
-    static fromData(data: GenericAdapterSetDescription, target?: GenericAdapterSetDescription): GenericAdapterSetDescription {
+    static 'fromData'(
+        data: GenericAdapterSetDescription,
+        target?: GenericAdapterSetDescription,
+    ): GenericAdapterSetDescription {
         if (!data) {
             return data;
         }
         const instance = target || new GenericAdapterSetDescription();
         super.fromData(data, instance);
-        instance.formatDescription = FormatDescription.fromData(data.formatDescription);
-        instance.protocolDescription = ProtocolDescription.fromData(data.protocolDescription);
         instance.eventSchema = EventSchema.fromData(data.eventSchema);
+        instance.formatDescription = FormatDescription.fromData(
+            data.formatDescription,
+        );
+        instance.protocolDescription = ProtocolDescription.fromData(
+            data.protocolDescription,
+        );
         return instance;
     }
 }
 
-export class GenericAdapterStreamDescription extends AdapterStreamDescription implements GenericAdapterDescription {
-    "@class": "org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription";
-    eventSchema: EventSchema;
-    formatDescription: FormatDescription;
-    protocolDescription: ProtocolDescription;
+export class GenericAdapterStreamDescription
+    extends AdapterStreamDescription
+    implements GenericAdapterDescription
+{
+    '@class': 'org.apache.streampipes.model.connect.adapter.GenericAdapterStreamDescription';
+    'eventSchema': EventSchema;
+    'formatDescription': FormatDescription;
+    'protocolDescription': ProtocolDescription;
 
-    static fromData(data: GenericAdapterStreamDescription, target?: GenericAdapterStreamDescription): GenericAdapterStreamDescription {
+    static 'fromData'(
+        data: GenericAdapterStreamDescription,
+        target?: GenericAdapterStreamDescription,
+    ): GenericAdapterStreamDescription {
         if (!data) {
             return data;
         }
         const instance = target || new GenericAdapterStreamDescription();
         super.fromData(data, instance);
-        instance.formatDescription = FormatDescription.fromData(data.formatDescription);
-        instance.protocolDescription = ProtocolDescription.fromData(data.protocolDescription);
         instance.eventSchema = EventSchema.fromData(data.eventSchema);
+        instance.formatDescription = FormatDescription.fromData(
+            data.formatDescription,
+        );
+        instance.protocolDescription = ProtocolDescription.fromData(
+            data.protocolDescription,
+        );
         return instance;
     }
 }
 
-export class GuessSchema extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.connect.guess.GuessSchema";
-    eventPreview: { [index: string]: GuessTypeInfo }[];
-    eventSchema: EventSchema;
-    fieldStatusInfo: { [index: string]: FieldStatusInfo };
+export class GuessSchema {
+    '@class': 'org.apache.streampipes.model.connect.guess.GuessSchema';
+    'eventPreview': { [index: string]: GuessTypeInfo }[];
+    'eventSchema': EventSchema;
+    'fieldStatusInfo': { [index: string]: FieldStatusInfo };
 
-    static fromData(data: GuessSchema, target?: GuessSchema): GuessSchema {
+    static 'fromData'(data: GuessSchema, target?: GuessSchema): GuessSchema {
         if (!data) {
             return data;
         }
         const instance = target || new GuessSchema();
-        super.fromData(data, instance);
+        instance['@class'] = data['@class'];
+        instance.eventPreview = __getCopyArrayFn(
+            __getCopyObjectFn(GuessTypeInfo.fromData),
+        )(data.eventPreview);
         instance.eventSchema = EventSchema.fromData(data.eventSchema);
-        instance.eventPreview = __getCopyArrayFn(__getCopyObjectFn(GuessTypeInfo.fromData))(data.eventPreview);
-        instance.fieldStatusInfo = __getCopyObjectFn(FieldStatusInfo.fromData)(data.fieldStatusInfo);
+        instance.fieldStatusInfo = __getCopyObjectFn(FieldStatusInfo.fromData)(
+            data.fieldStatusInfo,
+        );
         return instance;
     }
 }
@@ -1840,7 +2131,10 @@ export class GuessTypeInfo {
     type: string;
     value: any;
 
-    static fromData(data: GuessTypeInfo, target?: GuessTypeInfo): GuessTypeInfo {
+    static fromData(
+        data: GuessTypeInfo,
+        target?: GuessTypeInfo,
+    ): GuessTypeInfo {
         if (!data) {
             return data;
         }
@@ -1851,42 +2145,60 @@ export class GuessTypeInfo {
     }
 }
 
-export class TransportProtocol extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.grounding.TransportProtocol" | "org.apache.streampipes.model.grounding.JmsTransportProtocol" | "org.apache.streampipes.model.grounding.KafkaTransportProtocol" | "org.apache.streampipes.model.grounding.MqttTransportProtocol";
-    brokerHostname: string;
-    topicDefinition: TopicDefinitionUnion;
+export class TransportProtocol {
+    '@class':
+        | 'org.apache.streampipes.model.grounding.JmsTransportProtocol'
+        | 'org.apache.streampipes.model.grounding.KafkaTransportProtocol'
+        | 'org.apache.streampipes.model.grounding.MqttTransportProtocol'
+        | 'org.apache.streampipes.model.grounding.NatsTransportProtocol';
+    'brokerHostname': string;
+    'elementId': string;
+    'topicDefinition': TopicDefinitionUnion;
 
-    static fromData(data: TransportProtocol, target?: TransportProtocol): TransportProtocol {
+    static 'fromData'(
+        data: TransportProtocol,
+        target?: TransportProtocol,
+    ): TransportProtocol {
         if (!data) {
             return data;
         }
         const instance = target || new TransportProtocol();
-        super.fromData(data, instance);
+        instance['@class'] = data['@class'];
         instance.brokerHostname = data.brokerHostname;
-        instance.topicDefinition = TopicDefinition.fromDataUnion(data.topicDefinition);
+        instance.elementId = data.elementId;
+        instance.topicDefinition = TopicDefinition.fromDataUnion(
+            data.topicDefinition,
+        );
         return instance;
     }
 
-    static fromDataUnion(data: TransportProtocolUnion): TransportProtocolUnion {
+    static 'fromDataUnion'(
+        data: TransportProtocolUnion,
+    ): TransportProtocolUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.grounding.JmsTransportProtocol":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.grounding.JmsTransportProtocol':
                 return JmsTransportProtocol.fromData(data);
-            case "org.apache.streampipes.model.grounding.KafkaTransportProtocol":
+            case 'org.apache.streampipes.model.grounding.KafkaTransportProtocol':
                 return KafkaTransportProtocol.fromData(data);
-            case "org.apache.streampipes.model.grounding.MqttTransportProtocol":
+            case 'org.apache.streampipes.model.grounding.MqttTransportProtocol':
                 return MqttTransportProtocol.fromData(data);
+            case 'org.apache.streampipes.model.grounding.NatsTransportProtocol':
+                return NatsTransportProtocol.fromData(data);
         }
     }
 }
 
 export class JmsTransportProtocol extends TransportProtocol {
-    "@class": "org.apache.streampipes.model.grounding.JmsTransportProtocol";
-    port: number;
+    '@class': 'org.apache.streampipes.model.grounding.JmsTransportProtocol';
+    'port': number;
 
-    static fromData(data: JmsTransportProtocol, target?: JmsTransportProtocol): JmsTransportProtocol {
+    static 'fromData'(
+        data: JmsTransportProtocol,
+        target?: JmsTransportProtocol,
+    ): JmsTransportProtocol {
         if (!data) {
             return data;
         }
@@ -1898,44 +2210,50 @@ export class JmsTransportProtocol extends TransportProtocol {
 }
 
 export class KafkaTransportProtocol extends TransportProtocol {
-    "@class": "org.apache.streampipes.model.grounding.KafkaTransportProtocol";
-    acks: string;
-    batchSize: string;
-    groupId: string;
-    kafkaPort: number;
-    lingerMs: number;
-    maxRequestSize: string;
-    messageMaxBytes: string;
-    offset: string;
-    zookeeperHost: string;
-    zookeeperPort: number;
+    '@class': 'org.apache.streampipes.model.grounding.KafkaTransportProtocol';
+    'acks': string;
+    'batchSize': string;
+    'groupId': string;
+    'kafkaPort': number;
+    'lingerMs': number;
+    'maxRequestSize': string;
+    'messageMaxBytes': string;
+    'offset': string;
+    'zookeeperHost': string;
+    'zookeeperPort': number;
 
-    static fromData(data: KafkaTransportProtocol, target?: KafkaTransportProtocol): KafkaTransportProtocol {
+    static 'fromData'(
+        data: KafkaTransportProtocol,
+        target?: KafkaTransportProtocol,
+    ): KafkaTransportProtocol {
         if (!data) {
             return data;
         }
         const instance = target || new KafkaTransportProtocol();
         super.fromData(data, instance);
-        instance.zookeeperHost = data.zookeeperHost;
-        instance.zookeeperPort = data.zookeeperPort;
-        instance.kafkaPort = data.kafkaPort;
-        instance.lingerMs = data.lingerMs;
-        instance.messageMaxBytes = data.messageMaxBytes;
-        instance.maxRequestSize = data.maxRequestSize;
         instance.acks = data.acks;
         instance.batchSize = data.batchSize;
-        instance.offset = data.offset;
         instance.groupId = data.groupId;
+        instance.kafkaPort = data.kafkaPort;
+        instance.lingerMs = data.lingerMs;
+        instance.maxRequestSize = data.maxRequestSize;
+        instance.messageMaxBytes = data.messageMaxBytes;
+        instance.offset = data.offset;
+        instance.zookeeperHost = data.zookeeperHost;
+        instance.zookeeperPort = data.zookeeperPort;
         return instance;
     }
 }
 
 export class KeepOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.KeepOutputStrategy";
-    eventName: string;
-    keepBoth: boolean;
+    '@class': 'org.apache.streampipes.model.output.KeepOutputStrategy';
+    'eventName': string;
+    'keepBoth': boolean;
 
-    static fromData(data: KeepOutputStrategy, target?: KeepOutputStrategy): KeepOutputStrategy {
+    static 'fromData'(
+        data: KeepOutputStrategy,
+        target?: KeepOutputStrategy,
+    ): KeepOutputStrategy {
         if (!data) {
             return data;
         }
@@ -1960,36 +2278,24 @@ export class Label {
             return data;
         }
         const instance = target || new Label();
-        instance.name = data.name;
-        instance.color = data.color;
-        instance.internalName = data.internalName;
-        instance.categoryId = data.categoryId;
         instance._id = data._id;
         instance._rev = data._rev;
-        return instance;
-    }
-}
-
-export class Latency extends EventStreamQualityDefinition {
-    "@class": "org.apache.streampipes.model.quality.Latency";
-    quantityValue: number;
-
-    static fromData(data: Latency, target?: Latency): Latency {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new Latency();
-        super.fromData(data, instance);
-        instance.quantityValue = data.quantityValue;
+        instance.categoryId = data.categoryId;
+        instance.color = data.color;
+        instance.internalName = data.internalName;
+        instance.name = data.name;
         return instance;
     }
 }
 
 export class ListOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.ListOutputStrategy";
-    propertyName: string;
+    '@class': 'org.apache.streampipes.model.output.ListOutputStrategy';
+    'propertyName': string;
 
-    static fromData(data: ListOutputStrategy, target?: ListOutputStrategy): ListOutputStrategy {
+    static 'fromData'(
+        data: ListOutputStrategy,
+        target?: ListOutputStrategy,
+    ): ListOutputStrategy {
         if (!data) {
             return data;
         }
@@ -2001,56 +2307,72 @@ export class ListOutputStrategy extends OutputStrategy {
 }
 
 export class MappingProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.MappingProperty" | "org.apache.streampipes.model.staticproperty.MappingPropertyUnary" | "org.apache.streampipes.model.staticproperty.MappingPropertyNary";
-    mapsFromOptions: string[];
-    propertyScope: string;
-    requirementSelector: string;
+    '@class':
+        | 'org.apache.streampipes.model.staticproperty.MappingProperty'
+        | 'org.apache.streampipes.model.staticproperty.MappingPropertyUnary'
+        | 'org.apache.streampipes.model.staticproperty.MappingPropertyNary';
+    'mapsFromOptions': string[];
+    'propertyScope': string;
+    'requirementSelector': string;
 
-    static fromData(data: MappingProperty, target?: MappingProperty): MappingProperty {
+    static 'fromData'(
+        data: MappingProperty,
+        target?: MappingProperty,
+    ): MappingProperty {
         if (!data) {
             return data;
         }
         const instance = target || new MappingProperty();
         super.fromData(data, instance);
-        instance.requirementSelector = data.requirementSelector;
-        instance.mapsFromOptions = __getCopyArrayFn(__identity<string>())(data.mapsFromOptions);
+        instance.mapsFromOptions = __getCopyArrayFn(__identity<string>())(
+            data.mapsFromOptions,
+        );
         instance.propertyScope = data.propertyScope;
+        instance.requirementSelector = data.requirementSelector;
         return instance;
     }
 
-    static fromDataUnion(data: MappingPropertyUnion): MappingPropertyUnion {
+    static 'fromDataUnion'(data: MappingPropertyUnion): MappingPropertyUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.staticproperty.MappingPropertyNary":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.staticproperty.MappingPropertyNary':
                 return MappingPropertyNary.fromData(data);
-            case "org.apache.streampipes.model.staticproperty.MappingPropertyUnary":
+            case 'org.apache.streampipes.model.staticproperty.MappingPropertyUnary':
                 return MappingPropertyUnary.fromData(data);
         }
     }
 }
 
 export class MappingPropertyNary extends MappingProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.MappingPropertyNary";
-    selectedProperties: string[];
+    '@class': 'org.apache.streampipes.model.staticproperty.MappingPropertyNary';
+    'selectedProperties': string[];
 
-    static fromData(data: MappingPropertyNary, target?: MappingPropertyNary): MappingPropertyNary {
+    static 'fromData'(
+        data: MappingPropertyNary,
+        target?: MappingPropertyNary,
+    ): MappingPropertyNary {
         if (!data) {
             return data;
         }
         const instance = target || new MappingPropertyNary();
         super.fromData(data, instance);
-        instance.selectedProperties = __getCopyArrayFn(__identity<string>())(data.selectedProperties);
+        instance.selectedProperties = __getCopyArrayFn(__identity<string>())(
+            data.selectedProperties,
+        );
         return instance;
     }
 }
 
 export class MappingPropertyUnary extends MappingProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.MappingPropertyUnary";
-    selectedProperty: string;
+    '@class': 'org.apache.streampipes.model.staticproperty.MappingPropertyUnary';
+    'selectedProperty': string;
 
-    static fromData(data: MappingPropertyUnary, target?: MappingPropertyUnary): MappingPropertyUnary {
+    static 'fromData'(
+        data: MappingPropertyUnary,
+        target?: MappingPropertyUnary,
+    ): MappingPropertyUnary {
         if (!data) {
             return data;
         }
@@ -2062,11 +2384,14 @@ export class MappingPropertyUnary extends MappingProperty {
 }
 
 export class MatchingStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.MatchingStaticProperty";
-    matchLeft: string;
-    matchRight: string;
+    '@class': 'org.apache.streampipes.model.staticproperty.MatchingStaticProperty';
+    'matchLeft': string;
+    'matchRight': string;
 
-    static fromData(data: MatchingStaticProperty, target?: MatchingStaticProperty): MatchingStaticProperty {
+    static 'fromData'(
+        data: MatchingStaticProperty,
+        target?: MatchingStaticProperty,
+    ): MatchingStaticProperty {
         if (!data) {
             return data;
         }
@@ -2078,79 +2403,74 @@ export class MatchingStaticProperty extends StaticProperty {
     }
 }
 
-export class MeasurementCapability extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.quality.MeasurementCapability";
-    capability: string;
+export class MessageCounter {
+    counter: number;
+    lastTimestamp: number;
 
-    static fromData(data: MeasurementCapability, target?: MeasurementCapability): MeasurementCapability {
+    static fromData(
+        data: MessageCounter,
+        target?: MessageCounter,
+    ): MessageCounter {
         if (!data) {
             return data;
         }
-        const instance = target || new MeasurementCapability();
-        super.fromData(data, instance);
-        instance.capability = data.capability;
-        return instance;
-    }
-}
-
-export class MeasurementObject extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.quality.MeasurementObject";
-    measuresObject: string;
-
-    static fromData(data: MeasurementObject, target?: MeasurementObject): MeasurementObject {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new MeasurementObject();
-        super.fromData(data, instance);
-        instance.measuresObject = data.measuresObject;
-        return instance;
-    }
-}
-
-export class MeasurementRange extends EventPropertyQualityDefinition {
-    "@class": "org.apache.streampipes.model.quality.MeasurementRange";
-    maxValue: number;
-    minValue: number;
-
-    static fromData(data: MeasurementRange, target?: MeasurementRange): MeasurementRange {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new MeasurementRange();
-        super.fromData(data, instance);
-        instance.minValue = data.minValue;
-        instance.maxValue = data.maxValue;
+        const instance = target || new MessageCounter();
+        instance.counter = data.counter;
+        instance.lastTimestamp = data.lastTimestamp;
         return instance;
     }
 }
 
 export class MoveRuleDescription extends SchemaTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription";
-    newRuntimeKey: string;
-    oldRuntimeKey: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.schema.MoveRuleDescription';
+    'newRuntimeKey': string;
+    'oldRuntimeKey': string;
 
-    static fromData(data: MoveRuleDescription, target?: MoveRuleDescription): MoveRuleDescription {
+    static 'fromData'(
+        data: MoveRuleDescription,
+        target?: MoveRuleDescription,
+    ): MoveRuleDescription {
         if (!data) {
             return data;
         }
         const instance = target || new MoveRuleDescription();
         super.fromData(data, instance);
-        instance.oldRuntimeKey = data.oldRuntimeKey;
         instance.newRuntimeKey = data.newRuntimeKey;
+        instance.oldRuntimeKey = data.oldRuntimeKey;
         return instance;
     }
 }
 
 export class MqttTransportProtocol extends TransportProtocol {
-    "@class": "org.apache.streampipes.model.grounding.MqttTransportProtocol";
-    port: number;
+    '@class': 'org.apache.streampipes.model.grounding.MqttTransportProtocol';
+    'port': number;
 
-    static fromData(data: MqttTransportProtocol, target?: MqttTransportProtocol): MqttTransportProtocol {
+    static 'fromData'(
+        data: MqttTransportProtocol,
+        target?: MqttTransportProtocol,
+    ): MqttTransportProtocol {
         if (!data) {
             return data;
         }
         const instance = target || new MqttTransportProtocol();
+        super.fromData(data, instance);
+        instance.port = data.port;
+        return instance;
+    }
+}
+
+export class NatsTransportProtocol extends TransportProtocol {
+    '@class': 'org.apache.streampipes.model.grounding.NatsTransportProtocol';
+    'port': number;
+
+    static 'fromData'(
+        data: NatsTransportProtocol,
+        target?: NatsTransportProtocol,
+    ): NatsTransportProtocol {
+        if (!data) {
+            return data;
+        }
+        const instance = target || new NatsTransportProtocol();
         super.fromData(data, instance);
         instance.port = data.port;
         return instance;
@@ -2167,17 +2487,22 @@ export class Notification {
             return data;
         }
         const instance = target || new Notification();
-        instance.title = data.title;
-        instance.description = data.description;
         instance.additionalInformation = data.additionalInformation;
+        instance.description = data.description;
+        instance.title = data.title;
         return instance;
     }
 }
 
 export class OneOfStaticProperty extends SelectionStaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.OneOfStaticProperty" | "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty";
+    '@class':
+        | 'org.apache.streampipes.model.staticproperty.OneOfStaticProperty'
+        | 'org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty';
 
-    static fromData(data: OneOfStaticProperty, target?: OneOfStaticProperty): OneOfStaticProperty {
+    static 'fromData'(
+        data: OneOfStaticProperty,
+        target?: OneOfStaticProperty,
+    ): OneOfStaticProperty {
         if (!data) {
             return data;
         }
@@ -2186,19 +2511,21 @@ export class OneOfStaticProperty extends SelectionStaticProperty {
         return instance;
     }
 
-    static fromDataUnion(data: OneOfStaticPropertyUnion): OneOfStaticPropertyUnion {
+    static 'fromDataUnion'(
+        data: OneOfStaticPropertyUnion,
+    ): OneOfStaticPropertyUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty':
                 return RuntimeResolvableOneOfStaticProperty.fromData(data);
         }
     }
 }
 
-export class Option extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.staticproperty.Option";
+export class Option {
+    elementId: string;
     internalName: string;
     name: string;
     selected: boolean;
@@ -2208,10 +2535,10 @@ export class Option extends UnnamedStreamPipesEntity {
             return data;
         }
         const instance = target || new Option();
-        super.fromData(data, instance);
+        instance.elementId = data.elementId;
+        instance.internalName = data.internalName;
         instance.name = data.name;
         instance.selected = data.selected;
-        instance.internalName = data.internalName;
         return instance;
     }
 }
@@ -2238,15 +2565,18 @@ export class PersistedDataStream {
     pipelineName: string;
     schema: EventSchema;
 
-    static fromData(data: PersistedDataStream, target?: PersistedDataStream): PersistedDataStream {
+    static fromData(
+        data: PersistedDataStream,
+        target?: PersistedDataStream,
+    ): PersistedDataStream {
         if (!data) {
             return data;
         }
         const instance = target || new PersistedDataStream();
+        instance.measureName = data.measureName;
         instance.pipelineId = data.pipelineId;
         instance.pipelineName = data.pipelineName;
         instance.schema = EventSchema.fromData(data.schema);
-        instance.measureName = data.measureName;
         return instance;
     }
 }
@@ -2271,18 +2601,24 @@ export class Pipeline extends ElementComposition {
         }
         const instance = target || new Pipeline();
         super.fromData(data, instance);
-        instance.actions = __getCopyArrayFn(DataSinkInvocation.fromData)(data.actions);
-        instance.running = data.running;
-        instance.restartOnSystemReboot = data.restartOnSystemReboot;
-        instance.startedAt = data.startedAt;
-        instance.createdAt = data.createdAt;
-        instance.publicElement = data.publicElement;
-        instance.createdByUser = data.createdByUser;
-        instance.pipelineCategories = __getCopyArrayFn(__identity<string>())(data.pipelineCategories);
-        instance.pipelineNotifications = __getCopyArrayFn(__identity<string>())(data.pipelineNotifications);
-        instance.healthStatus = data.healthStatus;
         instance._id = data._id;
         instance._rev = data._rev;
+        instance.actions = __getCopyArrayFn(DataSinkInvocation.fromData)(
+            data.actions,
+        );
+        instance.createdAt = data.createdAt;
+        instance.createdByUser = data.createdByUser;
+        instance.healthStatus = data.healthStatus;
+        instance.pipelineCategories = __getCopyArrayFn(__identity<string>())(
+            data.pipelineCategories,
+        );
+        instance.pipelineNotifications = __getCopyArrayFn(__identity<string>())(
+            data.pipelineNotifications,
+        );
+        instance.publicElement = data.publicElement;
+        instance.restartOnSystemReboot = data.restartOnSystemReboot;
+        instance.running = data.running;
+        instance.startedAt = data.startedAt;
         return instance;
     }
 }
@@ -2291,7 +2627,10 @@ export class PipelineCanvasComment {
     comment: string;
     position: CanvasPosition;
 
-    static fromData(data: PipelineCanvasComment, target?: PipelineCanvasComment): PipelineCanvasComment {
+    static fromData(
+        data: PipelineCanvasComment,
+        target?: PipelineCanvasComment,
+    ): PipelineCanvasComment {
         if (!data) {
             return data;
         }
@@ -2309,16 +2648,23 @@ export class PipelineCanvasMetadata {
     pipelineElementMetadata: { [index: string]: PipelineElementMetadata };
     pipelineId: string;
 
-    static fromData(data: PipelineCanvasMetadata, target?: PipelineCanvasMetadata): PipelineCanvasMetadata {
+    static fromData(
+        data: PipelineCanvasMetadata,
+        target?: PipelineCanvasMetadata,
+    ): PipelineCanvasMetadata {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineCanvasMetadata();
-        instance.pipelineId = data.pipelineId;
-        instance.pipelineElementMetadata = __getCopyObjectFn(PipelineElementMetadata.fromData)(data.pipelineElementMetadata);
-        instance.comments = __getCopyArrayFn(PipelineCanvasComment.fromData)(data.comments);
         instance._id = data._id;
         instance._rev = data._rev;
+        instance.comments = __getCopyArrayFn(PipelineCanvasComment.fromData)(
+            data.comments,
+        );
+        instance.pipelineElementMetadata = __getCopyObjectFn(
+            PipelineElementMetadata.fromData,
+        )(data.pipelineElementMetadata);
+        instance.pipelineId = data.pipelineId;
         return instance;
     }
 }
@@ -2329,15 +2675,18 @@ export class PipelineCategory {
     categoryDescription: string;
     categoryName: string;
 
-    static fromData(data: PipelineCategory, target?: PipelineCategory): PipelineCategory {
+    static fromData(
+        data: PipelineCategory,
+        target?: PipelineCategory,
+    ): PipelineCategory {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineCategory();
-        instance.categoryName = data.categoryName;
-        instance.categoryDescription = data.categoryDescription;
         instance._id = data._id;
         instance._rev = data._rev;
+        instance.categoryDescription = data.categoryDescription;
+        instance.categoryName = data.categoryName;
         return instance;
     }
 }
@@ -2347,14 +2696,17 @@ export class PipelineEdgeValidation {
     status: EdgeValidationStatus;
     targetId: string;
 
-    static fromData(data: PipelineEdgeValidation, target?: PipelineEdgeValidation): PipelineEdgeValidation {
+    static fromData(
+        data: PipelineEdgeValidation,
+        target?: PipelineEdgeValidation,
+    ): PipelineEdgeValidation {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineEdgeValidation();
         instance.sourceId = data.sourceId;
-        instance.targetId = data.targetId;
         instance.status = EdgeValidationStatus.fromData(data.status);
+        instance.targetId = data.targetId;
         return instance;
     }
 }
@@ -2363,13 +2715,16 @@ export class PipelineElementMetadata {
     customName: string;
     position: CanvasPosition;
 
-    static fromData(data: PipelineElementMetadata, target?: PipelineElementMetadata): PipelineElementMetadata {
+    static fromData(
+        data: PipelineElementMetadata,
+        target?: PipelineElementMetadata,
+    ): PipelineElementMetadata {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineElementMetadata();
-        instance.position = CanvasPosition.fromData(data.position);
         instance.customName = data.customName;
+        instance.position = CanvasPosition.fromData(data.position);
         return instance;
     }
 }
@@ -2382,17 +2737,24 @@ export class PipelineElementMonitoringInfo {
     producedMessageInfoExists: boolean;
     producedMessagesInfo: ProducedMessagesInfo;
 
-    static fromData(data: PipelineElementMonitoringInfo, target?: PipelineElementMonitoringInfo): PipelineElementMonitoringInfo {
+    static fromData(
+        data: PipelineElementMonitoringInfo,
+        target?: PipelineElementMonitoringInfo,
+    ): PipelineElementMonitoringInfo {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineElementMonitoringInfo();
+        instance.consumedMessageInfoExists = data.consumedMessageInfoExists;
+        instance.consumedMessagesInfos = __getCopyArrayFn(
+            ConsumedMessagesInfo.fromData,
+        )(data.consumedMessagesInfos);
         instance.pipelineElementId = data.pipelineElementId;
         instance.pipelineElementName = data.pipelineElementName;
-        instance.consumedMessageInfoExists = data.consumedMessageInfoExists;
         instance.producedMessageInfoExists = data.producedMessageInfoExists;
-        instance.consumedMessagesInfos = __getCopyArrayFn(ConsumedMessagesInfo.fromData)(data.consumedMessagesInfos);
-        instance.producedMessagesInfo = ProducedMessagesInfo.fromData(data.producedMessagesInfo);
+        instance.producedMessagesInfo = ProducedMessagesInfo.fromData(
+            data.producedMessagesInfo,
+        );
         return instance;
     }
 }
@@ -2404,16 +2766,19 @@ export class PipelineElementRecommendation {
     name: string;
     weight: number;
 
-    static fromData(data: PipelineElementRecommendation, target?: PipelineElementRecommendation): PipelineElementRecommendation {
+    static fromData(
+        data: PipelineElementRecommendation,
+        target?: PipelineElementRecommendation,
+    ): PipelineElementRecommendation {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineElementRecommendation();
+        instance.count = data.count;
+        instance.description = data.description;
         instance.elementId = data.elementId;
         instance.name = data.name;
-        instance.description = data.description;
         instance.weight = data.weight;
-        instance.count = data.count;
         return instance;
     }
 }
@@ -2423,13 +2788,20 @@ export class PipelineElementRecommendationMessage {
     recommendedElements: PipelineElementRecommendation[];
     success: boolean;
 
-    static fromData(data: PipelineElementRecommendationMessage, target?: PipelineElementRecommendationMessage): PipelineElementRecommendationMessage {
+    static fromData(
+        data: PipelineElementRecommendationMessage,
+        target?: PipelineElementRecommendationMessage,
+    ): PipelineElementRecommendationMessage {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineElementRecommendationMessage();
-        instance.possibleElements = __getCopyArrayFn(PipelineElementRecommendation.fromData)(data.possibleElements);
-        instance.recommendedElements = __getCopyArrayFn(PipelineElementRecommendation.fromData)(data.recommendedElements);
+        instance.possibleElements = __getCopyArrayFn(
+            PipelineElementRecommendation.fromData,
+        )(data.possibleElements);
+        instance.recommendedElements = __getCopyArrayFn(
+            PipelineElementRecommendation.fromData,
+        )(data.recommendedElements);
         instance.success = data.success;
         return instance;
     }
@@ -2441,7 +2813,10 @@ export class PipelineElementStatus {
     optionalMessage: string;
     success: boolean;
 
-    static fromData(data: PipelineElementStatus, target?: PipelineElementStatus): PipelineElementStatus {
+    static fromData(
+        data: PipelineElementStatus,
+        target?: PipelineElementStatus,
+    ): PipelineElementStatus {
         if (!data) {
             return data;
         }
@@ -2462,17 +2837,22 @@ export class PipelineElementTemplate {
     templateDescription: string;
     templateName: string;
 
-    static fromData(data: PipelineElementTemplate, target?: PipelineElementTemplate): PipelineElementTemplate {
+    static fromData(
+        data: PipelineElementTemplate,
+        target?: PipelineElementTemplate,
+    ): PipelineElementTemplate {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineElementTemplate();
-        instance.templateName = data.templateName;
-        instance.templateDescription = data.templateDescription;
-        instance.basePipelineElementAppId = data.basePipelineElementAppId;
-        instance.templateConfigs = __getCopyObjectFn(PipelineElementTemplateConfig.fromData)(data.templateConfigs);
         instance._id = data._id;
         instance._rev = data._rev;
+        instance.basePipelineElementAppId = data.basePipelineElementAppId;
+        instance.templateConfigs = __getCopyObjectFn(
+            PipelineElementTemplateConfig.fromData,
+        )(data.templateConfigs);
+        instance.templateDescription = data.templateDescription;
+        instance.templateName = data.templateName;
         return instance;
     }
 }
@@ -2482,13 +2862,16 @@ export class PipelineElementTemplateConfig {
     editable: boolean;
     value: any;
 
-    static fromData(data: PipelineElementTemplateConfig, target?: PipelineElementTemplateConfig): PipelineElementTemplateConfig {
+    static fromData(
+        data: PipelineElementTemplateConfig,
+        target?: PipelineElementTemplateConfig,
+    ): PipelineElementTemplateConfig {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineElementTemplateConfig();
-        instance.editable = data.editable;
         instance.displayed = data.displayed;
+        instance.editable = data.editable;
         instance.value = data.value;
         return instance;
     }
@@ -2498,7 +2881,10 @@ export class PipelineElementValidationInfo {
     level: ValidationInfoLevel;
     message: string;
 
-    static fromData(data: PipelineElementValidationInfo, target?: PipelineElementValidationInfo): PipelineElementValidationInfo {
+    static fromData(
+        data: PipelineElementValidationInfo,
+        target?: PipelineElementValidationInfo,
+    ): PipelineElementValidationInfo {
         if (!data) {
             return data;
         }
@@ -2519,19 +2905,30 @@ export class PipelineModification {
     staticProperties: StaticPropertyUnion[];
     validationInfos: PipelineElementValidationInfo[];
 
-    static fromData(data: PipelineModification, target?: PipelineModification): PipelineModification {
+    static fromData(
+        data: PipelineModification,
+        target?: PipelineModification,
+    ): PipelineModification {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineModification();
         instance.domId = data.domId;
         instance.elementId = data.elementId;
-        instance.pipelineElementValid = data.pipelineElementValid;
-        instance.validationInfos = __getCopyArrayFn(PipelineElementValidationInfo.fromData)(data.validationInfos);
-        instance.staticProperties = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.staticProperties);
-        instance.outputStrategies = __getCopyArrayFn(OutputStrategy.fromDataUnion)(data.outputStrategies);
-        instance.inputStreams = __getCopyArrayFn(SpDataStream.fromDataUnion)(data.inputStreams);
+        instance.inputStreams = __getCopyArrayFn(SpDataStream.fromDataUnion)(
+            data.inputStreams,
+        );
+        instance.outputStrategies = __getCopyArrayFn(
+            OutputStrategy.fromDataUnion,
+        )(data.outputStrategies);
         instance.outputStream = SpDataStream.fromDataUnion(data.outputStream);
+        instance.pipelineElementValid = data.pipelineElementValid;
+        instance.staticProperties = __getCopyArrayFn(
+            StaticProperty.fromDataUnion,
+        )(data.staticProperties);
+        instance.validationInfos = __getCopyArrayFn(
+            PipelineElementValidationInfo.fromData,
+        )(data.validationInfos);
         return instance;
     }
 }
@@ -2541,15 +2938,22 @@ export class PipelineModificationMessage extends Message {
     pipelineModifications: PipelineModification[];
     pipelineValid: boolean;
 
-    static fromData(data: PipelineModificationMessage, target?: PipelineModificationMessage): PipelineModificationMessage {
+    static fromData(
+        data: PipelineModificationMessage,
+        target?: PipelineModificationMessage,
+    ): PipelineModificationMessage {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineModificationMessage();
         super.fromData(data, instance);
-        instance.pipelineModifications = __getCopyArrayFn(PipelineModification.fromData)(data.pipelineModifications);
+        instance.edgeValidations = __getCopyArrayFn(
+            PipelineEdgeValidation.fromData,
+        )(data.edgeValidations);
+        instance.pipelineModifications = __getCopyArrayFn(
+            PipelineModification.fromData,
+        )(data.pipelineModifications);
         instance.pipelineValid = data.pipelineValid;
-        instance.edgeValidations = __getCopyArrayFn(PipelineEdgeValidation.fromData)(data.edgeValidations);
         return instance;
     }
 }
@@ -2560,15 +2964,20 @@ export class PipelineMonitoringInfo {
     pipelineId: string;
     startedAt: number;
 
-    static fromData(data: PipelineMonitoringInfo, target?: PipelineMonitoringInfo): PipelineMonitoringInfo {
+    static fromData(
+        data: PipelineMonitoringInfo,
+        target?: PipelineMonitoringInfo,
+    ): PipelineMonitoringInfo {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineMonitoringInfo();
-        instance.pipelineId = data.pipelineId;
         instance.createdAt = data.createdAt;
+        instance.pipelineElementMonitoringInfo = __getCopyArrayFn(
+            PipelineElementMonitoringInfo.fromData,
+        )(data.pipelineElementMonitoringInfo);
+        instance.pipelineId = data.pipelineId;
         instance.startedAt = data.startedAt;
-        instance.pipelineElementMonitoringInfo = __getCopyArrayFn(PipelineElementMonitoringInfo.fromData)(data.pipelineElementMonitoringInfo);
         return instance;
     }
 }
@@ -2580,16 +2989,21 @@ export class PipelineOperationStatus {
     success: boolean;
     title: string;
 
-    static fromData(data: PipelineOperationStatus, target?: PipelineOperationStatus): PipelineOperationStatus {
+    static fromData(
+        data: PipelineOperationStatus,
+        target?: PipelineOperationStatus,
+    ): PipelineOperationStatus {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineOperationStatus();
+        instance.elementStatus = __getCopyArrayFn(
+            PipelineElementStatus.fromData,
+        )(data.elementStatus);
         instance.pipelineId = data.pipelineId;
         instance.pipelineName = data.pipelineName;
-        instance.title = data.title;
         instance.success = data.success;
-        instance.elementStatus = __getCopyArrayFn(PipelineElementStatus.fromData)(data.elementStatus);
+        instance.title = data.title;
         return instance;
     }
 }
@@ -2598,13 +3012,18 @@ export class PipelinePreviewModel {
     previewId: string;
     supportedPipelineElementDomIds: string[];
 
-    static fromData(data: PipelinePreviewModel, target?: PipelinePreviewModel): PipelinePreviewModel {
+    static fromData(
+        data: PipelinePreviewModel,
+        target?: PipelinePreviewModel,
+    ): PipelinePreviewModel {
         if (!data) {
             return data;
         }
         const instance = target || new PipelinePreviewModel();
         instance.previewId = data.previewId;
-        instance.supportedPipelineElementDomIds = __getCopyArrayFn(__identity<string>())(data.supportedPipelineElementDomIds);
+        instance.supportedPipelineElementDomIds = __getCopyArrayFn(
+            __identity<string>(),
+        )(data.supportedPipelineElementDomIds);
         return instance;
     }
 }
@@ -2615,74 +3034,75 @@ export class PipelineStatusMessage {
     pipelineId: string;
     timestamp: number;
 
-    static fromData(data: PipelineStatusMessage, target?: PipelineStatusMessage): PipelineStatusMessage {
+    static fromData(
+        data: PipelineStatusMessage,
+        target?: PipelineStatusMessage,
+    ): PipelineStatusMessage {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineStatusMessage();
+        instance.message = data.message;
+        instance.messageType = data.messageType;
         instance.pipelineId = data.pipelineId;
         instance.timestamp = data.timestamp;
-        instance.messageType = data.messageType;
-        instance.message = data.message;
         return instance;
     }
 }
 
 export class PipelineTemplateDescription extends NamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.template.PipelineTemplateDescription";
-    boundTo: BoundPipelineElement[];
-    pipelineTemplateDescription: string;
-    pipelineTemplateId: string;
-    pipelineTemplateName: string;
+    '@class': 'org.apache.streampipes.model.template.PipelineTemplateDescription';
+    'boundTo': BoundPipelineElement[];
+    'pipelineTemplateDescription': string;
+    'pipelineTemplateId': string;
+    'pipelineTemplateName': string;
 
-    static fromData(data: PipelineTemplateDescription, target?: PipelineTemplateDescription): PipelineTemplateDescription {
+    static 'fromData'(
+        data: PipelineTemplateDescription,
+        target?: PipelineTemplateDescription,
+    ): PipelineTemplateDescription {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineTemplateDescription();
         super.fromData(data, instance);
-        instance.boundTo = __getCopyArrayFn(BoundPipelineElement.fromData)(data.boundTo);
-        instance.pipelineTemplateId = data.pipelineTemplateId;
+        instance.boundTo = __getCopyArrayFn(BoundPipelineElement.fromData)(
+            data.boundTo,
+        );
         instance.pipelineTemplateDescription = data.pipelineTemplateDescription;
+        instance.pipelineTemplateId = data.pipelineTemplateId;
         instance.pipelineTemplateName = data.pipelineTemplateName;
         return instance;
     }
 }
 
-export class PipelineTemplateInvocation extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.template.PipelineTemplateInvocation";
-    dataSetId: string;
-    kviName: string;
-    pipelineTemplateDescription: PipelineTemplateDescription;
-    pipelineTemplateId: string;
-    staticProperties: StaticPropertyUnion[];
+export class PipelineTemplateInvocation {
+    '@class': 'org.apache.streampipes.model.template.PipelineTemplateInvocation';
+    'dataSetId': string;
+    'kviName': string;
+    'pipelineTemplateDescription': PipelineTemplateDescription;
+    'pipelineTemplateId': string;
+    'staticProperties': StaticPropertyUnion[];
 
-    static fromData(data: PipelineTemplateInvocation, target?: PipelineTemplateInvocation): PipelineTemplateInvocation {
+    static 'fromData'(
+        data: PipelineTemplateInvocation,
+        target?: PipelineTemplateInvocation,
+    ): PipelineTemplateInvocation {
         if (!data) {
             return data;
         }
         const instance = target || new PipelineTemplateInvocation();
-        super.fromData(data, instance);
-        instance.kviName = data.kviName;
+        instance['@class'] = data['@class'];
         instance.dataSetId = data.dataSetId;
+        instance.kviName = data.kviName;
+        instance.pipelineTemplateDescription =
+            PipelineTemplateDescription.fromData(
+                data.pipelineTemplateDescription,
+            );
         instance.pipelineTemplateId = data.pipelineTemplateId;
-        instance.pipelineTemplateDescription = PipelineTemplateDescription.fromData(data.pipelineTemplateDescription);
-        instance.staticProperties = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.staticProperties);
-        return instance;
-    }
-}
-
-export class Precision extends EventPropertyQualityDefinition {
-    "@class": "org.apache.streampipes.model.quality.Precision";
-    quantityValue: number;
-
-    static fromData(data: Precision, target?: Precision): Precision {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new Precision();
-        super.fromData(data, instance);
-        instance.quantityValue = data.quantityValue;
+        instance.staticProperties = __getCopyArrayFn(
+            StaticProperty.fromDataUnion,
+        )(data.staticProperties);
         return instance;
     }
 }
@@ -2691,101 +3111,121 @@ export class ProducedMessagesInfo extends MessagesInfo {
     totalProducedMessages: number;
     totalProducedMessagesSincePipelineStart: number;
 
-    static fromData(data: ProducedMessagesInfo, target?: ProducedMessagesInfo): ProducedMessagesInfo {
+    static fromData(
+        data: ProducedMessagesInfo,
+        target?: ProducedMessagesInfo,
+    ): ProducedMessagesInfo {
         if (!data) {
             return data;
         }
         const instance = target || new ProducedMessagesInfo();
         super.fromData(data, instance);
         instance.totalProducedMessages = data.totalProducedMessages;
-        instance.totalProducedMessagesSincePipelineStart = data.totalProducedMessagesSincePipelineStart;
+        instance.totalProducedMessagesSincePipelineStart =
+            data.totalProducedMessagesSincePipelineStart;
         return instance;
     }
 }
 
-export class PropertyRenameRule extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.output.PropertyRenameRule";
+export class PropertyRenameRule {
     newRuntimeName: string;
     runtimeId: string;
 
-    static fromData(data: PropertyRenameRule, target?: PropertyRenameRule): PropertyRenameRule {
+    static fromData(
+        data: PropertyRenameRule,
+        target?: PropertyRenameRule,
+    ): PropertyRenameRule {
         if (!data) {
             return data;
         }
         const instance = target || new PropertyRenameRule();
-        super.fromData(data, instance);
-        instance.runtimeId = data.runtimeId;
         instance.newRuntimeName = data.newRuntimeName;
+        instance.runtimeId = data.runtimeId;
         return instance;
     }
 }
 
-export class PropertyValueSpecification extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.staticproperty.PropertyValueSpecification";
+export class PropertyValueSpecification {
     maxValue: number;
     minValue: number;
     step: number;
 
-    static fromData(data: PropertyValueSpecification, target?: PropertyValueSpecification): PropertyValueSpecification {
+    static fromData(
+        data: PropertyValueSpecification,
+        target?: PropertyValueSpecification,
+    ): PropertyValueSpecification {
         if (!data) {
             return data;
         }
         const instance = target || new PropertyValueSpecification();
-        super.fromData(data, instance);
-        instance.minValue = data.minValue;
         instance.maxValue = data.maxValue;
+        instance.minValue = data.minValue;
         instance.step = data.step;
         return instance;
     }
 }
 
 export class ProtocolDescription extends NamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.connect.grounding.ProtocolDescription";
-    category: string[];
-    config: StaticPropertyUnion[];
-    sourceType: string;
+    '@class': 'org.apache.streampipes.model.connect.grounding.ProtocolDescription';
+    'category': string[];
+    'config': StaticPropertyUnion[];
+    'sourceType': string;
 
-    static fromData(data: ProtocolDescription, target?: ProtocolDescription): ProtocolDescription {
+    static 'fromData'(
+        data: ProtocolDescription,
+        target?: ProtocolDescription,
+    ): ProtocolDescription {
         if (!data) {
             return data;
         }
         const instance = target || new ProtocolDescription();
         super.fromData(data, instance);
+        instance.category = __getCopyArrayFn(__identity<string>())(
+            data.category,
+        );
+        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(
+            data.config,
+        );
         instance.sourceType = data.sourceType;
-        instance.config = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.config);
-        instance.category = __getCopyArrayFn(__identity<string>())(data.category);
         return instance;
     }
 }
 
 export class QuantitativeValue extends ValueSpecification {
-    "@class": "org.apache.streampipes.model.schema.QuantitativeValue";
-    maxValue: number;
-    minValue: number;
-    step: number;
+    '@class': 'org.apache.streampipes.model.schema.QuantitativeValue';
+    'maxValue': number;
+    'minValue': number;
+    'step': number;
 
-    static fromData(data: QuantitativeValue, target?: QuantitativeValue): QuantitativeValue {
+    static 'fromData'(
+        data: QuantitativeValue,
+        target?: QuantitativeValue,
+    ): QuantitativeValue {
         if (!data) {
             return data;
         }
         const instance = target || new QuantitativeValue();
         super.fromData(data, instance);
-        instance.minValue = data.minValue;
         instance.maxValue = data.maxValue;
+        instance.minValue = data.minValue;
         instance.step = data.step;
         return instance;
     }
 }
 
 export class RemoveDuplicatesTransformationRuleDescription extends StreamTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription";
-    filterTimeWindow: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.stream.RemoveDuplicatesTransformationRuleDescription';
+    'filterTimeWindow': string;
 
-    static fromData(data: RemoveDuplicatesTransformationRuleDescription, target?: RemoveDuplicatesTransformationRuleDescription): RemoveDuplicatesTransformationRuleDescription {
+    static 'fromData'(
+        data: RemoveDuplicatesTransformationRuleDescription,
+        target?: RemoveDuplicatesTransformationRuleDescription,
+    ): RemoveDuplicatesTransformationRuleDescription {
         if (!data) {
             return data;
         }
-        const instance = target || new RemoveDuplicatesTransformationRuleDescription();
+        const instance =
+            target || new RemoveDuplicatesTransformationRuleDescription();
         super.fromData(data, instance);
         instance.filterTimeWindow = data.filterTimeWindow;
         return instance;
@@ -2793,170 +3233,199 @@ export class RemoveDuplicatesTransformationRuleDescription extends StreamTransfo
 }
 
 export class RenameRuleDescription extends SchemaTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription";
-    newRuntimeKey: string;
-    oldRuntimeKey: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.schema.RenameRuleDescription';
+    'newRuntimeKey': string;
+    'oldRuntimeKey': string;
 
-    static fromData(data: RenameRuleDescription, target?: RenameRuleDescription): RenameRuleDescription {
+    static 'fromData'(
+        data: RenameRuleDescription,
+        target?: RenameRuleDescription,
+    ): RenameRuleDescription {
         if (!data) {
             return data;
         }
         const instance = target || new RenameRuleDescription();
         super.fromData(data, instance);
-        instance.oldRuntimeKey = data.oldRuntimeKey;
         instance.newRuntimeKey = data.newRuntimeKey;
+        instance.oldRuntimeKey = data.oldRuntimeKey;
         return instance;
     }
 }
 
-export class Resolution extends EventPropertyQualityDefinition {
-    "@class": "org.apache.streampipes.model.quality.Resolution";
-    quantityValue: number;
+export class RuntimeOptionsRequest {
+    '@class':
+        | 'org.apache.streampipes.model.runtime.RuntimeOptionsRequest'
+        | 'org.apache.streampipes.model.runtime.RuntimeOptionsResponse';
+    'appId': string;
+    'belongsTo': string;
+    'inputStreams': SpDataStreamUnion[];
+    'requestId': string;
+    'staticProperties': StaticPropertyUnion[];
 
-    static fromData(data: Resolution, target?: Resolution): Resolution {
-        if (!data) {
-            return data;
-        }
-        const instance = target || new Resolution();
-        super.fromData(data, instance);
-        instance.quantityValue = data.quantityValue;
-        return instance;
-    }
-}
-
-export class RuntimeOptionsRequest extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.runtime.RuntimeOptionsRequest" | "org.apache.streampipes.model.runtime.RuntimeOptionsResponse";
-    appId: string;
-    belongsTo: string;
-    inputStreams: SpDataStreamUnion[];
-    requestId: string;
-    staticProperties: StaticPropertyUnion[];
-
-    static fromData(data: RuntimeOptionsRequest, target?: RuntimeOptionsRequest): RuntimeOptionsRequest {
+    static 'fromData'(
+        data: RuntimeOptionsRequest,
+        target?: RuntimeOptionsRequest,
+    ): RuntimeOptionsRequest {
         if (!data) {
             return data;
         }
         const instance = target || new RuntimeOptionsRequest();
-        super.fromData(data, instance);
-        instance.requestId = data.requestId;
+        instance['@class'] = data['@class'];
         instance.appId = data.appId;
-        instance.staticProperties = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.staticProperties);
-        instance.inputStreams = __getCopyArrayFn(SpDataStream.fromDataUnion)(data.inputStreams);
         instance.belongsTo = data.belongsTo;
+        instance.inputStreams = __getCopyArrayFn(SpDataStream.fromDataUnion)(
+            data.inputStreams,
+        );
+        instance.requestId = data.requestId;
+        instance.staticProperties = __getCopyArrayFn(
+            StaticProperty.fromDataUnion,
+        )(data.staticProperties);
         return instance;
     }
 }
 
 export class RuntimeOptionsResponse extends RuntimeOptionsRequest {
-    "@class": "org.apache.streampipes.model.runtime.RuntimeOptionsResponse";
-    staticProperty: StaticPropertyUnion;
+    '@class': 'org.apache.streampipes.model.runtime.RuntimeOptionsResponse';
+    'staticProperty': StaticPropertyUnion;
 
-    static fromData(data: RuntimeOptionsResponse, target?: RuntimeOptionsResponse): RuntimeOptionsResponse {
+    static 'fromData'(
+        data: RuntimeOptionsResponse,
+        target?: RuntimeOptionsResponse,
+    ): RuntimeOptionsResponse {
         if (!data) {
             return data;
         }
         const instance = target || new RuntimeOptionsResponse();
         super.fromData(data, instance);
-        instance.staticProperty = StaticProperty.fromDataUnion(data.staticProperty);
+        instance.staticProperty = StaticProperty.fromDataUnion(
+            data.staticProperty,
+        );
         return instance;
     }
 }
 
 export class RuntimeResolvableAnyStaticProperty extends AnyStaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty";
-    dependsOn: string[];
+    '@class': 'org.apache.streampipes.model.staticproperty.RuntimeResolvableAnyStaticProperty';
+    'dependsOn': string[];
 
-    static fromData(data: RuntimeResolvableAnyStaticProperty, target?: RuntimeResolvableAnyStaticProperty): RuntimeResolvableAnyStaticProperty {
+    static 'fromData'(
+        data: RuntimeResolvableAnyStaticProperty,
+        target?: RuntimeResolvableAnyStaticProperty,
+    ): RuntimeResolvableAnyStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new RuntimeResolvableAnyStaticProperty();
         super.fromData(data, instance);
-        instance.dependsOn = __getCopyArrayFn(__identity<string>())(data.dependsOn);
+        instance.dependsOn = __getCopyArrayFn(__identity<string>())(
+            data.dependsOn,
+        );
         return instance;
     }
 }
 
 export class RuntimeResolvableOneOfStaticProperty extends OneOfStaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty";
-    dependsOn: string[];
+    '@class': 'org.apache.streampipes.model.staticproperty.RuntimeResolvableOneOfStaticProperty';
+    'dependsOn': string[];
 
-    static fromData(data: RuntimeResolvableOneOfStaticProperty, target?: RuntimeResolvableOneOfStaticProperty): RuntimeResolvableOneOfStaticProperty {
+    static 'fromData'(
+        data: RuntimeResolvableOneOfStaticProperty,
+        target?: RuntimeResolvableOneOfStaticProperty,
+    ): RuntimeResolvableOneOfStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new RuntimeResolvableOneOfStaticProperty();
         super.fromData(data, instance);
-        instance.dependsOn = __getCopyArrayFn(__identity<string>())(data.dependsOn);
+        instance.dependsOn = __getCopyArrayFn(__identity<string>())(
+            data.dependsOn,
+        );
         return instance;
     }
 }
 
 export class RuntimeResolvableTreeInputStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty";
-    dependsOn: string[];
-    nodes: TreeInputNode[];
+    '@class': 'org.apache.streampipes.model.staticproperty.RuntimeResolvableTreeInputStaticProperty';
+    'dependsOn': string[];
+    'nodes': TreeInputNode[];
 
-    static fromData(data: RuntimeResolvableTreeInputStaticProperty, target?: RuntimeResolvableTreeInputStaticProperty): RuntimeResolvableTreeInputStaticProperty {
+    static 'fromData'(
+        data: RuntimeResolvableTreeInputStaticProperty,
+        target?: RuntimeResolvableTreeInputStaticProperty,
+    ): RuntimeResolvableTreeInputStaticProperty {
         if (!data) {
             return data;
         }
-        const instance = target || new RuntimeResolvableTreeInputStaticProperty();
+        const instance =
+            target || new RuntimeResolvableTreeInputStaticProperty();
         super.fromData(data, instance);
-        instance.dependsOn = __getCopyArrayFn(__identity<string>())(data.dependsOn);
+        instance.dependsOn = __getCopyArrayFn(__identity<string>())(
+            data.dependsOn,
+        );
         instance.nodes = __getCopyArrayFn(TreeInputNode.fromData)(data.nodes);
         return instance;
     }
 }
 
 export class SecretStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.SecretStaticProperty";
-    encrypted: boolean;
-    value: string;
+    '@class': 'org.apache.streampipes.model.staticproperty.SecretStaticProperty';
+    'encrypted': boolean;
+    'value': string;
 
-    static fromData(data: SecretStaticProperty, target?: SecretStaticProperty): SecretStaticProperty {
+    static 'fromData'(
+        data: SecretStaticProperty,
+        target?: SecretStaticProperty,
+    ): SecretStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new SecretStaticProperty();
         super.fromData(data, instance);
-        instance.value = data.value;
         instance.encrypted = data.encrypted;
+        instance.value = data.value;
         return instance;
     }
 }
 
-export class TopicDefinition extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.grounding.TopicDefinition" | "org.apache.streampipes.model.grounding.SimpleTopicDefinition" | "org.apache.streampipes.model.grounding.WildcardTopicDefinition";
-    actualTopicName: string;
+export class TopicDefinition {
+    '@class':
+        | 'org.apache.streampipes.model.grounding.SimpleTopicDefinition'
+        | 'org.apache.streampipes.model.grounding.WildcardTopicDefinition';
+    'actualTopicName': string;
 
-    static fromData(data: TopicDefinition, target?: TopicDefinition): TopicDefinition {
+    static 'fromData'(
+        data: TopicDefinition,
+        target?: TopicDefinition,
+    ): TopicDefinition {
         if (!data) {
             return data;
         }
         const instance = target || new TopicDefinition();
-        super.fromData(data, instance);
+        instance['@class'] = data['@class'];
         instance.actualTopicName = data.actualTopicName;
         return instance;
     }
 
-    static fromDataUnion(data: TopicDefinitionUnion): TopicDefinitionUnion {
+    static 'fromDataUnion'(data: TopicDefinitionUnion): TopicDefinitionUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.grounding.SimpleTopicDefinition":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.grounding.SimpleTopicDefinition':
                 return SimpleTopicDefinition.fromData(data);
-            case "org.apache.streampipes.model.grounding.WildcardTopicDefinition":
+            case 'org.apache.streampipes.model.grounding.WildcardTopicDefinition':
                 return WildcardTopicDefinition.fromData(data);
         }
     }
 }
 
 export class SimpleTopicDefinition extends TopicDefinition {
-    "@class": "org.apache.streampipes.model.grounding.SimpleTopicDefinition";
+    '@class': 'org.apache.streampipes.model.grounding.SimpleTopicDefinition';
 
-    static fromData(data: SimpleTopicDefinition, target?: SimpleTopicDefinition): SimpleTopicDefinition {
+    static 'fromData'(
+        data: SimpleTopicDefinition,
+        target?: SimpleTopicDefinition,
+    ): SimpleTopicDefinition {
         if (!data) {
             return data;
         }
@@ -2967,86 +3436,144 @@ export class SimpleTopicDefinition extends TopicDefinition {
 }
 
 export class SlideToggleStaticProperty extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty";
-    defaultValue: boolean;
-    selected: boolean;
+    '@class': 'org.apache.streampipes.model.staticproperty.SlideToggleStaticProperty';
+    'defaultValue': boolean;
+    'selected': boolean;
 
-    static fromData(data: SlideToggleStaticProperty, target?: SlideToggleStaticProperty): SlideToggleStaticProperty {
+    static 'fromData'(
+        data: SlideToggleStaticProperty,
+        target?: SlideToggleStaticProperty,
+    ): SlideToggleStaticProperty {
         if (!data) {
             return data;
         }
         const instance = target || new SlideToggleStaticProperty();
         super.fromData(data, instance);
-        instance.selected = data.selected;
         instance.defaultValue = data.defaultValue;
+        instance.selected = data.selected;
         return instance;
     }
 }
 
 export class SpDataStream extends NamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.SpDataStream" | "org.apache.streampipes.model.SpDataSet";
-    category: string[];
-    correspondingAdapterId: string;
-    eventGrounding: EventGrounding;
-    eventSchema: EventSchema;
-    hasEventStreamQualities: EventStreamQualityDefinitionUnion[];
-    index: number;
-    measurementCapability: MeasurementCapability[];
-    measurementObject: MeasurementObject[];
-    requiresEventStreamQualities: EventStreamQualityRequirement[];
+    '@class':
+        | 'org.apache.streampipes.model.SpDataStream'
+        | 'org.apache.streampipes.model.SpDataSet';
+    'category': string[];
+    'correspondingAdapterId': string;
+    'eventGrounding': EventGrounding;
+    'eventSchema': EventSchema;
+    'index': number;
 
-    static fromData(data: SpDataStream, target?: SpDataStream): SpDataStream {
+    static 'fromData'(data: SpDataStream, target?: SpDataStream): SpDataStream {
         if (!data) {
             return data;
         }
         const instance = target || new SpDataStream();
         super.fromData(data, instance);
-        instance.hasEventStreamQualities = __getCopyArrayFn(EventStreamQualityDefinition.fromDataUnion)(data.hasEventStreamQualities);
-        instance.requiresEventStreamQualities = __getCopyArrayFn(EventStreamQualityRequirement.fromData)(data.requiresEventStreamQualities);
+        instance.category = __getCopyArrayFn(__identity<string>())(
+            data.category,
+        );
+        instance.correspondingAdapterId = data.correspondingAdapterId;
         instance.eventGrounding = EventGrounding.fromData(data.eventGrounding);
         instance.eventSchema = EventSchema.fromData(data.eventSchema);
-        instance.measurementCapability = __getCopyArrayFn(MeasurementCapability.fromData)(data.measurementCapability);
-        instance.measurementObject = __getCopyArrayFn(MeasurementObject.fromData)(data.measurementObject);
         instance.index = data.index;
-        instance.correspondingAdapterId = data.correspondingAdapterId;
-        instance.category = __getCopyArrayFn(__identity<string>())(data.category);
         return instance;
     }
 
-    static fromDataUnion(data: SpDataStreamUnion): SpDataStreamUnion {
+    static 'fromDataUnion'(data: SpDataStreamUnion): SpDataStreamUnion {
         if (!data) {
             return data;
         }
-        switch (data["@class"]) {
-            case "org.apache.streampipes.model.SpDataStream":
+        switch (data['@class']) {
+            case 'org.apache.streampipes.model.SpDataStream':
                 return SpDataStream.fromData(data);
-            case "org.apache.streampipes.model.SpDataSet":
+            case 'org.apache.streampipes.model.SpDataSet':
                 return SpDataSet.fromData(data);
         }
     }
 }
 
 export class SpDataSet extends SpDataStream {
-    "@class": "org.apache.streampipes.model.SpDataSet";
-    actualTopicName: string;
-    brokerHostname: string;
-    correspondingPipeline: string;
-    datasetInvocationId: string;
-    selectedEndpointUrl: string;
-    supportedGrounding: EventGrounding;
+    '@class': 'org.apache.streampipes.model.SpDataSet';
+    'actualTopicName': string;
+    'brokerHostname': string;
+    'correspondingPipeline': string;
+    'datasetInvocationId': string;
+    'selectedEndpointUrl': string;
+    'supportedGrounding': EventGrounding;
 
-    static fromData(data: SpDataSet, target?: SpDataSet): SpDataSet {
+    static 'fromData'(data: SpDataSet, target?: SpDataSet): SpDataSet {
         if (!data) {
             return data;
         }
         const instance = target || new SpDataSet();
         super.fromData(data, instance);
-        instance.supportedGrounding = EventGrounding.fromData(data.supportedGrounding);
-        instance.datasetInvocationId = data.datasetInvocationId;
-        instance.correspondingPipeline = data.correspondingPipeline;
-        instance.selectedEndpointUrl = data.selectedEndpointUrl;
         instance.actualTopicName = data.actualTopicName;
         instance.brokerHostname = data.brokerHostname;
+        instance.correspondingPipeline = data.correspondingPipeline;
+        instance.datasetInvocationId = data.datasetInvocationId;
+        instance.selectedEndpointUrl = data.selectedEndpointUrl;
+        instance.supportedGrounding = EventGrounding.fromData(
+            data.supportedGrounding,
+        );
+        return instance;
+    }
+}
+
+export class SpDataStreamContainer {
+    '@class': 'org.apache.streampipes.model.SpDataStreamContainer';
+    'list': SpDataStreamUnion[];
+
+    static 'fromData'(
+        data: SpDataStreamContainer,
+        target?: SpDataStreamContainer,
+    ): SpDataStreamContainer {
+        if (!data) {
+            return data;
+        }
+        const instance = target || new SpDataStreamContainer();
+        instance['@class'] = data['@class'];
+        instance.list = __getCopyArrayFn(SpDataStream.fromDataUnion)(data.list);
+        return instance;
+    }
+}
+
+export class SpLogEntry {
+    errorMessage: StreamPipesErrorMessage;
+    timestamp: number;
+
+    static fromData(data: SpLogEntry, target?: SpLogEntry): SpLogEntry {
+        if (!data) {
+            return data;
+        }
+        const instance = target || new SpLogEntry();
+        instance.errorMessage = StreamPipesErrorMessage.fromData(
+            data.errorMessage,
+        );
+        instance.timestamp = data.timestamp;
+        return instance;
+    }
+}
+
+export class SpMetricsEntry {
+    lastTimestamp: number;
+    messagesIn: { [index: string]: MessageCounter };
+    messagesOut: MessageCounter;
+
+    static fromData(
+        data: SpMetricsEntry,
+        target?: SpMetricsEntry,
+    ): SpMetricsEntry {
+        if (!data) {
+            return data;
+        }
+        const instance = target || new SpMetricsEntry();
+        instance.lastTimestamp = data.lastTimestamp;
+        instance.messagesIn = __getCopyObjectFn(MessageCounter.fromData)(
+            data.messagesIn,
+        );
+        instance.messagesOut = MessageCounter.fromData(data.messagesOut);
         return instance;
     }
 }
@@ -3059,25 +3586,33 @@ export class SpQueryResult {
     spQueryStatus: SpQueryStatus;
     total: number;
 
-    static fromData(data: SpQueryResult, target?: SpQueryResult): SpQueryResult {
+    static fromData(
+        data: SpQueryResult,
+        target?: SpQueryResult,
+    ): SpQueryResult {
         if (!data) {
             return data;
         }
         const instance = target || new SpQueryResult();
-        instance.total = data.total;
+        instance.allDataSeries = __getCopyArrayFn(DataSeries.fromData)(
+            data.allDataSeries,
+        );
+        instance.forId = data.forId;
         instance.headers = __getCopyArrayFn(__identity<string>())(data.headers);
-        instance.allDataSeries = __getCopyArrayFn(DataSeries.fromData)(data.allDataSeries);
         instance.sourceIndex = data.sourceIndex;
         instance.spQueryStatus = data.spQueryStatus;
-        instance.forId = data.forId;
+        instance.total = data.total;
         return instance;
     }
 }
 
 export class SpecificAdapterSetDescription extends AdapterSetDescription {
-    "@class": "org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription";
+    '@class': 'org.apache.streampipes.model.connect.adapter.SpecificAdapterSetDescription';
 
-    static fromData(data: SpecificAdapterSetDescription, target?: SpecificAdapterSetDescription): SpecificAdapterSetDescription {
+    static 'fromData'(
+        data: SpecificAdapterSetDescription,
+        target?: SpecificAdapterSetDescription,
+    ): SpecificAdapterSetDescription {
         if (!data) {
             return data;
         }
@@ -3088,9 +3623,12 @@ export class SpecificAdapterSetDescription extends AdapterSetDescription {
 }
 
 export class SpecificAdapterStreamDescription extends AdapterStreamDescription {
-    "@class": "org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription";
+    '@class': 'org.apache.streampipes.model.connect.adapter.SpecificAdapterStreamDescription';
 
-    static fromData(data: SpecificAdapterStreamDescription, target?: SpecificAdapterStreamDescription): SpecificAdapterStreamDescription {
+    static 'fromData'(
+        data: SpecificAdapterStreamDescription,
+        target?: SpecificAdapterStreamDescription,
+    ): SpecificAdapterStreamDescription {
         if (!data) {
             return data;
         }
@@ -3101,52 +3639,69 @@ export class SpecificAdapterStreamDescription extends AdapterStreamDescription {
 }
 
 export class StaticPropertyAlternative extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.StaticPropertyAlternative";
-    selected: boolean;
-    staticProperty: StaticPropertyUnion;
+    '@class': 'org.apache.streampipes.model.staticproperty.StaticPropertyAlternative';
+    'elementId': string;
+    'selected': boolean;
+    'staticProperty': StaticPropertyUnion;
 
-    static fromData(data: StaticPropertyAlternative, target?: StaticPropertyAlternative): StaticPropertyAlternative {
+    static 'fromData'(
+        data: StaticPropertyAlternative,
+        target?: StaticPropertyAlternative,
+    ): StaticPropertyAlternative {
         if (!data) {
             return data;
         }
         const instance = target || new StaticPropertyAlternative();
         super.fromData(data, instance);
+        instance.elementId = data.elementId;
         instance.selected = data.selected;
-        instance.staticProperty = StaticProperty.fromDataUnion(data.staticProperty);
+        instance.staticProperty = StaticProperty.fromDataUnion(
+            data.staticProperty,
+        );
         return instance;
     }
 }
 
 export class StaticPropertyAlternatives extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives";
-    alternatives: StaticPropertyAlternative[];
+    '@class': 'org.apache.streampipes.model.staticproperty.StaticPropertyAlternatives';
+    'alternatives': StaticPropertyAlternative[];
 
-    static fromData(data: StaticPropertyAlternatives, target?: StaticPropertyAlternatives): StaticPropertyAlternatives {
+    static 'fromData'(
+        data: StaticPropertyAlternatives,
+        target?: StaticPropertyAlternatives,
+    ): StaticPropertyAlternatives {
         if (!data) {
             return data;
         }
         const instance = target || new StaticPropertyAlternatives();
         super.fromData(data, instance);
-        instance.alternatives = __getCopyArrayFn(StaticPropertyAlternative.fromData)(data.alternatives);
+        instance.alternatives = __getCopyArrayFn(
+            StaticPropertyAlternative.fromData,
+        )(data.alternatives);
         return instance;
     }
 }
 
 export class StaticPropertyGroup extends StaticProperty {
-    "@class": "org.apache.streampipes.model.staticproperty.StaticPropertyGroup";
-    horizontalRendering: boolean;
-    showLabel: boolean;
-    staticProperties: StaticPropertyUnion[];
+    '@class': 'org.apache.streampipes.model.staticproperty.StaticPropertyGroup';
+    'horizontalRendering': boolean;
+    'showLabel': boolean;
+    'staticProperties': StaticPropertyUnion[];
 
-    static fromData(data: StaticPropertyGroup, target?: StaticPropertyGroup): StaticPropertyGroup {
+    static 'fromData'(
+        data: StaticPropertyGroup,
+        target?: StaticPropertyGroup,
+    ): StaticPropertyGroup {
         if (!data) {
             return data;
         }
         const instance = target || new StaticPropertyGroup();
         super.fromData(data, instance);
-        instance.staticProperties = __getCopyArrayFn(StaticProperty.fromDataUnion)(data.staticProperties);
-        instance.showLabel = data.showLabel;
         instance.horizontalRendering = data.horizontalRendering;
+        instance.showLabel = data.showLabel;
+        instance.staticProperties = __getCopyArrayFn(
+            StaticProperty.fromDataUnion,
+        )(data.staticProperties);
         return instance;
     }
 }
@@ -3166,24 +3721,49 @@ export class StreamPipesApplicationPackage {
     requiredDataSinkAppIds: string[];
     requiredProcessorAppIds: string[];
 
-    static fromData(data: StreamPipesApplicationPackage, target?: StreamPipesApplicationPackage): StreamPipesApplicationPackage {
+    static fromData(
+        data: StreamPipesApplicationPackage,
+        target?: StreamPipesApplicationPackage,
+    ): StreamPipesApplicationPackage {
         if (!data) {
             return data;
         }
         const instance = target || new StreamPipesApplicationPackage();
-        instance.requiredProcessorAppIds = __getCopyArrayFn(__identity<string>())(data.requiredProcessorAppIds);
-        instance.requiredDataSinkAppIds = __getCopyArrayFn(__identity<string>())(data.requiredDataSinkAppIds);
-        instance.requiredAdapterAppIds = __getCopyArrayFn(__identity<string>())(data.requiredAdapterAppIds);
+        instance.adapters = __getCopyArrayFn(__identity<string>())(
+            data.adapters,
+        );
         instance.assets = __getCopyArrayFn(__identity<string>())(data.assets);
-        instance.adapters = __getCopyArrayFn(__identity<string>())(data.adapters);
-        instance.dashboards = __getCopyArrayFn(__identity<string>())(data.dashboards);
-        instance.dashboardWidgets = __getCopyArrayFn(__identity<string>())(data.dashboardWidgets);
-        instance.dataViews = __getCopyArrayFn(__identity<string>())(data.dataViews);
-        instance.dataViewWidgets = __getCopyArrayFn(__identity<string>())(data.dataViewWidgets);
-        instance.dataLakeMeasures = __getCopyArrayFn(__identity<string>())(data.dataLakeMeasures);
-        instance.dataSources = __getCopyArrayFn(__identity<string>())(data.dataSources);
-        instance.pipelines = __getCopyArrayFn(__identity<string>())(data.pipelines);
+        instance.dashboardWidgets = __getCopyArrayFn(__identity<string>())(
+            data.dashboardWidgets,
+        );
+        instance.dashboards = __getCopyArrayFn(__identity<string>())(
+            data.dashboards,
+        );
+        instance.dataLakeMeasures = __getCopyArrayFn(__identity<string>())(
+            data.dataLakeMeasures,
+        );
+        instance.dataSources = __getCopyArrayFn(__identity<string>())(
+            data.dataSources,
+        );
+        instance.dataViewWidgets = __getCopyArrayFn(__identity<string>())(
+            data.dataViewWidgets,
+        );
+        instance.dataViews = __getCopyArrayFn(__identity<string>())(
+            data.dataViews,
+        );
         instance.files = __getCopyArrayFn(__identity<string>())(data.files);
+        instance.pipelines = __getCopyArrayFn(__identity<string>())(
+            data.pipelines,
+        );
+        instance.requiredAdapterAppIds = __getCopyArrayFn(__identity<string>())(
+            data.requiredAdapterAppIds,
+        );
+        instance.requiredDataSinkAppIds = __getCopyArrayFn(
+            __identity<string>(),
+        )(data.requiredDataSinkAppIds);
+        instance.requiredProcessorAppIds = __getCopyArrayFn(
+            __identity<string>(),
+        )(data.requiredProcessorAppIds);
         return instance;
     }
 }
@@ -3195,23 +3775,28 @@ export class StreamPipesErrorMessage {
     level: string;
     title: string;
 
-    static fromData(data: StreamPipesErrorMessage, target?: StreamPipesErrorMessage): StreamPipesErrorMessage {
+    static fromData(
+        data: StreamPipesErrorMessage,
+        target?: StreamPipesErrorMessage,
+    ): StreamPipesErrorMessage {
         if (!data) {
             return data;
         }
         const instance = target || new StreamPipesErrorMessage();
+        instance.cause = data.cause;
+        instance.detail = data.detail;
+        instance.fullStackTrace = data.fullStackTrace;
         instance.level = data.level;
         instance.title = data.title;
-        instance.detail = data.detail;
-        instance.cause = data.cause;
-        instance.fullStackTrace = data.fullStackTrace;
         return instance;
     }
 }
 
 export class SuccessMessage extends Message {
-
-    static fromData(data: SuccessMessage, target?: SuccessMessage): SuccessMessage {
+    static fromData(
+        data: SuccessMessage,
+        target?: SuccessMessage,
+    ): SuccessMessage {
         if (!data) {
             return data;
         }
@@ -3221,92 +3806,104 @@ export class SuccessMessage extends Message {
     }
 }
 
-export class SupportedProperty extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.staticproperty.SupportedProperty";
+export class SupportedProperty {
     propertyId: string;
     value: string;
     valueRequired: boolean;
 
-    static fromData(data: SupportedProperty, target?: SupportedProperty): SupportedProperty {
+    static fromData(
+        data: SupportedProperty,
+        target?: SupportedProperty,
+    ): SupportedProperty {
         if (!data) {
             return data;
         }
         const instance = target || new SupportedProperty();
-        super.fromData(data, instance);
         instance.propertyId = data.propertyId;
-        instance.valueRequired = data.valueRequired;
         instance.value = data.value;
+        instance.valueRequired = data.valueRequired;
         return instance;
     }
 }
 
 export class TimestampTranfsformationRuleDescription extends ValueTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription";
-    formatString: string;
-    mode: string;
-    multiplier: number;
-    runtimeKey: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.value.TimestampTranfsformationRuleDescription';
+    'formatString': string;
+    'mode': string;
+    'multiplier': number;
+    'runtimeKey': string;
 
-    static fromData(data: TimestampTranfsformationRuleDescription, target?: TimestampTranfsformationRuleDescription): TimestampTranfsformationRuleDescription {
+    static 'fromData'(
+        data: TimestampTranfsformationRuleDescription,
+        target?: TimestampTranfsformationRuleDescription,
+    ): TimestampTranfsformationRuleDescription {
         if (!data) {
             return data;
         }
-        const instance = target || new TimestampTranfsformationRuleDescription();
+        const instance =
+            target || new TimestampTranfsformationRuleDescription();
         super.fromData(data, instance);
-        instance.runtimeKey = data.runtimeKey;
-        instance.mode = data.mode;
         instance.formatString = data.formatString;
+        instance.mode = data.mode;
         instance.multiplier = data.multiplier;
+        instance.runtimeKey = data.runtimeKey;
         return instance;
     }
 }
 
-export class TransformOperation extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.output.TransformOperation";
+export class TransformOperation {
     mappingPropertyInternalName: string;
     sourceStaticProperty: string;
     targetValue: string;
     transformationScope: string;
 
-    static fromData(data: TransformOperation, target?: TransformOperation): TransformOperation {
+    static fromData(
+        data: TransformOperation,
+        target?: TransformOperation,
+    ): TransformOperation {
         if (!data) {
             return data;
         }
         const instance = target || new TransformOperation();
-        super.fromData(data, instance);
         instance.mappingPropertyInternalName = data.mappingPropertyInternalName;
         instance.sourceStaticProperty = data.sourceStaticProperty;
-        instance.transformationScope = data.transformationScope;
         instance.targetValue = data.targetValue;
+        instance.transformationScope = data.transformationScope;
         return instance;
     }
 }
 
 export class TransformOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.TransformOutputStrategy";
-    transformOperations: TransformOperation[];
+    '@class': 'org.apache.streampipes.model.output.TransformOutputStrategy';
+    'transformOperations': TransformOperation[];
 
-    static fromData(data: TransformOutputStrategy, target?: TransformOutputStrategy): TransformOutputStrategy {
+    static 'fromData'(
+        data: TransformOutputStrategy,
+        target?: TransformOutputStrategy,
+    ): TransformOutputStrategy {
         if (!data) {
             return data;
         }
         const instance = target || new TransformOutputStrategy();
         super.fromData(data, instance);
-        instance.transformOperations = __getCopyArrayFn(TransformOperation.fromData)(data.transformOperations);
+        instance.transformOperations = __getCopyArrayFn(
+            TransformOperation.fromData,
+        )(data.transformOperations);
         return instance;
     }
 }
 
-export class TransportFormat extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.grounding.TransportFormat";
+export class TransportFormat {
     rdfType: string[];
 
-    static fromData(data: TransportFormat, target?: TransportFormat): TransportFormat {
+    static fromData(
+        data: TransportFormat,
+        target?: TransportFormat,
+    ): TransportFormat {
         if (!data) {
             return data;
         }
         const instance = target || new TransportFormat();
-        super.fromData(data, instance);
         instance.rdfType = __getCopyArrayFn(__identity<string>())(data.rdfType);
         return instance;
     }
@@ -3319,50 +3916,63 @@ export class TreeInputNode {
     nodeName: string;
     selected: boolean;
 
-    static fromData(data: TreeInputNode, target?: TreeInputNode): TreeInputNode {
+    static fromData(
+        data: TreeInputNode,
+        target?: TreeInputNode,
+    ): TreeInputNode {
         if (!data) {
             return data;
         }
         const instance = target || new TreeInputNode();
+        instance.children = __getCopyArrayFn(TreeInputNode.fromData)(
+            data.children,
+        );
         instance.dataNode = data.dataNode;
-        instance.selected = data.selected;
-        instance.nodeName = data.nodeName;
         instance.internalNodeName = data.internalNodeName;
-        instance.children = __getCopyArrayFn(TreeInputNode.fromData)(data.children);
+        instance.nodeName = data.nodeName;
+        instance.selected = data.selected;
         return instance;
     }
 }
 
 export class UnitTransformRuleDescription extends ValueTransformationRuleDescription {
-    "@class": "org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription";
-    fromUnitRessourceURL: string;
-    runtimeKey: string;
-    toUnitRessourceURL: string;
+    '@class': 'org.apache.streampipes.model.connect.rules.value.UnitTransformRuleDescription';
+    'fromUnitRessourceURL': string;
+    'runtimeKey': string;
+    'toUnitRessourceURL': string;
 
-    static fromData(data: UnitTransformRuleDescription, target?: UnitTransformRuleDescription): UnitTransformRuleDescription {
+    static 'fromData'(
+        data: UnitTransformRuleDescription,
+        target?: UnitTransformRuleDescription,
+    ): UnitTransformRuleDescription {
         if (!data) {
             return data;
         }
         const instance = target || new UnitTransformRuleDescription();
         super.fromData(data, instance);
-        instance.runtimeKey = data.runtimeKey;
         instance.fromUnitRessourceURL = data.fromUnitRessourceURL;
+        instance.runtimeKey = data.runtimeKey;
         instance.toUnitRessourceURL = data.toUnitRessourceURL;
         return instance;
     }
 }
 
 export class UserDefinedOutputStrategy extends OutputStrategy {
-    "@class": "org.apache.streampipes.model.output.UserDefinedOutputStrategy";
-    eventProperties: EventPropertyUnion[];
+    '@class': 'org.apache.streampipes.model.output.UserDefinedOutputStrategy';
+    'eventProperties': EventPropertyUnion[];
 
-    static fromData(data: UserDefinedOutputStrategy, target?: UserDefinedOutputStrategy): UserDefinedOutputStrategy {
+    static 'fromData'(
+        data: UserDefinedOutputStrategy,
+        target?: UserDefinedOutputStrategy,
+    ): UserDefinedOutputStrategy {
         if (!data) {
             return data;
         }
         const instance = target || new UserDefinedOutputStrategy();
         super.fromData(data, instance);
-        instance.eventProperties = __getCopyArrayFn(EventProperty.fromDataUnion)(data.eventProperties);
+        instance.eventProperties = __getCopyArrayFn(
+            EventProperty.fromDataUnion,
+        )(data.eventProperties);
         return instance;
     }
 }
@@ -3379,11 +3989,11 @@ export class UserInfo {
             return data;
         }
         const instance = target || new UserInfo();
-        instance.username = data.username;
+        instance.darkMode = data.darkMode;
         instance.displayName = data.displayName;
         instance.roles = __getCopyArrayFn(__identity<string>())(data.roles);
         instance.showTutorial = data.showTutorial;
-        instance.darkMode = data.darkMode;
+        instance.username = data.username;
         return instance;
     }
 }
@@ -3395,107 +4005,193 @@ export class VisualizablePipeline {
     topic: string;
     visualizationName: string;
 
-    static fromData(data: VisualizablePipeline, target?: VisualizablePipeline): VisualizablePipeline {
+    static fromData(
+        data: VisualizablePipeline,
+        target?: VisualizablePipeline,
+    ): VisualizablePipeline {
         if (!data) {
             return data;
         }
         const instance = target || new VisualizablePipeline();
         instance.pipelineId = data.pipelineId;
-        instance.schema = EventSchema.fromData(data.schema);
-        instance.visualizationName = data.visualizationName;
-        instance.topic = data.topic;
         instance.pipelineName = data.pipelineName;
+        instance.schema = EventSchema.fromData(data.schema);
+        instance.topic = data.topic;
+        instance.visualizationName = data.visualizationName;
         return instance;
     }
 }
 
 export class WildcardTopicDefinition extends TopicDefinition {
-    "@class": "org.apache.streampipes.model.grounding.WildcardTopicDefinition";
-    wildcardTopicMappings: WildcardTopicMapping[];
-    wildcardTopicName: string;
+    '@class': 'org.apache.streampipes.model.grounding.WildcardTopicDefinition';
+    'wildcardTopicMappings': WildcardTopicMapping[];
+    'wildcardTopicName': string;
 
-    static fromData(data: WildcardTopicDefinition, target?: WildcardTopicDefinition): WildcardTopicDefinition {
+    static 'fromData'(
+        data: WildcardTopicDefinition,
+        target?: WildcardTopicDefinition,
+    ): WildcardTopicDefinition {
         if (!data) {
             return data;
         }
         const instance = target || new WildcardTopicDefinition();
         super.fromData(data, instance);
+        instance.wildcardTopicMappings = __getCopyArrayFn(
+            WildcardTopicMapping.fromData,
+        )(data.wildcardTopicMappings);
         instance.wildcardTopicName = data.wildcardTopicName;
-        instance.wildcardTopicMappings = __getCopyArrayFn(WildcardTopicMapping.fromData)(data.wildcardTopicMappings);
         return instance;
     }
 }
 
-export class WildcardTopicMapping extends UnnamedStreamPipesEntity {
-    "@class": "org.apache.streampipes.model.grounding.WildcardTopicMapping";
+export class WildcardTopicMapping {
     mappedRuntimeName: string;
     mappingId: string;
     selectedMapping: string;
     topicParameterType: string;
 
-    static fromData(data: WildcardTopicMapping, target?: WildcardTopicMapping): WildcardTopicMapping {
+    static fromData(
+        data: WildcardTopicMapping,
+        target?: WildcardTopicMapping,
+    ): WildcardTopicMapping {
         if (!data) {
             return data;
         }
         const instance = target || new WildcardTopicMapping();
-        super.fromData(data, instance);
-        instance.topicParameterType = data.topicParameterType;
-        instance.mappingId = data.mappingId;
         instance.mappedRuntimeName = data.mappedRuntimeName;
+        instance.mappingId = data.mappingId;
         instance.selectedMapping = data.selectedMapping;
+        instance.topicParameterType = data.topicParameterType;
         return instance;
     }
 }
 
-export type AdapterDescriptionUnion = GenericAdapterSetDescription | GenericAdapterStreamDescription | SpecificAdapterStreamDescription | SpecificAdapterSetDescription;
+export type AdapterDescriptionUnion =
+    | GenericAdapterSetDescription
+    | GenericAdapterStreamDescription
+    | SpecificAdapterStreamDescription
+    | SpecificAdapterSetDescription;
 
-export type AdapterSetDescriptionUnion = GenericAdapterSetDescription | SpecificAdapterSetDescription;
+export type AdapterSetDescriptionUnion =
+    | GenericAdapterSetDescription
+    | SpecificAdapterSetDescription;
 
 export type AdapterStreamDescriptionUnion = SpecificAdapterStreamDescription;
 
-export type EdgeValidationStatusType = "COMPLETE" | "INCOMPLETE" | "INVALID";
+export type EdgeValidationStatusType = 'COMPLETE' | 'INCOMPLETE' | 'INVALID';
 
-export type EventPropertyQualityDefinitionUnion = Accuracy | MeasurementRange | Precision | Resolution;
+export type EventPropertyUnion =
+    | EventPropertyList
+    | EventPropertyNested
+    | EventPropertyPrimitive;
 
-export type EventPropertyUnion = EventPropertyList | EventPropertyNested | EventPropertyPrimitive;
-
-export type EventStreamQualityDefinitionUnion = Frequency | Latency;
-
-export type FieldStatus = "GOOD" | "BAD" | "ATTENTION";
+export type FieldStatus = 'GOOD' | 'BAD' | 'ATTENTION';
 
 export type MappingPropertyUnion = MappingPropertyNary | MappingPropertyUnary;
 
-export type MeasurementPropertyUnion = EventPropertyQualityDefinition | EventStreamQualityDefinition;
-
 export type OneOfStaticPropertyUnion = RuntimeResolvableOneOfStaticProperty;
 
-export type OutputStrategyUnion = AppendOutputStrategy | CustomOutputStrategy | CustomTransformOutputStrategy | FixedOutputStrategy | KeepOutputStrategy | ListOutputStrategy | TransformOutputStrategy | UserDefinedOutputStrategy;
+export type OutputStrategyUnion =
+    | AppendOutputStrategy
+    | CustomOutputStrategy
+    | CustomTransformOutputStrategy
+    | FixedOutputStrategy
+    | KeepOutputStrategy
+    | ListOutputStrategy
+    | TransformOutputStrategy
+    | UserDefinedOutputStrategy;
 
-export type PipelineHealthStatus = "OK" | "REQUIRES_ATTENTION" | "FAILURE";
+export type PipelineHealthStatus = 'OK' | 'REQUIRES_ATTENTION' | 'FAILURE';
 
-export type SelectionStaticPropertyUnion = AnyStaticProperty | OneOfStaticProperty;
+export type SelectionStaticPropertyUnion =
+    | AnyStaticProperty
+    | OneOfStaticProperty;
 
 export type SpDataStreamUnion = SpDataStream | SpDataSet;
 
-export type SpQueryStatus = "OK" | "TOO_MUCH_DATA";
+export type SpQueryStatus = 'OK' | 'TOO_MUCH_DATA';
 
-export type StaticPropertyType = "AnyStaticProperty" | "CodeInputStaticProperty" | "CollectionStaticProperty" | "ColorPickerStaticProperty" | "DomainStaticProperty" | "FreeTextStaticProperty" | "FileStaticProperty" | "MappingPropertyUnary" | "MappingPropertyNary" | "MatchingStaticProperty" | "OneOfStaticProperty" | "RuntimeResolvableAnyStaticProperty" | "RuntimeResolvableOneOfStaticProperty" | "RuntimeResolvableTreeInputStaticProperty" | "StaticPropertyGroup" | "StaticPropertyAlternatives" | "StaticPropertyAlternative" | "SecretStaticProperty" | "SlideToggleStaticProperty";
+export type StaticPropertyType =
+    | 'AnyStaticProperty'
+    | 'CodeInputStaticProperty'
+    | 'CollectionStaticProperty'
+    | 'ColorPickerStaticProperty'
+    | 'DomainStaticProperty'
+    | 'FreeTextStaticProperty'
+    | 'FileStaticProperty'
+    | 'MappingPropertyUnary'
+    | 'MappingPropertyNary'
+    | 'MatchingStaticProperty'
+    | 'OneOfStaticProperty'
+    | 'RuntimeResolvableAnyStaticProperty'
+    | 'RuntimeResolvableOneOfStaticProperty'
+    | 'RuntimeResolvableTreeInputStaticProperty'
+    | 'StaticPropertyGroup'
+    | 'StaticPropertyAlternatives'
+    | 'StaticPropertyAlternative'
+    | 'SecretStaticProperty'
+    | 'SlideToggleStaticProperty';
 
-export type StaticPropertyUnion = AnyStaticProperty | CodeInputStaticProperty | CollectionStaticProperty | ColorPickerStaticProperty | DomainStaticProperty | FileStaticProperty | FreeTextStaticProperty | MappingPropertyUnary | MappingPropertyNary | MatchingStaticProperty | OneOfStaticProperty | RuntimeResolvableAnyStaticProperty | RuntimeResolvableOneOfStaticProperty | RuntimeResolvableTreeInputStaticProperty | SecretStaticProperty | StaticPropertyAlternative | StaticPropertyAlternatives | StaticPropertyGroup | SlideToggleStaticProperty;
+export type StaticPropertyUnion =
+    | AnyStaticProperty
+    | CodeInputStaticProperty
+    | CollectionStaticProperty
+    | ColorPickerStaticProperty
+    | DomainStaticProperty
+    | FileStaticProperty
+    | FreeTextStaticProperty
+    | MappingPropertyUnary
+    | MappingPropertyNary
+    | MatchingStaticProperty
+    | OneOfStaticProperty
+    | RuntimeResolvableAnyStaticProperty
+    | RuntimeResolvableOneOfStaticProperty
+    | RuntimeResolvableTreeInputStaticProperty
+    | SecretStaticProperty
+    | StaticPropertyAlternative
+    | StaticPropertyAlternatives
+    | StaticPropertyGroup
+    | SlideToggleStaticProperty;
 
-export type StreamTransformationRuleDescriptionUnion = EventRateTransformationRuleDescription | RemoveDuplicatesTransformationRuleDescription;
+export type StreamTransformationRuleDescriptionUnion =
+    | EventRateTransformationRuleDescription
+    | RemoveDuplicatesTransformationRuleDescription;
 
-export type TopicDefinitionUnion = SimpleTopicDefinition | WildcardTopicDefinition;
+export type TopicDefinitionUnion =
+    | SimpleTopicDefinition
+    | WildcardTopicDefinition;
 
-export type TransformationRuleDescriptionUnion = AddTimestampRuleDescription | AddValueTransformationRuleDescription | TimestampTranfsformationRuleDescription | UnitTransformRuleDescription | EventRateTransformationRuleDescription | RemoveDuplicatesTransformationRuleDescription | CreateNestedRuleDescription | DeleteRuleDescription | RenameRuleDescription | MoveRuleDescription | ChangeDatatypeTransformationRuleDescription | CorrectionValueTransformationRuleDescription;
+export type TransformationRuleDescriptionUnion =
+    | AddTimestampRuleDescription
+    | AddValueTransformationRuleDescription
+    | TimestampTranfsformationRuleDescription
+    | UnitTransformRuleDescription
+    | EventRateTransformationRuleDescription
+    | RemoveDuplicatesTransformationRuleDescription
+    | CreateNestedRuleDescription
+    | DeleteRuleDescription
+    | RenameRuleDescription
+    | MoveRuleDescription
+    | ChangeDatatypeTransformationRuleDescription
+    | CorrectionValueTransformationRuleDescription
+    | DebugSinkRuleDescription;
 
-export type TransportProtocolUnion = JmsTransportProtocol | KafkaTransportProtocol | MqttTransportProtocol;
+export type TransportProtocolUnion =
+    | JmsTransportProtocol
+    | KafkaTransportProtocol
+    | MqttTransportProtocol
+    | NatsTransportProtocol;
 
-export type ValidationInfoLevel = "INFO" | "ERROR";
+export type ValidationInfoLevel = 'INFO' | 'ERROR';
 
 export type ValueSpecificationUnion = QuantitativeValue | Enumeration;
 
-export type ValueTransformationRuleDescriptionUnion = AddTimestampRuleDescription | AddValueTransformationRuleDescription | TimestampTranfsformationRuleDescription | UnitTransformRuleDescription | CorrectionValueTransformationRuleDescription;
+export type ValueTransformationRuleDescriptionUnion =
+    | AddTimestampRuleDescription
+    | AddValueTransformationRuleDescription
+    | TimestampTranfsformationRuleDescription
+    | UnitTransformRuleDescription
+    | CorrectionValueTransformationRuleDescription;
 
 function __getCopyArrayFn<T>(itemCopyFn: (item: T) => T): (array: T[]) => T[] {
     return (array: T[]) => __copyArray(array, itemCopyFn);
@@ -3505,11 +4201,16 @@ function __copyArray<T>(array: T[], itemCopyFn: (item: T) => T): T[] {
     return array && array.map(item => item && itemCopyFn(item));
 }
 
-function __getCopyObjectFn<T>(itemCopyFn: (item: T) => T): (object: { [index: string]: T }) => { [index: string]: T } {
+function __getCopyObjectFn<T>(
+    itemCopyFn: (item: T) => T,
+): (object: { [index: string]: T }) => { [index: string]: T } {
     return (object: { [index: string]: T }) => __copyObject(object, itemCopyFn);
 }
 
-function __copyObject<T>(object: { [index: string]: T }, itemCopyFn: (item: T) => T): { [index: string]: T } {
+function __copyObject<T>(
+    object: { [index: string]: T },
+    itemCopyFn: (item: T) => T,
+): { [index: string]: T } {
     if (!object) {
         return object;
     }

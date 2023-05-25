@@ -17,30 +17,26 @@
  */
 
 import { Input, Directive } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import {
-  DataProcessorInvocation,
-  OutputStrategy
+    DataProcessorInvocation,
+    OutputStrategy,
 } from '@streampipes/platform-services';
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class BaseOutputStrategy<T extends OutputStrategy> {
+    @Input()
+    parentForm: UntypedFormGroup;
 
-  @Input()
-  parentForm: FormGroup;
+    @Input()
+    outputStrategy: T;
 
-  @Input()
-  outputStrategy: T;
+    @Input()
+    selectedElement: DataProcessorInvocation;
 
-  @Input()
-  selectedElement: DataProcessorInvocation;
+    @Input()
+    restrictedEditMode: boolean;
 
-  @Input()
-  restrictedEditMode: boolean;
-
-  constructor() {
-
-  }
-
+    constructor() {}
 }

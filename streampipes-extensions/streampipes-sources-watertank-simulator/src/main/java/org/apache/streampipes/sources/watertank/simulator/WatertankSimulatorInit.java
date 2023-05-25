@@ -18,13 +18,17 @@
 
 package org.apache.streampipes.sources.watertank.simulator;
 
-import org.apache.streampipes.container.model.SpServiceDefinition;
-import org.apache.streampipes.container.model.SpServiceDefinitionBuilder;
-import org.apache.streampipes.container.standalone.init.StandaloneModelSubmitter;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinition;
+import org.apache.streampipes.extensions.management.model.SpServiceDefinitionBuilder;
+import org.apache.streampipes.service.extensions.ExtensionsModelSubmitter;
 import org.apache.streampipes.sources.watertank.simulator.config.ConfigKeys;
-import org.apache.streampipes.sources.watertank.simulator.watertank.streams.*;
+import org.apache.streampipes.sources.watertank.simulator.watertank.streams.FlowRate1Stream;
+import org.apache.streampipes.sources.watertank.simulator.watertank.streams.FlowRate2Stream;
+import org.apache.streampipes.sources.watertank.simulator.watertank.streams.PressureTankStream;
+import org.apache.streampipes.sources.watertank.simulator.watertank.streams.WaterLevel1Stream;
+import org.apache.streampipes.sources.watertank.simulator.watertank.streams.WaterLevel2Stream;
 
-public class WatertankSimulatorInit extends StandaloneModelSubmitter {
+public class WatertankSimulatorInit extends ExtensionsModelSubmitter {
 
   public static void main(String[] args) {
     new WatertankSimulatorInit().init();

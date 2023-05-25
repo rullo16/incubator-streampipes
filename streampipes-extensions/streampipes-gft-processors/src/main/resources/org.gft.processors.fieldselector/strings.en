@@ -1,0 +1,2 @@
+org.gft.processors.fieldselector.title=Fields Selector
+org.gft.processors.fieldselector.description=Select from the event stream inputs the desired outputs

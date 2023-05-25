@@ -67,6 +67,8 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
   List<Double> dailyConsumptionListForMonth = new ArrayList<>();
   List<Double> dailyConsumptionListForWeek = new ArrayList<>();
 
+  //Define abstract stream requirements such as event properties that must be present
+  // in any input stream that is later connected to the element using the StreamPipes UI
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create(ID)
@@ -79,18 +81,22 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
                     .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
                             Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
                     .build())
-            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthlyConsumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "dailyConsumption", SO.Number),
-                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weeklyConsumption", SO.Number)))
+            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.withId(MONTHLY_CONSUMPTION), "monthlyConsumption", SO.NUMBER),
+                    EpProperties.doubleEp(Labels.withId(DAILY_CONSUMPTION), "dailyConsumption", SO.NUMBER),
+                    EpProperties.doubleEp(Labels.withId(WEEKLY_CONSUMPTION), "weeklyConsumption", SO.NUMBER)))
             .build();
   }
 
+  //Triggered once a pipeline is started. Allow to identify the actual stream that are connected to the pipeline element and the runtime names
+  // to build the different selectors ("stream"::"runtime name") to use in onEvent method to retrieve the exact data.
   @Override
   public void onInvocation(ProcessorParams parameters, SpOutputCollector out, EventProcessorRuntimeContext ctx) throws SpRuntimeException {
     this.input_power_value = parameters.extractor().mappingPropertyValue(INPUT_VALUE);
     this.input_timestamp_value = parameters.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
   }
 
+  // Get fields from an incoming event by providing the corresponding selector (casting to their corresponding target data types).
+  // Then use the if conditional statements to define the output value
   @Override
   public void onEvent(Event event,SpOutputCollector out){
     //recovery power value
@@ -108,6 +114,7 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
 
     String day = getCurrentDay(date);
 
+    //if true compute first the consumption of the day that has just passed
     if(day_current != this.day_precedent && this.day_precedent != -1){
 
       // reset day for computations
@@ -126,11 +133,13 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
       this.powersList.add(power);
       this.timestampsList.add(timestamp);
 
+      //if the day coincide with monday compute the consumption of the week that has just passed
       if(day.equals("Mon")){
         this.weekly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(this.dailyConsumptionListForWeek);
         this.dailyConsumptionListForWeek.clear();
       }
 
+      //if true compute consumption of the month that has just passed
       if(month_current != this.month_precedent){
         this.month_precedent = month_current;
         this.monthly_consumption = dailyConsumptionsToWeeklyOrMonthlyConsumption(this.dailyConsumptionListForMonth);
@@ -155,12 +164,14 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     out.collect(event);
   }
 
+  //from timestamp (millis second) to date format
   private String getTheDate(Long timestamp) {
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(timestamp);
     return  date_format.format(cal.getTime());
   }
 
+  // return the day of the current date
   private String getCurrentDay(String date){
     String day = null;
     try{
@@ -176,6 +187,7 @@ public class PowerTrackingDWM extends StreamPipesDataProcessor {
     return day;
   }
 
+  // return the sum of daily consumption as weekly or monthly consumption
   private double dailyConsumptionsToWeeklyOrMonthlyConsumption(List<Double> dailyConsumptionList) {
     double sum = 0.0;
     DecimalFormat df = new DecimalFormat("#.#####");

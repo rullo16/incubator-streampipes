@@ -18,39 +18,40 @@
 
 package org.apache.streampipes.rest.impl.connect;
 
-import org.apache.streampipes.connect.api.exception.AdapterException;
-import org.apache.streampipes.connect.container.master.management.UnitMasterManagement;
+import org.apache.streampipes.connect.management.management.UnitMasterManagement;
+import org.apache.streampipes.extensions.api.connect.exception.AdapterException;
 import org.apache.streampipes.model.connect.unit.UnitDescription;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/v2/connect/master/unit")
 public class UnitResource extends AbstractAdapterResource<UnitMasterManagement> {
 
-    private static final Logger logger = LoggerFactory.getLogger(UnitResource.class);
+  private static final Logger logger = LoggerFactory.getLogger(UnitResource.class);
 
-    public UnitResource() {
-        super(UnitMasterManagement::new);
-    }
+  public UnitResource() {
+    super(UnitMasterManagement::new);
+  }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getFittingUnits(UnitDescription unitDescription) {
-        try {
-            String resultingJson = managementService.getFittingUnits(unitDescription);
-            return ok(resultingJson);
-        } catch (AdapterException e) {
-            logger.error("Error while getting all adapter descriptions", e);
-            return fail();
-        }
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getFittingUnits(UnitDescription unitDescription) {
+    try {
+      String resultingJson = managementService.getFittingUnits(unitDescription);
+      return ok(resultingJson);
+    } catch (AdapterException e) {
+      logger.error("Error while getting all adapter descriptions", e);
+      return fail();
     }
+  }
 
 }

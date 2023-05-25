@@ -17,68 +17,66 @@
  */
 package org.apache.streampipes.svcdiscovery.consul;
 
-import com.orbitz.consul.Consul;
-import org.apache.streampipes.commons.constants.Envs;
+import org.apache.streampipes.commons.constants.DefaultEnvValues;
+import org.apache.streampipes.commons.environment.Environment;
+
+import com.ecwid.consul.v1.ConsulClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
-public class ConsulProvider {
+public enum ConsulProvider {
+
+  INSTANCE;
 
   private static final Logger LOG = LoggerFactory.getLogger(ConsulProvider.class);
+  private static final int CHECK_INTERVAL = 1;
 
-  private static final int CONSUL_DEFAULT_PORT = 8500;
-  private static final String CONSUL_URL_REGISTER_SERVICE = "v1/agent/service/register";
+  private ConsulClient consulClient;
+  private boolean initialized = false;
 
-  public Consul consulInstance() {
-    URL consulUrl = consulURL();
-    boolean connected;
-
-    do {
-      LOG.info("Checking if consul is available...");
-      connected = checkConsulAvailable(consulUrl);
-
-      if (!connected) {
-        LOG.info("Retrying in 1 second");
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    } while(!connected);
-
-    LOG.info("Successfully connected to Consul");
-    return Consul.builder().withUrl(consulURL()).build();
+  ConsulProvider() {
   }
 
-  private URL consulURL() {
-    URL url = null;
+  public ConsulClient getConsulInstance(Environment environment) {
+    if (!initialized) {
+      createConsulInstance(environment);
+    }
 
-    if (Envs.SP_CONSUL_LOCATION.exists()) {
-      try {
-        url = new URL("http", Envs.SP_CONSUL_LOCATION.getValue(), CONSUL_DEFAULT_PORT, "");
-      } catch (MalformedURLException e) {
-        e.printStackTrace();
-      }
+    return consulClient;
+  }
+
+  private void createConsulInstance(Environment environment) {
+    var consulHost = getConsulHost(environment);
+    var consulPort = getConsulPort(environment);
+    var connected = false;
+
+    LOG.info("Checking if consul is available on host {} and port {}", consulHost, consulPort);
+    connected = checkConsulAvailable(consulHost, consulPort);
+
+    if (connected) {
+      LOG.info("Successfully connected to Consul on host {}", consulHost);
+      this.consulClient = new ConsulClient(consulHost, consulPort);
+      this.initialized = true;
     } else {
+      LOG.info("Retrying in {} second", CHECK_INTERVAL);
       try {
-        url = new URL("http", "localhost", CONSUL_DEFAULT_PORT, "");
-      } catch (MalformedURLException e) {
+        TimeUnit.SECONDS.sleep(CHECK_INTERVAL);
+        createConsulInstance(environment);
+      } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-    return url;
   }
 
-  private boolean checkConsulAvailable(URL consulUrl) {
+  private boolean checkConsulAvailable(String consulHost,
+                                       int consulPort) {
     try {
-      InetSocketAddress sa = new InetSocketAddress(consulUrl.getHost(), consulUrl.getPort());
+      InetSocketAddress sa = new InetSocketAddress(consulHost, consulPort);
       Socket ss = new Socket();
       ss.connect(sa, 1000);
       ss.close();
@@ -88,11 +86,21 @@ public class ConsulProvider {
       LOG.info("Could not connect to Consul instance...");
       return false;
     }
-
-
   }
 
-  public String makeConsulEndpoint() {
-    return consulURL().toString() + "/" + CONSUL_URL_REGISTER_SERVICE;
+  private int getConsulPort(Environment environment) {
+    return environment.getConsulPort().getValueOrDefault();
+  }
+
+  private String getConsulHost(Environment environment) {
+    if (environment.getConsulLocation().exists()) {
+      return environment.getConsulLocation().getValue();
+    } else {
+      if (environment.getSpDebug().getValueOrReturn(false)) {
+        return DefaultEnvValues.LOCALHOST;
+      } else {
+        return environment.getConsulHost().getValueOrDefault();
+      }
+    }
   }
 }

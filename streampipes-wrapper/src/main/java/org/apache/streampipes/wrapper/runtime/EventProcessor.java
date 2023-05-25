@@ -25,11 +25,13 @@ import org.apache.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.apache.streampipes.wrapper.params.binding.EventProcessorBindingParams;
 import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 
-public interface EventProcessor<B extends EventProcessorBindingParams> extends
-        PipelineElement<B, DataProcessorInvocation> {
+@Deprecated(since = "0.70.0", forRemoval = true)
+public interface EventProcessor<T extends EventProcessorBindingParams> extends
+    PipelineElement<T, DataProcessorInvocation> {
 
-  void onInvocation(B parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws
-          SpRuntimeException;
+  void onInvocation(T parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext)
+      throws
+      SpRuntimeException;
 
   void onEvent(Event event, SpOutputCollector collector) throws SpRuntimeException;
 

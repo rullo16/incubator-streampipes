@@ -18,186 +18,222 @@
 
 import * as FileSaver from 'file-saver';
 import { Component, OnInit } from '@angular/core';
-import { Pipeline, PipelineCategory, PipelineService } from '@streampipes/platform-services';
-import { DialogRef, DialogService, PanelType, SpBreadcrumbService } from '@streampipes/shared-ui';
+import {
+    FunctionId,
+    FunctionsService,
+    Pipeline,
+    PipelineCategory,
+    PipelineService,
+} from '@streampipes/platform-services';
+import {
+    DialogRef,
+    DialogService,
+    PanelType,
+    SpBreadcrumbService,
+} from '@streampipes/shared-ui';
 import { ImportPipelineDialogComponent } from './dialog/import-pipeline/import-pipeline-dialog.component';
 import { StartAllPipelinesDialogComponent } from './dialog/start-all-pipelines/start-all-pipelines-dialog.component';
 import { PipelineCategoriesDialogComponent } from './dialog/pipeline-categories/pipeline-categories-dialog.component';
-import { zip } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { UserPrivilege } from '../_enums/user-privilege.enum';
 import { SpPipelineRoutes } from './pipelines.routes';
+import { UserRole } from '../_enums/user-role.enum';
 
 @Component({
-  selector: 'pipelines',
-  templateUrl: './pipelines.component.html',
-  styleUrls: ['./pipelines.component.scss']
+    selector: 'sp-pipelines',
+    templateUrl: './pipelines.component.html',
+    styleUrls: ['./pipelines.component.scss'],
 })
 export class PipelinesComponent implements OnInit {
+    pipeline: Pipeline;
+    pipelines: Pipeline[] = [];
+    systemPipelines: Pipeline[] = [];
+    starting: boolean;
+    stopping: boolean;
+    pipelineCategories: PipelineCategory[];
+    activeCategoryId: string;
 
-  pipeline: Pipeline;
-  pipelines: Pipeline[] = [];
-  systemPipelines: Pipeline[] = [];
-  starting: boolean;
-  stopping: boolean;
-  pipelineCategories: PipelineCategory[];
-  activeCategoryId: string;
+    pipelineIdToStart: string;
 
-  pipelineIdToStart: string;
+    pipelineToStart: Pipeline;
+    systemPipelineToStart: Pipeline;
 
-  pipelineToStart: Pipeline;
-  systemPipelineToStart: Pipeline;
+    pipelinesReady = false;
 
-  pipelinesReady = false;
+    selectedCategoryIndex = 0;
+    hasPipelineWritePrivileges = false;
 
-  selectedCategoryIndex = 0;
-  hasPipelineWritePrivileges = false;
+    functions: FunctionId[] = [];
+    functionsReady = false;
+    isAdminRole = false;
 
-  constructor(private pipelineService: PipelineService,
-              private dialogService: DialogService,
-              private activatedRoute: ActivatedRoute,
-              private authService: AuthService,
-              private router: Router,
-              private breadcrumbService: SpBreadcrumbService) {
-    this.pipelineCategories = [];
-    this.starting = false;
-    this.stopping = false;
-  }
+    constructor(
+        private pipelineService: PipelineService,
+        private dialogService: DialogService,
+        private activatedRoute: ActivatedRoute,
+        private authService: AuthService,
+        private router: Router,
+        private functionsService: FunctionsService,
+        private breadcrumbService: SpBreadcrumbService,
+    ) {
+        this.pipelineCategories = [];
+        this.starting = false;
+        this.stopping = false;
+    }
 
-  ngOnInit() {
-    this.breadcrumbService.updateBreadcrumb(this.breadcrumbService.getRootLink(SpPipelineRoutes.BASE));
-    this.authService.user$.subscribe(user => {
-      this.hasPipelineWritePrivileges = this.authService.hasRole(UserPrivilege.PRIVILEGE_WRITE_PIPELINE);
-    });
-    this.activatedRoute.queryParams.subscribe(params => {
-      if (params['pipeline']) {
-        this.pipelineIdToStart = params['pipeline'];
-      }
-      this.getPipelineCategories();
-      this.getPipelines();
-    });
-  }
-
-  setSelectedTab(index) {
-    this.activeCategoryId =  index === 0 ? undefined : this.pipelineCategories[index - 1]._id;
-  }
-
-  exportPipelines() {
-    const blob = new Blob([JSON.stringify(this.pipelines)], {type: 'application/json'});
-    FileSaver.saveAs(blob, 'pipelines.json');
-  }
-
-  getPipelines() {
-    this.pipelines = [];
-    zip(this.pipelineService.getOwnPipelines(), this.pipelineService.getSystemPipelines()).subscribe(allPipelines => {
-      this.pipelines = allPipelines[0];
-      this.systemPipelines = allPipelines[1];
-      this.checkForImmediateStart(allPipelines);
-      this.pipelinesReady = true;
-    });
-  }
-
-  checkForImmediateStart(allPipelines: Pipeline[][]) {
-    this.pipelineToStart = undefined;
-    allPipelines.forEach((pipelines, index) => {
-      pipelines.forEach(pipeline => {
-        if (pipeline._id === this.pipelineIdToStart) {
-          if (index === 0) {
-            this.pipelineToStart = pipeline;
-          } else {
-            this.systemPipelineToStart = pipeline;
-          }
-        }
-      });
-    });
-    this.pipelineIdToStart = undefined;
-  }
-
-  getPipelineCategories() {
-    this.pipelineService.getPipelineCategories()
-        .subscribe(pipelineCategories => {
-          this.pipelineCategories = pipelineCategories;
+    ngOnInit() {
+        this.breadcrumbService.updateBreadcrumb(
+            this.breadcrumbService.getRootLink(SpPipelineRoutes.BASE),
+        );
+        this.authService.user$.subscribe(user => {
+            this.hasPipelineWritePrivileges = this.authService.hasRole(
+                UserPrivilege.PRIVILEGE_WRITE_PIPELINE,
+            );
+            this.isAdminRole = this.authService.hasRole(UserRole.ROLE_ADMIN);
         });
-  }
+        this.activatedRoute.queryParams.subscribe(params => {
+            if (params['pipeline']) {
+                this.pipelineIdToStart = params['pipeline'];
+            }
+            this.getPipelineCategories();
+            this.getPipelines();
+            this.getFunctions();
+        });
+    }
 
-  activeClass(pipeline) {
-    return 'active-pipeline';
-  }
+    setSelectedTab(index) {
+        this.activeCategoryId =
+            index === 0 ? undefined : this.pipelineCategories[index - 1]._id;
+    }
 
-  checkCurrentSelectionStatus(status) {
-    let active = true;
-    this.pipelines.forEach(pipeline => {
-      if (!this.activeCategoryId || pipeline.pipelineCategories.some(pc => pc === this.activeCategoryId)) {
-        if (pipeline.running === status) {
-          active = false;
-        }
-      }
-    });
-    return active;
-  }
+    exportPipelines() {
+        const blob = new Blob([JSON.stringify(this.pipelines)], {
+            type: 'application/json',
+        });
+        FileSaver.saveAs(blob, 'pipelines.json');
+    }
 
-  openImportPipelinesDialog() {
-    const dialogRef: DialogRef<ImportPipelineDialogComponent> = this.dialogService.open(ImportPipelineDialogComponent, {
-      panelType: PanelType.STANDARD_PANEL,
-      title: 'Import Pipeline',
-      width: '70vw',
-      data: {
-        'pipelines': this.pipelines
-      }
-    });
-    dialogRef.afterClosed().subscribe(data => {
-      if (data) {
-        this.refreshPipelines();
-      }
-    });
-  }
+    getFunctions() {
+        this.functionsService.getActiveFunctions().subscribe(functions => {
+            this.functions = functions.map(f => f.functionId);
+            console.log(this.functions);
+            this.functionsReady = true;
+        });
+    }
 
-  startAllPipelines(action) {
-    const dialogRef: DialogRef<StartAllPipelinesDialogComponent> = this.dialogService.open(StartAllPipelinesDialogComponent, {
-      panelType: PanelType.STANDARD_PANEL,
-      title: (action ? 'Start' : 'Stop') + ' all pipelines',
-      width: '70vw',
-      data: {
-        'pipelines': this.pipelines,
-        'action': action,
-        'activeCategoryId': this.activeCategoryId
-      }
-    });
+    getPipelines() {
+        this.pipelines = [];
+        this.pipelineService.getOwnPipelines().subscribe(pipelines => {
+            this.pipelines = pipelines;
+            this.checkForImmediateStart(pipelines);
+            this.pipelinesReady = true;
+        });
+    }
 
-    dialogRef.afterClosed().subscribe(data => {
-      if (data) {
-        this.refreshPipelines();
-      }
-    });
-  }
+    checkForImmediateStart(pipelines: Pipeline[]) {
+        this.pipelineToStart = undefined;
+        pipelines.forEach(pipeline => {
+            if (pipeline._id === this.pipelineIdToStart) {
+                this.pipelineToStart = pipeline;
+            }
+        });
+        this.pipelineIdToStart = undefined;
+    }
 
-  showPipelineCategoriesDialog() {
-    const dialogRef: DialogRef<PipelineCategoriesDialogComponent> = this.dialogService.open(PipelineCategoriesDialogComponent, {
-      panelType: PanelType.STANDARD_PANEL,
-      title: 'Pipeline Categories',
-      width: '70vw',
-      data: {
-        'pipelines': this.pipelines,
-        'systemPipelines': this.systemPipelines
-      }
-    });
+    getPipelineCategories() {
+        this.pipelineService
+            .getPipelineCategories()
+            .subscribe(pipelineCategories => {
+                this.pipelineCategories = pipelineCategories;
+            });
+    }
 
-    dialogRef.afterClosed().subscribe(data => {
-      this.getPipelineCategories();
-      this.refreshPipelines();
-    });
-  }
+    activeClass(pipeline) {
+        return 'active-pipeline';
+    }
 
-  refreshPipelines() {
-    this.getPipelines();
-  }
+    checkCurrentSelectionStatus(status) {
+        let active = true;
+        this.pipelines.forEach(pipeline => {
+            if (
+                !this.activeCategoryId ||
+                pipeline.pipelineCategories.some(
+                    pc => pc === this.activeCategoryId,
+                )
+            ) {
+                if (pipeline.running === status) {
+                    active = false;
+                }
+            }
+        });
+        return active;
+    }
 
-  showPipeline(pipeline) {
-    pipeline.display = !pipeline.display;
-  }
+    openImportPipelinesDialog() {
+        const dialogRef: DialogRef<ImportPipelineDialogComponent> =
+            this.dialogService.open(ImportPipelineDialogComponent, {
+                panelType: PanelType.STANDARD_PANEL,
+                title: 'Import Pipeline',
+                width: '70vw',
+                data: {
+                    pipelines: this.pipelines,
+                },
+            });
+        dialogRef.afterClosed().subscribe(data => {
+            if (data) {
+                this.refreshPipelines();
+            }
+        });
+    }
 
-  navigateToPipelineEditor() {
-    this.router.navigate(['pipelines', 'create']);
-  }
+    startAllPipelines(action) {
+        const dialogRef: DialogRef<StartAllPipelinesDialogComponent> =
+            this.dialogService.open(StartAllPipelinesDialogComponent, {
+                panelType: PanelType.STANDARD_PANEL,
+                title: (action ? 'Start' : 'Stop') + ' all pipelines',
+                width: '70vw',
+                data: {
+                    pipelines: this.pipelines,
+                    action: action,
+                    activeCategoryId: this.activeCategoryId,
+                },
+            });
+
+        dialogRef.afterClosed().subscribe(data => {
+            if (data) {
+                this.refreshPipelines();
+            }
+        });
+    }
+
+    showPipelineCategoriesDialog() {
+        const dialogRef: DialogRef<PipelineCategoriesDialogComponent> =
+            this.dialogService.open(PipelineCategoriesDialogComponent, {
+                panelType: PanelType.STANDARD_PANEL,
+                title: 'Pipeline Categories',
+                width: '70vw',
+                data: {
+                    pipelines: this.pipelines,
+                    systemPipelines: this.systemPipelines,
+                },
+            });
+
+        dialogRef.afterClosed().subscribe(data => {
+            this.getPipelineCategories();
+            this.refreshPipelines();
+        });
+    }
+
+    refreshPipelines() {
+        this.getPipelines();
+    }
+
+    showPipeline(pipeline) {
+        pipeline.display = !pipeline.display;
+    }
+
+    navigateToPipelineEditor() {
+        this.router.navigate(['pipelines', 'create']);
+    }
 }

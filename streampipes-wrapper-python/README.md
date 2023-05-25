@@ -16,32 +16,38 @@
   ~
   -->
 
-[![Github Actions](https://img.shields.io/github/workflow/status/apache/incubator-streampipes/build-and-deploy-docker-dev)](https://github.com/apache/incubator-streampipes/actions/)
+[![Github Actions](https://img.shields.io/github/workflow/status/apache/streampipes/build-and-deploy-docker-dev)](https://github.com/apache/streampipes/actions/)
 [![Docker pulls](https://img.shields.io/docker/pulls/apachestreampipes/backend.svg)](https://hub.docker.com/r/apachestreampipes/backend/)
 [![Maven central](https://img.shields.io/maven-central/v/org.apache.streampipes/streampipes-backend.svg)](https://img.shields.io/maven-central/v/org.apache.streampipes/streampipes-backend.svg)
-[![License](https://img.shields.io/github/license/apache/incubator-streampipes.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Last commit](https://img.shields.io/github/last-commit/apache/incubator-streampipes.svg)]()
+[![License](https://img.shields.io/github/license/apache/streampipes.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Last commit](https://img.shields.io/github/last-commit/apache/streampipes.svg)]()
 [![Twitter](https://img.shields.io/twitter/follow/StreamPipes.svg?label=Follow&style=social)](https://twitter.com/StreamPipes)
 
 ## Apache StreamPipes Wrapper for Python [WIP]
-**NOTE**: 
 
-> The StreamPipes wrapper for python is currently under development. Thus, the processor model description still needs to be implemented externally in Java.
+**NOTE**:
+
+> The StreamPipes wrapper for python is currently under development. Thus, the processor model description still needs
+> to be implemented externally in Java.
 
 ## Apache StreamPipes
-Apache StreamPipes (incubating) enables flexible modeling of stream processing pipelines by providing a graphical 
+
+Apache StreamPipes enables flexible modeling of stream processing pipelines by providing a graphical
 modeling editor on top of existing stream processing frameworks.
 
-It leverages non-technical users to quickly define and execute processing pipelines based on an easily extensible 
-toolbox of data sources, data processors and data sinks. StreamPipes has an exchangeable runtime execution layer and executes pipelines using one of the provided wrappers, e.g., for Apache Flink or Apache Kafka Streams.
+It leverages non-technical users to quickly define and execute processing pipelines based on an easily extensible
+toolbox of data sources, data processors and data sinks. StreamPipes has an exchangeable runtime execution layer and
+executes pipelines using one of the provided wrappers, e.g., for Apache Flink or Apache Kafka Streams.
 
-Pipeline elements in StreamPipes can be installed at runtime - the built-in SDK allows to easily implement new 
-pipeline elements according to your needs. Pipeline elements are standalone microservices that can run anywhere - centrally on your server, in a large-scale cluster or close at the edge.
-
+Pipeline elements in StreamPipes can be installed at runtime - the built-in SDK allows to easily implement new
+pipeline elements according to your needs. Pipeline elements are standalone microservices that can run anywhere -
+centrally on your server, in a large-scale cluster or close at the edge.
 
 ## A Speudocode Example
+
 **NOTE**:
 Only works in combination with Java!
+
 ````
 from streampipes.core import StandaloneModelSubmitter
 from streampipes.manager import Declarer
@@ -98,13 +104,3 @@ def main():
 if __name__ == '__main__':
     main()
 ````
-
-### DISCLAIMER (WIP)
-Apache StreamPipes is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache
-Incubator. Incubation is required of all newly accepted projects until a further review indicates that the
-infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
-
-Some of the incubating project’s releases may not be fully compliant with ASF policy. For example, releases may have incomplete or un-reviewed licensing conditions. What follows is a list of known issues the project is currently aware of (note that this list, by definition, is likely to be incomplete):
-(currently no issues are known)
-
-If you are planning to incorporate this work into your product/project, please be aware that you will need to conduct a thorough licensing review to determine the overall implications of including this work. For the current status of this project through the Apache Incubator visit: https://incubator.apache.org/projects/streampipes.html

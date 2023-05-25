@@ -8,16 +8,16 @@ import java.util.List;
 
 public class TrendFilteredParams extends EventProcessorBindingParams {
 
-    private TrendOperator operator;
-    private int increase;
-    private int duration;
+    private final TrendOperator operator;
+    private final int increase;
+    private final int duration;
 
-    private String input;
-    private List<String> outputFieldSelectors;
+    private final String input;
+    private final List<String> outputFieldSelectors;
 
 
-    private double threshold;
-    private RelationalOperator filterOperation;
+    private final double threshold;
+    private final RelationalOperator filterOperation;
 
 
 

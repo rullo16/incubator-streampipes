@@ -17,16 +17,18 @@
  */
 package org.apache.streampipes.model.template;
 
-import org.apache.streampipes.model.base.UnnamedStreamPipesEntity;
 import org.apache.streampipes.model.shared.annotation.TsModel;
 import org.apache.streampipes.model.staticproperty.StaticProperty;
 import org.apache.streampipes.model.util.Cloner;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
 @TsModel
-public class PipelineTemplateInvocation extends UnnamedStreamPipesEntity {
+public class PipelineTemplateInvocation {
 
   private String kviName;
 
@@ -44,12 +46,13 @@ public class PipelineTemplateInvocation extends UnnamedStreamPipesEntity {
   }
 
   public PipelineTemplateInvocation(PipelineTemplateInvocation other) {
-    super(other);
     this.kviName = other.getKviName();
     this.dataSetId = other.getDataSetId();
     this.pipelineTemplateId = other.getPipelineTemplateId();
 
-    if (other.getStaticProperties() != null) this.staticProperties = new Cloner().staticProperties(other.getStaticProperties());
+    if (other.getStaticProperties() != null) {
+      this.staticProperties = new Cloner().staticProperties(other.getStaticProperties());
+    }
   }
 
   public String getKviName() {

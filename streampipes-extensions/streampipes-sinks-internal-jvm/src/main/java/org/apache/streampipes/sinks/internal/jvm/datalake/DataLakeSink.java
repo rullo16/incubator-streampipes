@@ -18,9 +18,9 @@
 
 package org.apache.streampipes.sinks.internal.jvm.datalake;
 
+import org.apache.streampipes.commons.environment.Environments;
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.dataexplorer.commons.TimeSeriesStore;
-import org.apache.streampipes.logging.api.Logger;
 import org.apache.streampipes.model.DataSinkType;
 import org.apache.streampipes.model.datalake.DataLakeMeasure;
 import org.apache.streampipes.model.graph.DataSinkDescription;
@@ -39,56 +39,51 @@ import org.apache.streampipes.wrapper.standalone.StreamPipesDataSink;
 
 
 public class DataLakeSink extends StreamPipesDataSink {
-    private static Logger LOG;
 
-    private static final String DATABASE_MEASUREMENT_KEY = "db_measurement";
-    private static final String TIMESTAMP_MAPPING_KEY = "timestamp_mapping";
+  private static final String DATABASE_MEASUREMENT_KEY = "db_measurement";
+  private static final String TIMESTAMP_MAPPING_KEY = "timestamp_mapping";
 
-    private TimeSeriesStore timeSeriesStore;
+  private TimeSeriesStore timeSeriesStore;
 
 
-    @Override
-    public DataSinkDescription declareModel() {
-        return DataSinkBuilder.create("org.apache.streampipes.sinks.internal.jvm.datalake")
-          .withLocales(Locales.EN)
-          .withAssets(Assets.DOCUMENTATION, Assets.ICON)
-          .category(DataSinkType.INTERNAL)
-          .requiredStream(StreamRequirementsBuilder.create()
+  @Override
+  public DataSinkDescription declareModel() {
+    return DataSinkBuilder.create("org.apache.streampipes.sinks.internal.jvm.datalake")
+        .withLocales(Locales.EN)
+        .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+        .category(DataSinkType.INTERNAL)
+        .requiredStream(StreamRequirementsBuilder.create()
             .requiredPropertyWithUnaryMapping(
                 EpRequirements.timestampReq(),
                 Labels.withId(TIMESTAMP_MAPPING_KEY),
                 PropertyScope.NONE)
-                .build())
-          .requiredTextParameter(Labels.withId(DATABASE_MEASUREMENT_KEY))
-          .build();
-    }
+            .build())
+        .requiredTextParameter(Labels.withId(DATABASE_MEASUREMENT_KEY))
+        .build();
+  }
 
-    @Override
-    public void onInvocation(SinkParams parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  @Override
+  public void onInvocation(SinkParams parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+    String timestampField = parameters.extractor().mappingPropertyValue(TIMESTAMP_MAPPING_KEY);
+    String measureName = parameters.extractor().singleValueParameter(DATABASE_MEASUREMENT_KEY, String.class);
+    EventSchema eventSchema = runtimeContext.getInputSchemaInfo().get(0).getEventSchema();
 
+    DataLakeMeasure measure = new DataLakeMeasure(measureName, timestampField, eventSchema);
 
-        LOG = parameters.getGraph().getLogger(DataLakeSink.class);
+    this.timeSeriesStore = new TimeSeriesStore(Environments.getEnvironment(),
+        runtimeContext.getStreamPipesClient(),
+        measure,
+        true);
 
-        String timestampField = parameters.extractor().mappingPropertyValue(TIMESTAMP_MAPPING_KEY);
-        String measureName = parameters.extractor().singleValueParameter(DATABASE_MEASUREMENT_KEY, String.class);
-        EventSchema eventSchema = runtimeContext.getInputSchemaInfo().get(0).getEventSchema();
+  }
 
-        DataLakeMeasure measure = new DataLakeMeasure(measureName, timestampField, eventSchema);
+  @Override
+  public void onEvent(Event event) throws SpRuntimeException {
+    this.timeSeriesStore.onEvent(event);
+  }
 
-        this.timeSeriesStore = new TimeSeriesStore(runtimeContext.getConfigStore().getConfig(),
-          runtimeContext.getStreamPipesClient(),
-          measure,
-          true);
-
-    }
-
-    @Override
-    public void onEvent(Event event) throws SpRuntimeException {
-        this.timeSeriesStore.onEvent(event);
-    }
-
-    @Override
-    public void onDetach() throws SpRuntimeException {
-        this.timeSeriesStore.close();
-    }
+  @Override
+  public void onDetach() throws SpRuntimeException {
+    this.timeSeriesStore.close();
+  }
 }

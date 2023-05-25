@@ -20,7 +20,7 @@
     <parent>
         <artifactId>streampipes-extensions</artifactId>
         <groupId>org.apache.streampipes</groupId>
-        <version>0.70.0</version>
+        <version>0.91.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -33,8 +33,8 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-container-extensions</artifactId>
-            <version>0.70.0</version>
+            <artifactId>streampipes-service-extensions</artifactId>
+            <version>0.91.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.graalvm.nativeimage</groupId>
@@ -43,25 +43,31 @@
             </exclusions>
         </dependency>
         <!-- StreamPipes pipeline elements all (JVM) -->
-            <dependency>
-                <groupId>org.apache.streampipes</groupId>
-                <artifactId>streampipes-pipeline-elements-all-jvm</artifactId>
-                <version>0.70.0</version>
-                <classifier>embed</classifier>
-            </dependency>
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-pipeline-elements-all-jvm</artifactId>
+            <version>0.91.1-SNAPSHOT</version>
+            <classifier>embed</classifier>
+        </dependency>
 
         <!-- StreamPipes connect adapters -->
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-connect-adapters</artifactId>
-            <version>0.70.0</version>
+            <version>0.91.1-SNAPSHOT</version>
             <classifier>embed</classifier>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-connect-adapters-iiot</artifactId>
-            <version>0.70.0</version>
+            <version>0.91.1-SNAPSHOT</version>
             <classifier>embed</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.streampipes</groupId>
+            <artifactId>streampipes-messaging-nats</artifactId>
+            <version>0.91.1-SNAPSHOT</version>
         </dependency>
 
         <!-- Dependency convergence -->
@@ -73,6 +79,10 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -90,8 +100,4 @@
         </plugins>
         <finalName>streampipes-extensions-all-jvm</finalName>
     </build>
-
-  <scm>
-    <tag>release/0.70.0</tag>
-  </scm>
 </project>

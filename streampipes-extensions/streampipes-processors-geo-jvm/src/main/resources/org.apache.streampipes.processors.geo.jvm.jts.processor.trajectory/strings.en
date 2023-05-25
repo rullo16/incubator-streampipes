@@ -1,17 +1,35 @@
-org.apache.streampipes.processors.geo.jvm.jts.processor.trajectory.title=Single Trajectory Creator
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+org.apache.streampipes.processors.geo.jvm.jts.processor.trajectory.title=Geo Single Trajectory Creator
 org.apache.streampipes.processors.geo.jvm.jts.processor.trajectory.description=Creates a trajectory from JTS point events
 
 point-key.title=JTS Point Event
-point-key.description=Single Point Event which will be added to the trajectory
+point-key.description=Single Point Event added to the trajectory
 
 point-key.title=JTS Point Event
-point-key.description=Single Point Event which will be added to the trajectory
+point-key.description=Single Point Event added to the trajectory
 
 epsg-key.title=CRS of Input Point
 epsg-key.description=EPSG-Code of input point
 
 m-key.title=measurement value
-m-key.description=Measurement value which will be stored with each point event
+m-key.description=Measurement value which is stored together with each point event and can be used for internal calculations
 
 description-key.title=description text of trajectory
 description-key.description=A description text for the trajectory
