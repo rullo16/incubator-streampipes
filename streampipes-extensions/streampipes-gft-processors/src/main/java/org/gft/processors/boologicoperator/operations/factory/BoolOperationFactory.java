@@ -20,7 +20,7 @@ package org.gft.processors.boologicoperator.operations.factory;
 
 import org.gft.processors.boologicoperator.enums.BoolOperatorType;
 import org.gft.processors.boologicoperator.operations.*;
-import org.gft.processors.boologicoperator.operations.IBoolOperation;
+
 import static org.gft.processors.boologicoperator.enums.BoolOperatorType.*;
 
 public class BoolOperationFactory {

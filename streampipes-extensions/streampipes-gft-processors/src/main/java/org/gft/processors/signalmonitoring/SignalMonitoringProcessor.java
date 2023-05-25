@@ -33,8 +33,6 @@ import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 import org.apache.streampipes.wrapper.standalone.ProcessorParams;
 import org.apache.streampipes.wrapper.standalone.StreamPipesDataProcessor;
 
-import java.util.Objects;
-
 public class SignalMonitoringProcessor extends StreamPipesDataProcessor {
 
   private static final String VALUE = "number-mapping";

@@ -62,9 +62,9 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
                 .requiredSingleValueSelection(Labels.withId(OPERATION), Options.from("<", "<=", ">",
                         ">=", "==", "!=", "None"))
                 .requiredFloatParameter(Labels.withId(THRESHOLD), 0.0F)
-                .requiredIntegerParameter(Labels.withId(DURATION), 0, 100, 1)
+                .requiredIntegerParameter(Labels.withId(DURATION), 0)
                 .requiredSingleValueSelection(Labels.withId(UNIT_DURATION), Options.from(MINUTES, HOURS, NONE))
-                .requiredIntegerParameter(Labels.withId(DELAY), 0, 100, 1)
+                .requiredIntegerParameter(Labels.withId(DELAY), 0)
                 .requiredSingleValueSelection(Labels.withId(UNIT_DELAY), Options.from(MINUTES, HOURS, NONE))
                 .outputStrategy(
                         OutputStrategies.fixed(EpProperties.timestampProperty("timestamp"),
@@ -88,7 +88,7 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
         Integer duration = processorParams.extractor().singleValueParameter(DURATION, Integer.class);
         this.unit_duration = processorParams.extractor().selectedSingleValue(UNIT_DURATION, String.class);
         Integer delay = processorParams.extractor().singleValueParameter(DELAY, Integer.class);
-        this.unit_delay = processorParams.extractor().selectedSingleValue(UNIT_DURATION, String.class);
+        this.unit_delay = processorParams.extractor().selectedSingleValue(UNIT_DELAY, String.class);
 
         String operation = "GT";
         switch (string_operation) {
@@ -222,14 +222,12 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
 
         if (precedent_time == current_time){
             long diff = current_time_fictive - precedent_time_fictive;
-            System.out.println(current_time+" "+current_value);
             if(diff >= this.delay){
                 this.alertTimestamp.addProperty("precedent_time", current_time);
                 this.alertTimestamp.addProperty("precedent_time_fictive", current_time_fictive);
                 this.alertTimestamp.addProperty("changed", false);
             }
             if(!this.alertTimestamp.get("changed").getAsBoolean()){
-                System.out.println("                                                        "+current_time+" "+current_value);
                 bool = true;
             }
         }else{

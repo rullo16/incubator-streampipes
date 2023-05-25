@@ -52,6 +52,9 @@ the component will use both or one operator.
 ### Threshold value
 Specifies the threshold value that will be use for filtering,
 valid for both the negative and the positive signal.
+Values will be taken on the numbers below the negative of the threshold
+and above the positive of the threshold. For example: if we have 30,
+we will be take values above 30 and below -30.
 
 ### Percentage of Increase/Decrease
 Specifies the increase/decrease in percent within the specified time window.

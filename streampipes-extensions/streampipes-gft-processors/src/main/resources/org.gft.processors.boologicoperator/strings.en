@@ -1,4 +1,4 @@
-org.gft.processors.boologicoperator.title= Logical Operator (Time Series)
+org.gft.processors.boologicoperator.title= Logical Operator
 org.gft.processors.boologicoperator.description=Performs a logical boolean operation b/w selected fields
 
 operator-field.title=Boolean Operator

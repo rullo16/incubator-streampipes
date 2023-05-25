@@ -31,10 +31,18 @@ import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 
 import org.gft.adapters.backend.BackendHttpStreamProtocol;
 import org.gft.adapters.plm.PLMHttpStreamProtocol;
-import org.gft.processors.interpolation.InterpolationDataProcessor;
+import org.gft.processors.alerttrigger.AlertTriggerProcessor;
+import org.gft.processors.boologicoperator.BoolOperatorProcessor;
+import org.gft.processors.fieldselector.FieldSelector;
+import org.gft.processors.hoursmonitoring.HoursMonitoringProcessor;
+import org.gft.processors.interpolation.DataInterpolationProcessor;
 import org.gft.processors.loessinterpolation.LoessInterpolationDataProcessor;
+import org.gft.processors.multifieldrename.MultiFieldRename;
 import org.gft.processors.powertracking.PowerTrackingProcessor;
 import org.gft.processors.powertrackingdwm.PowerTrackingDWM;
+import org.gft.processors.productiontracking.ProductionTracking;
+import org.gft.processors.settostream.SetToStream;
+import org.gft.processors.signalmonitoring.SignalMonitoringProcessor;
 import org.gft.processors.trendfiltered.TrendFilteredController;
 import org.gft.processors.waterflowtrackingdwm.WaterFlowTrackingDWM;
 import org.gft.processors.watertrackinghourly.WaterTrackingHourly;
@@ -51,11 +59,11 @@ public class ProcessorsGFTInit extends ExtensionsModelSubmitter {
                     "GFT Processors",
                     "", 8090)
             .registerPipelineElements(
-                    new InterpolationDataProcessor(),
-                    new TrendFilteredController(),
-                    new LoessInterpolationDataProcessor(),
-                    new PowerTrackingProcessor(),
-                    new PowerTrackingDWM())
+                    new PowerTrackingDWM(), new PowerTrackingProcessor(), new WaterTrackingHourly(),
+                    new WaterFlowTrackingDWM(), new TrendFilteredController(), new LoessInterpolationDataProcessor(),
+                    new DataInterpolationProcessor(), new ProductionTracking(),
+                    new SignalMonitoringProcessor(), new BoolOperatorProcessor(), new HoursMonitoringProcessor(),
+                    new FieldSelector(), new MultiFieldRename(), new SetToStream(), new AlertTriggerProcessor())
             .registerPipelineElement(new WaterTrackingHourly())
             .registerPipelineElement(new WaterFlowTrackingDWM())
             .registerAdapter(new BackendHttpStreamProtocol())

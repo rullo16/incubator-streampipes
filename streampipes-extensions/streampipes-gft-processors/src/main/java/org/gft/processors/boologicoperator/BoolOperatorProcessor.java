@@ -36,8 +36,6 @@ import org.gft.processors.boologicoperator.enums.BoolOperatorType;
 import org.gft.processors.boologicoperator.operations.IBoolOperation;
 import org.gft.processors.boologicoperator.operations.factory.BoolOperationFactory;
 
-import static org.gft.processors.boologicoperator.enums.BoolOperatorType.NOT;
-
 
 public class BoolOperatorProcessor extends StreamPipesDataProcessor {
     private static final String BOOLEAN_OPERATOR_TYPE = "operator-field";

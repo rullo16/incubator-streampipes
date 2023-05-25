@@ -16,7 +16,6 @@ import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 import org.apache.streampipes.wrapper.standalone.ProcessorParams;
 import org.apache.streampipes.wrapper.standalone.StreamPipesDataProcessor;
 
-
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
