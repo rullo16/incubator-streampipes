@@ -1,0 +1,29 @@
+org.gft.processors.alerttrigger.title=Alert Trigger
+org.gft.processors.alerttrigger.description=When threshold rule and/or delay rule is fulfilled one or two true boolean value are appended, false otherwise.
+
+timestamp.title=Timestamp
+timestamp.description= Timestamp of the current event from the data source.
+
+timestamp-fictive.title=Simulator Timestamp
+timestamp-fictive.description= Timestamp of the simulator.
+
+number-mapping.title=Value to Observe.
+number-mapping.description=Specifies the field name where the filter operation should be applied on.
+
+operation.title=Filter Operation.
+operation.description=Specifies the filter operation that should be applied on the field.
+
+value.title=Threshold Value.
+value.description=Specifies a threshold value.
+
+delay.title=Max Delay Between Two Event(must be > 5).
+delay.description=Value of the maximum delay between two event for the triggering of an alert.
+
+unit-delay.title = Delay Unit.
+unit-delay.description = Unit of the maximum delay value.
+
+duration.title = Max Duration For Duplicated Values(must be > 5).
+duration.description=Value of the maximum duration to accept duplicated event value before the triggering of an alert.
+
+unit-duration.title = Duration Unit.
+unit-duration.description = Unit of the maximum duration value.
