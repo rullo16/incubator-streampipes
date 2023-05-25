@@ -53,7 +53,10 @@ public abstract class PullProtocol extends Protocol {
 
   @Override
   public void run(IAdapterPipeline adapterPipeline) {
-    final Runnable errorThread = () -> executeProtocolLogic(adapterPipeline);
+    final Runnable errorThread = () -> {
+      executeProtocolLogic(adapterPipeline);
+    };
+
 
     scheduler = Executors.newScheduledThreadPool(1);
     scheduler.schedule(errorThread, 0, TimeUnit.MILLISECONDS);

@@ -41,7 +41,7 @@ services:
   ui:
     image: "${SP_DOCKER_REGISTRY}/ui:${SP_VERSION}"
     ports:
-      - "80:80"
+      - "80:8088"
     depends_on:
       - couchdb
       - consul
@@ -144,7 +144,7 @@ services:
 
   # Lite version pipeline elements
   extensions-all-jvm:
-    image: "fouo/gft-custom-extensions:latest"
+    image: "${SP_DOCKER_REGISTRY}/extensions-all-jvm:${SP_VERSION}"
     depends_on:
       - consul
     volumes:

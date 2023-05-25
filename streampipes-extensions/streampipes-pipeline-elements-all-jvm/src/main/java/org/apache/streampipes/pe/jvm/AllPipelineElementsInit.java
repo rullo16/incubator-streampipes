@@ -68,16 +68,16 @@ public class AllPipelineElementsInit extends ExtensionsModelSubmitter {
         .merge(new DatabasesJvmInit().provideServiceDefinition())
         .merge(new SinksNotificationsJvmInit().provideServiceDefinition())
         .merge(new InfluxConnectorsInit().provideServiceDefinition())
-        .merge(new ProcessorsGFTInit().provideServiceDefinition())
-          .registerMessagingFormats(
-                  new JsonDataFormatFactory(),
-                  new CborDataFormatFactory(),
-                  new SmileDataFormatFactory(),
-                  new FstDataFormatFactory())
-          .registerMessagingProtocols(
-                  new SpKafkaProtocolFactory(),
-                  new SpJmsProtocolFactory(),
-                  new SpMqttProtocolFactory())
-          .build();
+            .merge(new ProcessorsGFTInit().provideServiceDefinition())
+            .registerMessagingFormats(
+                    new JsonDataFormatFactory(),
+                    new CborDataFormatFactory(),
+                    new SmileDataFormatFactory(),
+                    new FstDataFormatFactory())
+            .registerMessagingProtocols(
+                    new SpKafkaProtocolFactory(),
+                    new SpJmsProtocolFactory(),
+                    new SpMqttProtocolFactory())
+            .build();
   }
 }

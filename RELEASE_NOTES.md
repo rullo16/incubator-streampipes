@@ -165,6 +165,7 @@ We are very grateful for the support and professional handling.
 * @Harry262530 made their first contribution in https://github.com/apache/streampipes/pull/1142
 * @WaterLemons2k made their first contribution in https://github.com/apache/streampipes/pull/1205
 
+
 # [0.90.0]
 
 ## What's Changed

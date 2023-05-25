@@ -1,0 +1,90 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# apps
+src/assets/lib/apps/*
+
+
+# prebuild
+src/app/app-routing.module.ts
+src/app/app-overview/apps.ts
+src/app/appng5.module.ts
+src/app/home/home.service.ts
+src/app/services/version/version.service.ts
+src/app/services/app.constants.ts
+src/app/core/components/base-navigation.component.ts
+src/assets/img/sp/logo.png
+src/assets/img/sp/logo-navigation.png
+src/assets/img/favicon/favicon-96x96.png
+src/scss/sp/sp-theme.scss
+webpack.partial.dev.js
+
+# compiled output
+/dist
+/dist-server
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+projects/streampipes/platform-services/node_modules
+projects/streampipes/shared-ui/node_modules
+
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+npm-debug.log.*
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+
+bundle.js
+bundle.js.map
+
+.vscode/
+
+# Cypress
+cypress/screenshots/
+cypress/videos/
