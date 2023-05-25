@@ -46,149 +46,146 @@ import java.util.Arrays;
 
 public class LoessInterpolationDataProcessor extends StreamPipesDataProcessor {
 
-  private String input_value;
-  private String timestamp_value;
+    private String input_value;
+    private String timestamp_value;
 
-  private static final String INPUT_VALUE = "value";
-  private static final String TIMESTAMP_VALUE = "timestamp_value";
-  private static final String THRESHOLD = "threshold";
+    private static final String INPUT_VALUE = "value";
+    private static final String TIMESTAMP_VALUE = "timestamp_value";
+    private static final String THRESHOLD = "threshold";
 
-  private Double threshold;
+    private Double threshold;
 
-  double[] array3X = {0.0,0.0,0.0,0.0,0.0};
-  double[] array3Y = {0.0,0.0,0.0,0.0,0.0};
-
-
-  @Override
-  public DataProcessorDescription declareModel() {
-    return ProcessingElementBuilder.create("org.gft.processors.loessinterpolation")
-            .withAssets(Assets.DOCUMENTATION, Assets.ICON)
-            .withLocales(Locales.EN)
-            .category(DataProcessorType.AGGREGATE)
-
-            .requiredStream(StreamRequirementsBuilder.create()
-                    .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
-                            Labels.withId(INPUT_VALUE), PropertyScope.NONE)
-                    .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
-                            Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
-                    .build())
-
-            .requiredFloatParameter(Labels.withId(THRESHOLD))
-
-            .outputStrategy(OutputStrategies.append(PrimitivePropertyBuilder.create(Datatypes.Double, "chosen_timestamp").build()
-                    ,PrimitivePropertyBuilder.create(Datatypes.Double, "interpolation_value").build()))
-
-            .build();
-  }
-
-  @Override
-  public void onInvocation(ProcessorParams processorParams,
-                           SpOutputCollector out,
-                           EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
-
-    this.input_value = processorParams.extractor().mappingPropertyValue(INPUT_VALUE);
-    this.timestamp_value = processorParams.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
-    this.threshold = processorParams.extractor().singleValueParameter(THRESHOLD,Double.class);
-
-  }
-
-  @Override
-  public void onEvent(Event event,SpOutputCollector out) {
-
-    Double xi = 0.0;
-    Double yi = 0.0;
-
-    //recovery input value
-    Double value = event.getFieldBySelector(this.input_value).getAsPrimitive().getAsDouble();
-
-    //recovery timestamp value
-    String timestampStr = event.getFieldBySelector(this.timestamp_value).getAsPrimitive().getAsString();
-
-    //convert timestamp to double
-    Double timestamp = Double.parseDouble(timestampStr);
-
-    //recover type of interpolation
-    //if we are in the first event it sets the [0] values of the two arrays with the data arriving from SP
-    if ((array3Y[0] == 0.0 && array3X[0] == 0.0)) {
-
-      array3X[0] = timestamp;
-      array3Y[0] = value;
-
-      //if we are in the second event it sets the [1] values of the two arrays with the data arriving from SP
-    } else if ((array3Y[1] == 0.0 && array3X[1] == 0.0)) {
-
-      array3X[1] = timestamp;
-      array3Y[1] = value;
-
-    } else if ((array3Y[2] == 0.0 && array3X[2] == 0.0)) {
-
-      array3X[2] = timestamp;
-      array3Y[2] = value;
-
-    } else if ((array3Y[3] == 0.0 && array3X[3] == 0.0)) {
-
-      array3X[3] = timestamp;
-      array3Y[3] = value;
-
-    } else if ((array3Y[4] == 0.0 && array3X[4] == 0.0)) {
-
-      array3X[4] = timestamp;
-      array3Y[4] = value;
+    double[] array3X = {0.0,0.0,0.0,0.0,0.0};
+    double[] array3Y = {0.0,0.0,0.0,0.0,0.0};
 
 
-      //if the new timestamp is equal than the timestamp previously or the difference is more low to the threshold,
-      //do not perform an interpolation
-    } else if ((array3X[0] == timestamp) || (array3X[1] == timestamp) ||
-            (array3X[2] == timestamp) || (array3X[3] == timestamp) || (array3X[4] == timestamp) ||
-            (timestamp - array3X[0] < this.threshold) || (timestamp - array3X[1] < this.threshold) ||
-            (timestamp - array3X[2] < this.threshold) || (timestamp - array3X[3] < this.threshold) ||
-            (timestamp - array3X[4] < this.threshold)) {
-      System.out.println("--------- Timestamp Values not accepted ------- ");
+    @Override
+    public DataProcessorDescription declareModel() {
+        return ProcessingElementBuilder.create("org.gft.processors.loessinterpolation")
+                .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+                .withLocales(Locales.EN)
+                .category(DataProcessorType.AGGREGATE)
 
-      //perform an interpolation
-    } else {
-      array3X[4] = timestamp;
-      array3Y[4] = value;
+                .requiredStream(StreamRequirementsBuilder.create()
+                        .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
+                                Labels.withId(INPUT_VALUE), PropertyScope.NONE)
+                        .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),
+                                Labels.withId(TIMESTAMP_VALUE), PropertyScope.NONE)
+                        .build())
 
-      //perform a mathematical median for an array of two timestamp values
-      BigDecimal bd = new BigDecimal((array3X[0] + array3X[1] + array3X[2] + array3X[3] + array3X[4]) / 5).setScale(2, RoundingMode.HALF_UP);
-      xi = bd.doubleValue();
+                .requiredFloatParameter(Labels.withId(THRESHOLD))
 
-      System.out.println("array3X: " + Arrays.toString(array3X));
-      System.out.println("array3Y: " + Arrays.toString(array3Y));
+                .outputStrategy(OutputStrategies.append(PrimitivePropertyBuilder.create(Datatypes.Double, "chosen_timestamp").build()
+                        ,PrimitivePropertyBuilder.create(Datatypes.Double, "interpolation_value").build()))
 
-      yi = loessInterp(array3X, array3Y, xi);
-      System.out.println("***** yi *****: " + yi);
-
-      for (int i = 0; i < 4; ++i) {
-        //move the second value of the array to the first position
-        array3X[i] = array3X[i+1];
-        array3Y[i] = array3Y[i+1];
-
-      }
-
-      //set the values resulting from the interpolation, in the fields of the event output
-      event.addField("chosen_timestamp", xi);
-      event.addField("interpolation_value", yi);
-
-      out.collect(event);
+                .build();
     }
-  }
 
-  @Override
-  public void onDetach(){
-  }
+    @Override
+    public void onInvocation(ProcessorParams processorParams,
+                             SpOutputCollector out,
+                             EventProcessorRuntimeContext ctx) throws SpRuntimeException  {
+
+        this.input_value = processorParams.extractor().mappingPropertyValue(INPUT_VALUE);
+        this.timestamp_value = processorParams.extractor().mappingPropertyValue(TIMESTAMP_VALUE);
+        this.threshold = processorParams.extractor().singleValueParameter(THRESHOLD,Double.class);
+
+    }
+
+    @Override
+    public void onEvent(Event event,SpOutputCollector out) {
+
+        double xi;
+        double yi;
+
+        //recovery input value
+        Double value = event.getFieldBySelector(this.input_value).getAsPrimitive().getAsDouble();
+
+        //recovery timestamp value
+        String timestampStr = event.getFieldBySelector(this.timestamp_value).getAsPrimitive().getAsString();
+
+        //convert timestamp to double
+        double timestamp = Double.parseDouble(timestampStr);
+
+        //recover type of interpolation
+        //if we are in the first event it sets the [0] values of the two arrays with the data arriving from SP
+        if ((array3Y[0] == 0.0 && array3X[0] == 0.0)) {
+
+            array3X[0] = timestamp;
+            array3Y[0] = value;
+
+            //if we are in the second event it sets the [1] values of the two arrays with the data arriving from SP
+        } else if ((array3Y[1] == 0.0 && array3X[1] == 0.0)) {
+
+            array3X[1] = timestamp;
+            array3Y[1] = value;
+
+        } else if ((array3Y[2] == 0.0 && array3X[2] == 0.0)) {
+
+            array3X[2] = timestamp;
+            array3Y[2] = value;
+
+        } else if ((array3Y[3] == 0.0 && array3X[3] == 0.0)) {
+
+            array3X[3] = timestamp;
+            array3Y[3] = value;
+
+        } else if ((array3Y[4] == 0.0 && array3X[4] == 0.0)) {
+
+            array3X[4] = timestamp;
+            array3Y[4] = value;
 
 
-  public double loessInterp(double[] x, double[] y, double xi) {
+            //if the new timestamp is equal than the timestamp previously or the difference is more low to the threshold,
+            //do not perform an interpolation
+        } else if ((array3X[0] == timestamp) || (array3X[1] == timestamp) ||
+                (array3X[2] == timestamp) || (array3X[3] == timestamp) || (array3X[4] == timestamp) ||
+                (timestamp - array3X[0] < this.threshold) || (timestamp - array3X[1] < this.threshold) ||
+                (timestamp - array3X[2] < this.threshold) || (timestamp - array3X[3] < this.threshold) ||
+                (timestamp - array3X[4] < this.threshold)) {
+            System.out.println("--------- Timestamp Values not accepted ------- ");
 
-    LoessInterpolator li = new LoessInterpolator(0.6, 2, 1e-12);
-    double[] res = li.smooth(x, y);
-    PolynomialSplineFunction psf = li.interpolate(x, y);
-    double yi = psf.value(xi);
-    return yi;
+            //perform an interpolation
+        } else {
+            array3X[4] = timestamp;
+            array3Y[4] = value;
 
-  }
+            //perform a mathematical median for an array of two timestamp values
+            BigDecimal bd = BigDecimal.valueOf((array3X[0] + array3X[1] + array3X[2] + array3X[3] + array3X[4]) / 5).setScale(2, RoundingMode.HALF_UP);
+            xi = bd.doubleValue();
 
+            System.out.println("array3X: " + Arrays.toString(array3X));
+            System.out.println("array3Y: " + Arrays.toString(array3Y));
+
+            yi = loessInterp(array3X, array3Y, xi);
+            System.out.println("***** yi *****: " + yi);
+
+            for (int i = 0; i < 4; ++i) {
+                //move the second value of the array to the first position
+                array3X[i] = array3X[i+1];
+                array3Y[i] = array3Y[i+1];
+
+            }
+
+            //set the values resulting from the interpolation, in the fields of the event output
+            event.addField("chosen_timestamp", xi);
+            event.addField("interpolation_value", yi);
+
+            out.collect(event);
+        }
+    }
+
+    @Override
+    public void onDetach(){
+    }
+
+
+    public double loessInterp(double[] x, double[] y, double xi) {
+
+        LoessInterpolator li = new LoessInterpolator(0.6, 2, 1e-12);
+        double[] res = li.smooth(x, y);
+        PolynomialSplineFunction psf = li.interpolate(x, y);
+        return psf.value(xi);
+    }
 
 }

@@ -11,7 +11,7 @@ public class BackendHttpUtils {
     private static final String LENGTH = "length";
     private static final String LOWEST_DATE = "lowest_date";
     private static final String HIGHEST_DATE = "highest_date";
-    private static final String SENSOR_SIGNAL = "signal";
+    private static final String SENSOR_SIGNAL_ID = "signal";
     public static final String USERNAME_KEY = "username";
     public static final String PASSWORD_KEY = "password";
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -29,7 +29,7 @@ public class BackendHttpUtils {
     }
 
     public static Label getSignalLabel() {
-        return Labels.withId(SENSOR_SIGNAL);
+        return Labels.withId(SENSOR_SIGNAL_ID);
     }
 
     public static Label getLowestLabel() {
@@ -45,14 +45,14 @@ public class BackendHttpUtils {
 
         String username = extractor.singleValueParameter(USERNAME_KEY, String.class).trim();
         String password = extractor.secretValue(PASSWORD_KEY);
-        String signal_name = extractor.singleValueParameter(SENSOR_SIGNAL, String.class).trim();
+        String signal_name = extractor.singleValueParameter(SENSOR_SIGNAL_ID, String.class).trim();
         String lowest_date = extractor.singleValueParameter(LOWEST_DATE, String.class).trim();//TODO .strip
         String highest_date = extractor.singleValueParameter(HIGHEST_DATE, String.class).trim();//TODO .strip
         Integer length = 30000;
 
         if(!highest_date.equals("CurrentDateTime")){
             try {
-                sdf.parse(highest_date);
+                sdf.parse(highest_date);           // second_date of the polling interval
                 sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -60,7 +60,7 @@ public class BackendHttpUtils {
         }
 
         try {
-            sdf.parse(lowest_date);
+            sdf.parse(lowest_date);            // first_date of the polling interval
             sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
         } catch (ParseException e) {
             e.printStackTrace();

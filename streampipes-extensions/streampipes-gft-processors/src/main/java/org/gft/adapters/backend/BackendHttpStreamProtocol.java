@@ -48,18 +48,23 @@ import java.util.Map;
 
 public class BackendHttpStreamProtocol extends BackendPullProtocol {
 
-  private static final long interval = 300; //TODO set this in HttpConfig
+  private static final long interval = 300; // interval between two consecutive polling: polling waiting time
   Logger logger = LoggerFactory.getLogger(Protocol.class);
   public static final String ID = "org.gft.adapters.backend";
   BackendHttpConfig config;
+
+  // Empty constructor
   public BackendHttpStreamProtocol() {
   }
 
+  // constructor with parameters
   public BackendHttpStreamProtocol(IParser parser, IFormat format, BackendHttpConfig config) {
     super(parser, format, interval);
     this.config = config;
   }
 
+  //Define abstract stream requirements such as event properties that must be present
+  // in any input stream that is later connected to the element using the StreamPipes UI
   @Override
   public ProtocolDescription declareModel() {
     return ProtocolDescriptionBuilder.create(ID)
@@ -75,6 +80,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
             .build();
   }
 
+  // get constructor parameters
   @Override
   public Protocol getInstance(ProtocolDescription protocolDescription, IParser parser, IFormat format) {
     StaticPropertyExtractor extractor = StaticPropertyExtractor.from(protocolDescription.getConfig(),  new ArrayList<>());
@@ -82,6 +88,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
     return new BackendHttpStreamProtocol(parser, format, config);
   }
 
+  // retrieve the schema of the payload
   @Override
   public GuessSchema getGuessSchema() throws ParseException {
     int n = 2;
@@ -123,11 +130,13 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
     return result;
   }
 
+  // retrieve data from the endpoint
   public InputStream getDataFromEndpoint() throws ParseException{
     InputStream result = null;
     String accessToken = login();
     String urlString = getUrl();
 
+    // stop adapter when it goes out of the whole polling time range as typed on the SP UI during set up
     if (!config.getHighestDate().equals("CurrentDateTime") && config.getLowestDate().compareToIgnoreCase(config.getHighestDate()) >= 0) {
       logger.warn("Adapter Stopped: there is not anymore data to retrieve in the time interval!!!");
       logger.warn("Stop Adapter on the User Interface!!!");
@@ -160,13 +169,17 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
     return result;
   }
 
-
+  // Build and return endpoint URL that will be used to get data
   private String getUrl(){
     String urlString, first_date, second_date, current_time = config.CurrentDateTime();
 
-    if((config.getSecondDate().compareToIgnoreCase(current_time)>0) && config.getHighestDate().equals("CurrentDateTime")){
+    //  if the second date of the polling interval coincide with the current date,
+    //  the time range for polling will become [current_time, current_time-5]
+    if((config.getSecondDate().compareToIgnoreCase(current_time)>=0) && config.getHighestDate().equals("CurrentDateTime")){
       first_date = config.precedentCurrentTime(current_time);
       second_date = current_time;
+    // the polling interval is in the past respectively to the current date
+    // and will move until the second_date will coincide with the current date
     }else{
       first_date = config.firstDateTime();
       second_date = config.secondDateTime();
@@ -186,6 +199,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
     return ID;
   }
 
+    // connection to KYKLOS Backend and token retrieve
   private String login() throws org.apache.http.ParseException {
     String response, token;
 

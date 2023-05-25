@@ -16,8 +16,8 @@ lowest_date.description=First value of the key for filtering - Example: 2022-07-
 highest_date.title=To - Highest Date of the Interval
 highest_date.description=Last value of the key for filtering - Example: 2022-12-21 00:00:00 (YYYY-MM-DD HH:mm:ss). The default increasing value (CurrentDateTime that corresponds to the time of the polling.) can be replaced by a static one (past or future).
 
-signal.title=Signal Name
-signal.description=The name of the sensor signal.
+signal.title=Signal ID
+signal.description=The comp_signal_id of the sensor signal without quote.
 
 
 

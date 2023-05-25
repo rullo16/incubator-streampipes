@@ -1,0 +1,11 @@
+org.gft.processors.settostream.title=Set To Stream
+org.gft.processors.settostream.description=Transform a set of data to a stream of data.
+
+timestamp.title=Timestamp
+timestamp.description=The time of the current event.
+
+sleep.title=Delay in Milliseconds.
+sleep.description=Value of the delay between two event to obtain a stream-like output.
+
+
+

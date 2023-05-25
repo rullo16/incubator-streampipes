@@ -36,66 +36,71 @@ import java.util.List;
 
 public class TrendFilteredController extends StandaloneEventProcessingDeclarer<TrendFilteredParams> {
 
-  private static final String Input = "input";
-  private static final String Increase = "increase";
-  private static final String Operation = "operation";
-  private static final String Duration = "duration";
-  private static final String FilterOperation = "fOperation";
-  private static final String Threshold = "threshold";
-  private double threshold;
+    private static final String Input = "input";
+    private static final String Increase = "increase";
+    private static final String Operation = "operation";
+    private static final String Duration = "duration";
+    private static final String FilterOperation = "fOperation";
+    private static final String Threshold = "threshold";
+    private double threshold;
 
-  @Override
-  public DataProcessorDescription declareModel() {
-    return ProcessingElementBuilder.create("org.gft.processors.trendfiltered")
-            .withAssets(Assets.DOCUMENTATION, Assets.ICON)
-            .withLocales(Locales.EN)
-            .category(DataProcessorType.PATTERN_DETECT)
-            .requiredStream(StreamRequirementsBuilder
-              .create()
-              .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),Labels.withId(Input), PropertyScope.MEASUREMENT_PROPERTY)
-              .build())
-            .requiredFloatParameter(Labels.withId(Threshold))
-            .requiredSingleValueSelection(Labels.withId(FilterOperation),Options.from("<", "<=", ">",
-                    ">=", "!="))
-            .requiredSingleValueSelection(Labels.withId(Operation), Options.from("Increase","Decrease"))
-            .requiredIntegerParameter(Labels.withId(Increase), 0, 500, 1)
-            .requiredIntegerParameter(Labels.withId(Duration))
-            .outputStrategy(OutputStrategies.custom())
-            .build();
-  }
-
-  public TrendOperator getOperation(String operation) {
-    if(operation.equals("Increase")){
-      return TrendOperator.INCREASE;
-    } else {
-      return TrendOperator.DECREASE;
-    }
-  }
-
-
-  @Override
-  public ConfiguredEventProcessor<TrendFilteredParams> onInvocation(DataProcessorInvocation dataProcessorInvocation, ProcessingElementParameterExtractor extractor) {
-    String operation = extractor.selectedSingleValue(Operation,String.class);
-    int increase = extractor.singleValueParameter(Increase, Integer.class);
-    int duration = extractor.singleValueParameter(Duration, Integer.class);
-    String input = extractor.mappingPropertyValue(Input);
-    List<String> outputFieldSelectors = extractor.outputKeySelectors();
-
-    this.threshold = extractor.singleValueParameter(Threshold,Double.class);
-    String stringFilterOperation = extractor.selectedSingleValue(FilterOperation,String.class);
-    RelationalOperator filterOperation = RelationalOperator.GREATER_THAN;
-
-    if (stringFilterOperation.equals("<=")) {
-      filterOperation = RelationalOperator.LESSER_EQUALS;
-    } else if (stringFilterOperation.equals("<")) {
-      filterOperation = RelationalOperator.LESSER_THAN;
-    } else if (stringFilterOperation.equals(">=")) {
-      filterOperation = RelationalOperator.GREATER_EQUALS;
-    } else if (stringFilterOperation.equals("!=")) {
-      filterOperation = RelationalOperator.NOT_EQUALS;
+    @Override
+    public DataProcessorDescription declareModel() {
+        return ProcessingElementBuilder.create("org.gft.processors.trendfiltered")
+                .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+                .withLocales(Locales.EN)
+                .category(DataProcessorType.PATTERN_DETECT)
+                .requiredStream(StreamRequirementsBuilder
+                        .create()
+                        .requiredPropertyWithUnaryMapping(EpRequirements.numberReq(),Labels.withId(Input), PropertyScope.MEASUREMENT_PROPERTY)
+                        .build())
+                .requiredFloatParameter(Labels.withId(Threshold))
+                .requiredSingleValueSelection(Labels.withId(FilterOperation),Options.from("<", "<=", ">",
+                        ">=", "!="))
+                .requiredSingleValueSelection(Labels.withId(Operation), Options.from("Increase","Decrease"))
+                .requiredIntegerParameter(Labels.withId(Increase), 0, 500, 1)
+                .requiredIntegerParameter(Labels.withId(Duration))
+                .outputStrategy(OutputStrategies.custom())
+                .build();
     }
 
-    TrendFilteredParams params = new TrendFilteredParams(dataProcessorInvocation, getOperation(operation),increase,duration,input,filterOperation,this.threshold,outputFieldSelectors);
-    return new ConfiguredEventProcessor<>(params,Trend::new);
-  }
+    public TrendOperator getOperation(String operation) {
+        if(operation.equals("Increase")){
+            return TrendOperator.INCREASE;
+        } else {
+            return TrendOperator.DECREASE;
+        }
+    }
+
+
+    @Override
+    public ConfiguredEventProcessor<TrendFilteredParams> onInvocation(DataProcessorInvocation dataProcessorInvocation, ProcessingElementParameterExtractor extractor) {
+        String operation = extractor.selectedSingleValue(Operation,String.class);
+        int increase = extractor.singleValueParameter(Increase, Integer.class);
+        int duration = extractor.singleValueParameter(Duration, Integer.class);
+        String input = extractor.mappingPropertyValue(Input);
+        List<String> outputFieldSelectors = extractor.outputKeySelectors();
+
+        this.threshold = extractor.singleValueParameter(Threshold,Double.class);
+        String stringFilterOperation = extractor.selectedSingleValue(FilterOperation,String.class);
+        RelationalOperator filterOperation = RelationalOperator.GREATER_THAN;
+
+        switch (stringFilterOperation) {
+            case "<=":
+                filterOperation = RelationalOperator.LESSER_EQUALS;
+                break;
+            case "<":
+                filterOperation = RelationalOperator.LESSER_THAN;
+                break;
+            case ">=":
+                filterOperation = RelationalOperator.GREATER_EQUALS;
+                break;
+            case "!=":
+                filterOperation = RelationalOperator.NOT_EQUALS;
+                break;
+        }
+
+        TrendFilteredParams params = new TrendFilteredParams(dataProcessorInvocation, getOperation(operation),increase,duration,input,filterOperation,this.threshold,outputFieldSelectors);
+        return new ConfiguredEventProcessor<>(params,Trend::new);
+    }
 }
