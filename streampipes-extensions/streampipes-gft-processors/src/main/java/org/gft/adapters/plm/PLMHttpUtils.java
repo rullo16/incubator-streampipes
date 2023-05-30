@@ -53,7 +53,7 @@ public class PLMHttpUtils {
 
 
         try {
-            sdf.parse(highest_date);
+            sdf.parse(highest_date);            // second_date of the polling interval
             sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
         } catch (ParseException e) {
             e.printStackTrace();
@@ -61,7 +61,7 @@ public class PLMHttpUtils {
 
 
         try {
-            sdf.parse(lowest_date);
+            sdf.parse(lowest_date);             // first_date of the polling interval
             sdf.setLenient(false);            // strict mode - check 30 or 31 days, leap year
         } catch (ParseException e) {
             e.printStackTrace();

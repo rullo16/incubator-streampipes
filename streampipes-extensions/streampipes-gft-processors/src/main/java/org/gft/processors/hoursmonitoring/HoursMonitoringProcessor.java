@@ -23,10 +23,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 
 public class HoursMonitoringProcessor extends StreamPipesDataProcessor {
 
@@ -38,7 +40,6 @@ public class HoursMonitoringProcessor extends StreamPipesDataProcessor {
 
 
     private static final String HOURS = "Hours";
-    private static final String SECONDS = "Seconds";
     private static final String MINUTES = "Minutes";
     private static final String TIMESTAMP = "timestamp";
     private static final String MT = "mt";
@@ -51,7 +52,7 @@ public class HoursMonitoringProcessor extends StreamPipesDataProcessor {
     List<Double> measuredTimeListWeekly = new ArrayList<>();
     List<Double> measuredTimeListMonthly = new ArrayList<>();
     private String fieldName;
-    private Double output_divisor = 1000.0;
+    private Double output_divisor = 0.0;
     private Long first_time_occurrence = Long.MIN_VALUE;
     private int day_precedent = -1, month_precedent = -1;
     private String measure_bool_string;
@@ -60,6 +61,7 @@ public class HoursMonitoringProcessor extends StreamPipesDataProcessor {
     private Double operating_time_daily = 0.0;
     private Double operating_time_weekly = 0.0;
     private Double operating_time_monthly = 0.0;
+    private String previous_date = "";
 
 
     @Override
@@ -136,7 +138,6 @@ public class HoursMonitoringProcessor extends StreamPipesDataProcessor {
                 String[] ymd = ymd_hms[0].split("-");
                 int day_current = Integer.parseInt(ymd[2]);
                 int month_current = Integer.parseInt(ymd[1]);
-                String day = getCurrentDay(date);
 
                 //if true compute first the consumption of the day that has just passed
                 if(day_current != this.day_precedent && this.day_precedent != -1){
@@ -147,8 +148,9 @@ public class HoursMonitoringProcessor extends StreamPipesDataProcessor {
                     this.operating_time_daily = calculateHours(measuredTimeListDaily);
                     this.measuredTimeListDaily.clear();
 
-                    //if the day coincide with monday compute the consumption of the week that has just passed
-                    if(day.equals("Mon")){
+                    //if the current week doesn't coincide with the week of the previous date,
+                    // compute the consumption of the week that has just passed
+                    if(!ifSameWeek(date)){
                         this.operating_time_weekly = calculateHours(this.measuredTimeListWeekly);
                         this.measuredTimeListWeekly.clear();
                     }
@@ -183,19 +185,32 @@ public class HoursMonitoringProcessor extends StreamPipesDataProcessor {
         return  date_format.format(cal.getTime());
     }
 
-    private String getCurrentDay(String date){
-        String day = null;
+    private Boolean ifSameWeek(String current_date){
+        boolean same_week = true;
+        if(this.previous_date.isEmpty())
+            this.previous_date = current_date;
         try{
-            Date myDate = date_format.parse(date);
-            LocalDateTime localDateTime = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            // convert LocalDateTime to date
-            Date date_plus = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-            String[] s = date_plus.toString().split(" ");
-            day = s[0];
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date current = sdf.parse(current_date);
+            Date previous = sdf.parse(this.previous_date);
+            // convert dates to local datetime
+            LocalDateTime date_current = current.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime date_previous = previous.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+            WeekFields weekFields = WeekFields.ISO;
+            int currentWeekNumber = date_current.get(weekFields.weekOfWeekBasedYear());
+            int previousWeekNumber = date_previous.get(weekFields.weekOfWeekBasedYear());
+
+            if (currentWeekNumber != previousWeekNumber) {
+                same_week = false;
+            }
         }catch (ParseException e){
             e.printStackTrace();
         }
-        return day;
+
+        this.previous_date = current_date;
+
+        return same_week;
     }
 
     private Double calculateHours(List<Double> measuredTimeList) {

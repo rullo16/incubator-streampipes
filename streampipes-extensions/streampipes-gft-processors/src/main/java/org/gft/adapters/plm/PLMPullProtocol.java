@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 import java.util.concurrent.*;
 
+// This is a Streampipes built in Class used to manage the waiting time between two consecutive poll
 public abstract class PLMPullProtocol extends Protocol {
 
     private ScheduledExecutorService scheduler;

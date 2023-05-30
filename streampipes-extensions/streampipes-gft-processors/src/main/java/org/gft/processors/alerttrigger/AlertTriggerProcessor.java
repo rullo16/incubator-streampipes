@@ -151,7 +151,7 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
         event.addField("timestamp", current_time);
         event.addField("value", current_value);
 
-        if ((this.threshold != 0.0) && (this.numerical_operator != AlertTriggerOperator.NONE)){
+        if (this.numerical_operator != AlertTriggerOperator.NONE){
             alert_threshold = alertThreshold(current_value);
             event.addField("Alert_threshold", alert_threshold);
         }
@@ -162,7 +162,7 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
         }
 
         if((this.delay != 0L) && !this.unit_delay.equals(NONE)){
-            alert_delay = alertDelay(current_time, current_time_fictive, current_value);
+            alert_delay = alertDelay(current_time, current_time_fictive);
             event.addField("Alert_delay", alert_delay);
         }
 
@@ -195,7 +195,7 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
         double precedent_value = this.alertValue.get("precedent_value").getAsDouble();
         long precedent_time = this.alertValue.get("precedent_time").getAsLong();
 
-        if((precedent_value == current_value) && (precedent_time != current_time)){
+        if((precedent_value == current_value)){
             long diff = current_time - precedent_time;
             if(diff >= this.duration){
                 this.alertValue.addProperty("precedent_time", current_time);
@@ -205,8 +205,7 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
             if (!this.alertValue.get("changed").getAsBoolean()) {
                 bool = true;
             }
-        }
-        if(precedent_value != current_value){
+        }else{
             this.alertValue.addProperty("precedent_time", current_time);
             this.alertValue.addProperty("precedent_value", current_value);
             this.alertValue.addProperty("changed", true);
@@ -215,7 +214,7 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
         return bool;
     }
 
-    private boolean alertDelay(Long current_time, Long current_time_fictive, Double current_value){
+    private boolean alertDelay(Long current_time, Long current_time_fictive){
         boolean bool = false;
         long precedent_time = this.alertTimestamp.get("precedent_time").getAsLong();
         long precedent_time_fictive = this.alertTimestamp.get("precedent_time_fictive").getAsLong();

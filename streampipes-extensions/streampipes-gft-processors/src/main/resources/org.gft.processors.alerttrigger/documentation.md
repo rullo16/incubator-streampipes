@@ -72,7 +72,6 @@ Specifies the unit that should be applied on the delay field.
 ## Further information on the configuration
 It is possible to activate only one alerts or two alerts or all the three.
 - To disable the ``Alert_threshold``, set up the Filter operator field to ``None``
-  and Threshold value to ``0.0``
 - To disable the ``Alert_duplicate``, set up the Duration unit field to ``None``
   and Max duration field to ``0``
 - To disable the ``Alert_delay``, set up the Delay unit field to ``None``
