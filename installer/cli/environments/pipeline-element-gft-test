@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[environment:pipeline-element]
+[environment:pipeline-element-gft-test]
 backend
 consul
 gft-custom-extensions
@@ -23,3 +23,5 @@ ui
 sources-watertank-simulator
 zookeeper
 influxdb
+connect-adapters
+connect-adapters-iiot
