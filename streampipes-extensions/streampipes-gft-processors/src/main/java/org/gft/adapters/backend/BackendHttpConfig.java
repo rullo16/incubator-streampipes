@@ -22,7 +22,7 @@ public class BackendHttpConfig {
     private final String lowest_date;
     private final String highest_date;
     private String first_date = "00-00-00 00:00:00";
-    private String second_date = " ";
+    private String second_date = "00-00-00 00:00:00";
 
     private final JsonObject nodes_id = new Gson().fromJson("{\"PINDOS\":\"61855a064f181d0f3a3b4d42\",\"ASTANDER\":\"6167f8078870124d6f1bc5e2\"}", JsonObject.class);
 
@@ -174,7 +174,7 @@ public class BackendHttpConfig {
         this.second_date = date_format.format(date_plus);
 
         //return the last date (highest_date: required as parameter) in the visualisation date interval, in order to not go out range.
-        if(this.second_date.compareToIgnoreCase(this.highest_date) >= 0 && !this.highest_date.equals("CurrentDateTime")){
+        if(!this.highest_date.equals("CurrentDateTime")  &&  this.second_date.compareToIgnoreCase(this.highest_date) >= 0){
             return this.highest_date;
         }
         return this.second_date;

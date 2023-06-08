@@ -3,8 +3,10 @@ package org.gft.adapters.plm;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class PLMHttpConfig {
@@ -16,6 +18,7 @@ public class PLMHttpConfig {
     private final String lowest_date;
     private final String highest_date;
     private String first_date = "00-00-00 00:00:00";
+    private String second_date = "00-00-00 00:00:00";
     DateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
@@ -45,11 +48,15 @@ public class PLMHttpConfig {
     public String getSignal() {  return this.signal_name;}
 
     public String getHighestDate(){
-        return getMillis(highest_date);
+        if (highest_date.equals("CurrentDateTime"))
+            return  "CurrentDateTime";
+        else
+            return getMillis(highest_date);
     }
-    public String getLowestDate(){
+    public String getFirstDate(){
         return getMillis(first_date);
     }
+    public String getSecondDate(){return getMillis(second_date);}
 
     // Convert date the date format (yyyy-MM-dd HH:mm:ss) to the timestamp format (millis-long)
     private String getMillis(String date){
@@ -65,7 +72,6 @@ public class PLMHttpConfig {
 
     //return the second date for the current polling interval (sub-interval of the whole date interval as required in input)
     public String secondDateTime() throws ParseException {
-        String second_date = " ";
 
         // for the current polling, use the current first_date and add it 5 days to obtain the second_date
         try{
@@ -74,17 +80,16 @@ public class PLMHttpConfig {
             LocalDateTime local_date_time = myDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
             local_date_time = local_date_time.plusDays(5); // 5 days of polling interval (increasing of 2 days each time there is a polling)
             Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
-            second_date = date_format.format(date_plus);
+            this.second_date = date_format.format(date_plus);
         }catch (ParseException e){
             e.printStackTrace();
         }
 
         //return the last date (highest_date: required as parameter) in the visualisation date interval, in order to not go out range.
-        if(second_date.compareToIgnoreCase(this.highest_date) >= 0){
+        if(!this.highest_date.equals("CurrentDateTime") &&  this.second_date.compareToIgnoreCase(this.highest_date) >= 0){
             return getMillis(this.highest_date);
         }
-
-        return getMillis(second_date);
+        return getMillis(this.second_date);
     }
 
     //return the first date for the current polling interval (part of the whole date interval as required in input)
@@ -116,5 +121,23 @@ public class PLMHttpConfig {
         this.first_date = first_date;
 
         return getMillis(first_date);
+    }
+
+    public String CurrentDateTime(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        return getMillis(dtf.format(now));
+    }
+
+    // return the CurrentDateTime() minus 5 minutes (occur each time when there will be a polling)
+    public String precedentCurrentTime(String current_time) {
+        long  milliseconds = Long.parseLong(current_time);
+
+        LocalDateTime local_date_time = LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault());
+        local_date_time = local_date_time.minusMinutes(5); //5 minutes of polling interval (difference of 5 minutes between the two date of the polling interval)
+        Date date_plus = Date.from(local_date_time.atZone(ZoneId.systemDefault()).toInstant());
+
+        String date = date_format.format(date_plus);
+        return getMillis(date);
     }
 }

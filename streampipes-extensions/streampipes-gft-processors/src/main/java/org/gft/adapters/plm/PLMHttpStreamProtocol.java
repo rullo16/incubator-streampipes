@@ -80,7 +80,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                 .requiredTextParameter(PLMHttpUtils.getModelLabel())
                 .requiredTextParameter(PLMHttpUtils.getSignalLabel())
                 .requiredTextParameter(PLMHttpUtils.getLowestLabel())
-                .requiredTextParameter(PLMHttpUtils.getHighestLabel())
+                .requiredTextParameter(PLMHttpUtils.getHighestLabel(),"CurrentDateTime")
                 .build();
     }
 
@@ -150,7 +150,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         String urlString = getUrl(this.selected_sensors);
 
         // stop adapter when it goes out of the whole polling time range as given on the SP UI during set up
-        if (config.getLowestDate().compareToIgnoreCase(config.getHighestDate()) >= 0) {
+        if (!config.getHighestDate().equals("CurrentDateTime") && config.getFirstDate().compareToIgnoreCase(config.getHighestDate()) >= 0) {
             logger.warn("Adapter Stopped: there is not anymore data to retrieve in the time interval!!!");
             logger.warn("Stop Adapter on the User Interface!!!");
             stop();
@@ -310,8 +310,19 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                 urn = sensor.getAsJsonArray("props").get(0).getAsJsonObject().get("urn").getAsString();
 
                 try {
-                    String first_date = config.firstDateTime();
-                    String second_date = config.secondDateTime();
+                    String first_date, second_date, current_time = config.CurrentDateTime();
+
+                    //  if the second date of the polling interval coincide with the current date,
+                    //  the time range for polling will become [current_time, current_time-5]
+                    if((config.getSecondDate().compareToIgnoreCase(current_time)>=0) && config.getHighestDate().equals("CurrentDateTime")){
+                        first_date = config.precedentCurrentTime(current_time);
+                        second_date = current_time;
+                        // the polling interval is in the past respectively to the current date
+                        // and will move until the second_date will coincide with the current date
+                    }else{
+                        first_date = config.firstDateTime();
+                        second_date = config.secondDateTime();
+                    }
 
                     urlString = config.getBaseUrl() + "bkd/aggr_exp_dt/" + config.getRepository() + "/" + config.getModel() + "/" + sensor.get("id") + "/" + urn + "/"
                             + this.accessToken + "/" + "?format=json" + "&from=" + first_date + "&to=" + second_date;
