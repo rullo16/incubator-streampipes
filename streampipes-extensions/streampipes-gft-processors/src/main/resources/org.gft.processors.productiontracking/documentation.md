@@ -25,8 +25,8 @@
 ***
 
 ## Description
-The Production Tracking processor maps two signal synchronising two timestamps (from two different data source) 
-filtering values based on a threshold value and on the input boolean values. 
+The production tracking processor matches two signals by synchronising their two timestamps (from two different data sources)
+and filtering the numerical input values based on a threshold value and Boolean input values. 
 
 ***
 

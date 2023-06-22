@@ -47,8 +47,6 @@ import java.util.List;
 import java.util.Map;
 
 public class BackendHttpStreamProtocol extends BackendPullProtocol {
-
-  private static final long interval = 300; // interval between two consecutive polling: polling waiting time
   Logger logger = LoggerFactory.getLogger(Protocol.class);
   public static final String ID = "org.gft.adapters.backend";
   BackendHttpConfig config;
@@ -58,7 +56,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
   }
 
   // constructor with parameters
-  public BackendHttpStreamProtocol(IParser parser, IFormat format, BackendHttpConfig config) {
+  public BackendHttpStreamProtocol(IParser parser, IFormat format, Integer interval, BackendHttpConfig config) {
     super(parser, format, interval);
     this.config = config;
   }
@@ -77,6 +75,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
             .requiredTextParameter(BackendHttpUtils.getSignalLabel())
             .requiredTextParameter(BackendHttpUtils.getLowestLabel())
             .requiredTextParameter(BackendHttpUtils.getHighestLabel(), "CurrentDateTime")
+            .requiredIntegerParameter(BackendHttpUtils.getIntervalLabel(), 60,3000,10)
             .build();
   }
 
@@ -84,8 +83,10 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
   @Override
   public Protocol getInstance(ProtocolDescription protocolDescription, IParser parser, IFormat format) {
     StaticPropertyExtractor extractor = StaticPropertyExtractor.from(protocolDescription.getConfig(),  new ArrayList<>());
+    // interval between two consecutive polling
+    Integer interval = extractor.singleValueParameter(BackendHttpUtils.POLLING_INTERVAL, Integer.class);
     BackendHttpConfig config = BackendHttpUtils.getConfig(extractor);
-    return new BackendHttpStreamProtocol(parser, format, config);
+    return new BackendHttpStreamProtocol(parser, format, interval, config);
   }
 
   // retrieve the schema of the payload
@@ -156,8 +157,8 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
       connection.setRequestProperty("Transfer-Encoding", "chunked");
       connection.setRequestProperty("Connection", "keep-alive");
       connection.setDoOutput(true);
-      connection.setConnectTimeout(5000);
-      connection.setReadTimeout(30000);
+      connection.setConnectTimeout(10000);
+      connection.setReadTimeout(40000);
       // Send the GET request to the API endpoint
       connection.connect();
 

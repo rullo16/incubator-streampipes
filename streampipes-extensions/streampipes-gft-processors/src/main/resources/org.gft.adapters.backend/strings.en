@@ -19,5 +19,7 @@ highest_date.description=Last value of the key for filtering - Example: 2022-12-
 signal.title=Signal ID
 signal.description=The comp_signal_id of the sensor signal without quote.
 
+interval.title=Interval [sec]
+interval.description=Example: 300 (Polling interval in seconds)
 
 

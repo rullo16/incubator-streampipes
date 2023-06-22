@@ -26,8 +26,8 @@
 
 ## Description
 
-This processor performs the logical boolean operation b/w the vales of set of properties. 
-A user can select the type of operation and set of properties.
+This processor performs the logical Boolean operation between the values of a set of properties. 
+The user can choose the type of operation and the set of properties.
 
 ***
 

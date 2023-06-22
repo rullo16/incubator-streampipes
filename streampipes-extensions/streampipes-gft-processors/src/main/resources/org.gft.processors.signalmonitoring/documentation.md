@@ -25,7 +25,7 @@
 ***
 
 ## Description
-The Monitoring processor filter and handle the numerical signal 
+The Monitoring processor filters and handles the numerical signal 
 (negative and positive) to create the Boolean-like signal based on a given threshold
 and on the variation of a numerical value over a customizable time window.
 

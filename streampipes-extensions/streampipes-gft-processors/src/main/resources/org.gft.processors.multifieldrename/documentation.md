@@ -16,7 +16,7 @@
   ~
   -->
 
-## Multi-Field Renamer
+## Multi-Field Rename
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
 </p>
@@ -26,7 +26,7 @@
 
 ## Description
 
-Replaces the runtime names of an event property with a custom defined name.
+Replaces the runtime names of two event properties with a custom defined names.
 Useful for data ingestion purposes where a specific event schema is required.
 
 

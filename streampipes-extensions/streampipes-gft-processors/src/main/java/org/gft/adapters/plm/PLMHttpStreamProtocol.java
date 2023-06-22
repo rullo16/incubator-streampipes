@@ -36,6 +36,7 @@ import org.apache.streampipes.sdk.extractor.StaticPropertyExtractor;
 import org.apache.streampipes.sdk.helpers.AdapterSourceType;
 import org.apache.streampipes.sdk.helpers.Locales;
 import org.apache.streampipes.sdk.utils.Assets;
+import org.gft.adapters.backend.BackendHttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 
 public class PLMHttpStreamProtocol extends PLMPullProtocol {
-    private static final long interval = 300; // interval between two consecutive polling: polling waiting time
     Logger logger = LoggerFactory.getLogger(PLMHttpStreamProtocol.class);
     public static final String ID = "org.gft.adapters.plm";
     PLMHttpConfig config;
@@ -59,7 +59,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
     }
 
     // constructor with parameters
-    public PLMHttpStreamProtocol(IParser parser, IFormat format, PLMHttpConfig config) {
+    public PLMHttpStreamProtocol(IParser parser, IFormat format, Integer interval, PLMHttpConfig config) {
         super(parser, format, interval);
         this.config = config;
         this.accessToken = login();
@@ -81,6 +81,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                 .requiredTextParameter(PLMHttpUtils.getSignalLabel())
                 .requiredTextParameter(PLMHttpUtils.getLowestLabel())
                 .requiredTextParameter(PLMHttpUtils.getHighestLabel(),"CurrentDateTime")
+                .requiredIntegerParameter(BackendHttpUtils.getIntervalLabel(), 60,3000,10)
                 .build();
     }
 
@@ -89,8 +90,10 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
     @Override
     public Protocol getInstance(ProtocolDescription protocolDescription, IParser parser, IFormat format) {
         StaticPropertyExtractor extractor = StaticPropertyExtractor.from(protocolDescription.getConfig(), new ArrayList<>());
+        // interval between two consecutive polling
+        Integer interval = extractor.singleValueParameter(BackendHttpUtils.POLLING_INTERVAL, Integer.class);
         PLMHttpConfig config = PLMHttpUtils.getConfig(extractor);
-        return new PLMHttpStreamProtocol(parser, format, config);
+        return new PLMHttpStreamProtocol(parser, format, interval, config);
     }
 
     // retrieve the schema of the payload
@@ -168,8 +171,8 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
             connection.setRequestProperty("transfer-encoding", "chunked");
             connection.setRequestProperty("connection", "keep-alive");
             //connection.setDoOutput(true);
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(60000);
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(40000);
             // Send the GET request to the API endpoint
             connection.connect();
 
@@ -196,7 +199,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
         try {
             Request request = Request.Post(urlString)
                     .connectTimeout(5000)
-                    .socketTimeout(30000)
+                    .socketTimeout(10000)
                     .setHeader("Content-Type", "application/json");
 
             response = request

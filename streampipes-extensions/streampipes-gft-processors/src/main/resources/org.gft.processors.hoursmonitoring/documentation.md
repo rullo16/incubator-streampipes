@@ -26,10 +26,10 @@
 
 ## Description
 
-This processor measures how long a boolean value (status of the operation) does not change. 
-Once the value is changes the event with the measured time is emitted and
-cumulated to calculate and emit the daily, weekly and monthly minutes/hours of operating.
-
+This processor measures the time during which a Boolean value
+(state of an operation) does not change. Once the value changes, 
+the event with the measured time is output and accumulated to calculate 
+and output daily, weekly and monthly minutes/hours of operation.
 ***
 
 ## Required inputs

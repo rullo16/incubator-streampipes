@@ -26,8 +26,8 @@
 
 ## Description
 
-Enables the selection one or more values to send in output. Any time, a new input event arrives, it allows to select , 
-between the input values,the desired outputs to forward.
+used to select one or more values to send as output. Each time, a new input event arrives, 
+we make the selection of the desired outputs to forward from the input values.
 
 ***
 

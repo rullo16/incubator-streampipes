@@ -14,6 +14,7 @@ public class BackendHttpUtils {
     private static final String SENSOR_SIGNAL_ID = "signal";
     public static final String USERNAME_KEY = "username";
     public static final String PASSWORD_KEY = "password";
+    public static final String POLLING_INTERVAL = "interval";
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static Label getUsernameLabel() {
@@ -24,8 +25,8 @@ public class BackendHttpUtils {
         return Labels.withId(PASSWORD_KEY);
     }
 
-    public static Label getLengthLabel() {
-        return Labels.withId(LENGTH);
+    public static Label getIntervalLabel() {
+        return Labels.withId(POLLING_INTERVAL);
     }
 
     public static Label getSignalLabel() {

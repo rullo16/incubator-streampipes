@@ -10,8 +10,8 @@ timestamp-fictive.description= Timestamp of the simulator.
 number-mapping.title=Value to Observe.
 number-mapping.description=Specifies the field name where the filter operation should be applied on.
 
-operation.title=Filter Operation.
-operation.description=Specifies the filter operation that should be applied on the field.
+operation.title=Filter Operator.
+operation.description=Specifies the filter operator that should be applied on the value to observe field.
 
 value.title=Threshold Value.
 value.description=Specifies a threshold value.

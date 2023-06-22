@@ -26,8 +26,8 @@
 
 ## Description
 
-Transform a set of data to a stream of data.
-in a pipeline, it should be placed directly after the data source.
+Transforms a set of data into a data stream-like. 
+In a pipeline, it must be placed directly after the data source.
 
 
 ***

@@ -26,8 +26,8 @@
 
 ## Description
 The Alert Trigger processor filters numerical values based on a given threshold 
-and/or tracks duplicated values and/or timestamp events in order to issue alerts.
-It forwards events in any case with three integrated boolean values representing the state of the alerts.
+and/or tracks duplicated values and/or timestamp events in order to issue alerts. 
+It forwards events in any case with any integrated Boolean values representing the state of the alerts.
 
 ***
 
@@ -70,13 +70,14 @@ the alert will be triggered and will remain up until a different data arrives or
 Specifies the unit that should be applied on the delay field.
 
 ## Further information on the configuration
-It is possible to activate only one alerts or two alerts or all the three.
+It possible to activate only one alerts or two alerts or all the three.
 - To disable the ``Alert_threshold``, set up the Filter operator field to ``None``
+  and Threshold value to ``0.0``
 - To disable the ``Alert_duplicate``, set up the Duration unit field to ``None``
   and Max duration field to ``0``
 - To disable the ``Alert_delay``, set up the Delay unit field to ``None``
   and Max delay field to ``0``
-- 
+
 ## Output
 Outputs the incoming event while appending:
 - a field with a Boolean value (``Alert_threshold``) indicating whether the filtering operation is satisfied (true) or not (false).

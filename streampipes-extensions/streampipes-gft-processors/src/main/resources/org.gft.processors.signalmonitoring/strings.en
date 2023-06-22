@@ -20,4 +20,4 @@ signal.title=Signal
 signal.description=Name of the monitored signal
 
 window.title=Time Window Length(Minutes)
-window.description=Specify the size of the time window in mintes.
+window.description=Specify the size of the time window in minutes.

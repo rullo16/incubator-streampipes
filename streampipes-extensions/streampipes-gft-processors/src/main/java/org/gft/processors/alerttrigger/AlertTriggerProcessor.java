@@ -151,7 +151,7 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
         event.addField("timestamp", current_time);
         event.addField("value", current_value);
 
-        if (this.numerical_operator != AlertTriggerOperator.NONE){
+        if ((this.threshold != 0.0) && (this.numerical_operator != AlertTriggerOperator.NONE)){
             alert_threshold = alertThreshold(current_value);
             event.addField("Alert_threshold", alert_threshold);
         }
