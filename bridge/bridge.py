@@ -42,8 +42,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response).encode('utf-8'))
 
 # Create an HTTP server and specify the request handler
-server_address = ('', 8000)  # You can change the port number if needed
+server_address = ('0.0.0.0', 8000)  # You can change the port number if needed
 httpd = HTTPServer(server_address, RequestHandler)
+httpd.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
+httpd.socker.setsockopt(socket.SOL_SOCKET, socker.SO_BINDTODEVICE, b'spnet')
 print('Server started on port 8000...')
 
 try:
