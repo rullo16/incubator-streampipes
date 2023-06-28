@@ -1,0 +1,3 @@
+[submodule "grafana"]
+	path = grafana
+	url = ./grafana/
