@@ -34,9 +34,9 @@ import org.apache.streampipes.model.schema.EventSchema;
 import org.apache.streampipes.sdk.builder.adapter.ProtocolDescriptionBuilder;
 import org.apache.streampipes.sdk.extractor.StaticPropertyExtractor;
 import org.apache.streampipes.sdk.helpers.AdapterSourceType;
+import org.apache.streampipes.sdk.helpers.Labels;
 import org.apache.streampipes.sdk.helpers.Locales;
 import org.apache.streampipes.sdk.utils.Assets;
-import org.gft.adapters.backend.BackendHttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +50,7 @@ import java.util.Map;
 public class PLMHttpStreamProtocol extends PLMPullProtocol {
     Logger logger = LoggerFactory.getLogger(PLMHttpStreamProtocol.class);
     public static final String ID = "org.gft.adapters.plm";
+    public static final String POLLING_INTERVAL = "interval";
     PLMHttpConfig config;
     private String accessToken = null;
     List<JsonObject> selected_sensors = new ArrayList<>();
@@ -81,7 +82,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
                 .requiredTextParameter(PLMHttpUtils.getSignalLabel())
                 .requiredTextParameter(PLMHttpUtils.getLowestLabel())
                 .requiredTextParameter(PLMHttpUtils.getHighestLabel(),"CurrentDateTime")
-                .requiredIntegerParameter(BackendHttpUtils.getIntervalLabel(), 60,3000,10)
+                .requiredIntegerParameter(Labels.withId(POLLING_INTERVAL), 60,3000,10)
                 .build();
     }
 
@@ -91,7 +92,7 @@ public class PLMHttpStreamProtocol extends PLMPullProtocol {
     public Protocol getInstance(ProtocolDescription protocolDescription, IParser parser, IFormat format) {
         StaticPropertyExtractor extractor = StaticPropertyExtractor.from(protocolDescription.getConfig(), new ArrayList<>());
         // interval between two consecutive polling
-        Integer interval = extractor.singleValueParameter(BackendHttpUtils.POLLING_INTERVAL, Integer.class);
+        Integer interval = extractor.singleValueParameter(POLLING_INTERVAL, Integer.class);
         PLMHttpConfig config = PLMHttpUtils.getConfig(extractor);
         return new PLMHttpStreamProtocol(parser, format, interval, config);
     }

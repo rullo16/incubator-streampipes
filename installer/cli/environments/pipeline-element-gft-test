@@ -23,5 +23,4 @@ ui
 sources-watertank-simulator
 zookeeper
 influxdb
-connect-adapters
 connect-adapters-iiot

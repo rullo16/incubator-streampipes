@@ -151,17 +151,17 @@ public class AlertTriggerProcessor extends StreamPipesDataProcessor {
         event.addField("timestamp", current_time);
         event.addField("value", current_value);
 
-        if ((this.threshold != 0.0) && (this.numerical_operator != AlertTriggerOperator.NONE)){
+        if (this.numerical_operator != AlertTriggerOperator.NONE){
             alert_threshold = alertThreshold(current_value);
             event.addField("Alert_threshold", alert_threshold);
         }
 
-        if((this.duration != 0L) && !this.unit_duration.equals(NONE)){
+        if((this.duration > 0L) && !this.unit_duration.equals(NONE)){
             alert_duplicate = alertDuplicate(current_time, current_value);
             event.addField("Alert_duplicate", alert_duplicate);
         }
 
-        if((this.delay != 0L) && !this.unit_delay.equals(NONE)){
+        if((this.delay > 0L) && !this.unit_delay.equals(NONE)){
             alert_delay = alertDelay(current_time, current_time_fictive);
             event.addField("Alert_delay", alert_delay);
         }

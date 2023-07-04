@@ -34,6 +34,7 @@ import org.apache.streampipes.model.schema.EventSchema;
 import org.apache.streampipes.sdk.builder.adapter.ProtocolDescriptionBuilder;
 import org.apache.streampipes.sdk.extractor.StaticPropertyExtractor;
 import org.apache.streampipes.sdk.helpers.AdapterSourceType;
+import org.apache.streampipes.sdk.helpers.Labels;
 import org.apache.streampipes.sdk.helpers.Locales;
 import org.apache.streampipes.sdk.utils.Assets;
 import org.slf4j.Logger;
@@ -49,6 +50,7 @@ import java.util.Map;
 public class BackendHttpStreamProtocol extends BackendPullProtocol {
   Logger logger = LoggerFactory.getLogger(Protocol.class);
   public static final String ID = "org.gft.adapters.backend";
+  public static final String POLLING_INTERVAL = "interval";
   BackendHttpConfig config;
 
   // Empty constructor
@@ -75,7 +77,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
             .requiredTextParameter(BackendHttpUtils.getSignalLabel())
             .requiredTextParameter(BackendHttpUtils.getLowestLabel())
             .requiredTextParameter(BackendHttpUtils.getHighestLabel(), "CurrentDateTime")
-            .requiredIntegerParameter(BackendHttpUtils.getIntervalLabel(), 60,3000,10)
+            .requiredIntegerParameter(Labels.withId(POLLING_INTERVAL), 60,3000,10)
             .build();
   }
 
@@ -84,7 +86,7 @@ public class BackendHttpStreamProtocol extends BackendPullProtocol {
   public Protocol getInstance(ProtocolDescription protocolDescription, IParser parser, IFormat format) {
     StaticPropertyExtractor extractor = StaticPropertyExtractor.from(protocolDescription.getConfig(),  new ArrayList<>());
     // interval between two consecutive polling
-    Integer interval = extractor.singleValueParameter(BackendHttpUtils.POLLING_INTERVAL, Integer.class);
+    Integer interval = extractor.singleValueParameter(POLLING_INTERVAL, Integer.class);
     BackendHttpConfig config = BackendHttpUtils.getConfig(extractor);
     return new BackendHttpStreamProtocol(parser, format, interval, config);
   }

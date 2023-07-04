@@ -16,7 +16,6 @@ public class PLMHttpUtils {
     public static final String USERNAME_KEY = "username";
     public static final String PASSWORD_KEY = "password";
     public static final String MODEL_NAME = "model";
-    public static final String POLLING_INTERVAL = "interval";
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static Label getUsernameLabel() {
@@ -42,10 +41,6 @@ public class PLMHttpUtils {
     public static Label getHighestLabel() {
         return Labels.withId(HIGHEST_DATE);
     }
-    public static Label getIntervalLabel() {
-        return Labels.withId(POLLING_INTERVAL);
-    }
-
 
     public static PLMHttpConfig getConfig(StaticPropertyExtractor extractor) {
 
